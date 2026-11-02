@@ -5,10 +5,13 @@ import Protect from "@/app/pages/Protect";
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
-      { title: "Admin dashboard | Ndi Igbo Germany" },
-      { name: "description", content: "Ndi Igbo Germany Admin dashboard." },
-      { property: "og:title", content: "Admin dashboard | Ndi Igbo Germany" },
-      { property: "og:description", content: "Ndi Igbo Germany Admin dashboard." },
+      { title: "Admin dashboard | Council For Renewable Energy Nigeria" },
+      { name: "description", content: "Council For Renewable Energy Nigeria Admin dashboard." },
+      { property: "og:title", content: "Admin dashboard | Council For Renewable Energy Nigeria" },
+      {
+        property: "og:description",
+        content: "Council For Renewable Energy Nigeria Admin dashboard.",
+      },
     ],
   }),
   component: () => (
