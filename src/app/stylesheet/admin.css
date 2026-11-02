@@ -1,0 +1,330 @@
+.fellow{
+    height: fit-content;
+    width: auto;
+    margin-left: 1.5rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 7px;
+
+}
+
+.admin_head{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+.leftt{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.rightt{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.rightt button{
+    padding: 0.5rem 1rem;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--red);
+    border-radius: 7px;
+    color: white;
+}
+
+.rightt button svg{
+    font-size: 1rem;
+}
+
+.fellow table{
+min-width: 100%;
+overflow-x: scroll;
+text-align: left;
+border-collapse: collapse;
+}
+
+.fellow tbody{
+    width: inherit;
+}
+
+.fellow th, td {
+    padding: 10px;
+    text-align: left;
+    font-size: 1rem;
+  }
+  .fellow td{
+    padding-bottom: 1rem;
+    font-size: 0.9em;
+  }
+  .fellow th:nth-child(1){
+    min-width: 2rem !important;
+  }
+  .fellow td:nth-child(1){
+    min-width: 2rem !important;
+  }
+  .fellow  th {
+   
+    background-color: #f2f2f2;
+    font-weight: bold;
+    font-size: 0.8rem;
+  }
+  
+  .fellow th:nth-child(1){
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
+
+  .fellow th:nth-child(8){
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+
+.load{
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    margin-top: 5rem;
+}
+
+
+.popup{
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+.add_member{
+
+}
+
+.add_head{
+    font-weight: 600;
+    background: var(--red);
+    padding: 1.3rem 2rem;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.add_head svg{
+    font-size: 1.2rem;
+}
+.add_mem{
+    background: white;
+    padding: 1.5rem 5rem 3rem 5rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    width: 100%;
+}
+.add_mem .input_log{
+    gap: 0.5rem;
+}
+.add_mem input{
+    padding: 0.3rem 0.5rem;
+}
+.add_mem label{
+    font-size: 1rem;
+}
+
+.add_btn{
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border-radius: 15px;
+    background: var(--red);
+    border: none;
+    color: white;
+    font-style: normal;
+font-weight: 600;
+line-height: normal;
+font-size: 1rem;
+margin-top: 1rem;
+}
+
+.dotss{
+  width:100%;
+  display: flex;
+  justify-content: center;
+  
+}
+
+.notify{
+  display: flex;
+  justify-content: center;
+
+  
+  
+  align-self: center;
+}
+.not{background: white;  border-radius: 7px;
+  width: 80%;margin: 1rem 1.5rem;
+  padding: 1rem;
+}
+.notify_body{
+  padding-top: 1rem;
+
+}
+
+.notify_head{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--red);
+  padding-bottom: 1.5rem;
+}
+
+.notify_left{
+  gap: 1rem;
+  display: flex;
+  align-items: center;
+  
+}
+
+.notify_left button{
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600 !important;
+  border: none;
+  background: none;
+  height: 3rem;
+}
+
+.view_dot{
+  position: relative;
+  text-align: center;
+}
+
+.drop{
+  top: 0;
+  z-index: 555;
+  left:-20px;
+  position: absolute;
+  background: white;
+}
+
+.drop a{
+  width:7rem;
+  padding: 0.5rem  ;
+  font-size: 0.8rem;
+  color: black;
+  border: rgb(149, 149, 149) 1px solid;
+  border-radius: 7px;
+  background: white;
+  box-shadow: 0px 12px 30px 0px rgba(80, 143, 244, 0.1);
+
+}
+
+.mem{
+  background: black;
+}
+.unread-notification > span{
+  background: var(--red);
+  padding: 1rem;
+  color: white;
+  font-size: 2rem !important;
+}
+
+.unread-notification > div{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  height: 4rem;
+
+
+}
+
+.all-notification span{
+  background: var(--red);
+  padding: 1rem;
+  color: white;
+  font-size: 2rem !important;
+}
+.all-notification> div{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  height: 4rem;
+
+}
+.all-notification{
+  border-radius: 15px;
+background: #f5f3f3;
+margin: 1.5rem 1rem;
+
+display: flex;
+flex-direction: row;
+align-items: center;
+}
+.unread-notification{
+  border-radius: 15px;
+margin: 1.5rem 1rem;
+display: flex;
+align-items: center;
+box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+
+  
+}
+
+.notification h3{
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.notification h3 span{
+  font-weight: 600;
+}
+.notification p{
+    font-size: 14px;
+}
+
+
+.notify_left button.active{
+  border-bottom: 3px solid var(--red);
+
+}
+
+.notify_left button span{
+  border-radius: 7px;
+  padding: 0.2rem 0.5rem;
+  background: #ececec;
+
+}
+
+.notification >span{
+  font-size: 1.2rem;
+}
+
+.notification .drop{
+  width: fit-content;
+}
+
+
+.notify .load{
+  height: fit-content;
+  padding-bottom: 5rem;
+  background: white;
+}
+
