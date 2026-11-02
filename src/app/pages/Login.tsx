@@ -41,7 +41,8 @@ const Login = () => {
         fd.append(key, value);
       });
       setIsLoading(true);
-      axios.post(`${API_URL}/auth/login`, fd, {
+      axios
+        .post(`${API_URL}/auth/login`, fd, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -50,10 +51,7 @@ const Login = () => {
           if (res.data.code === 200) {
             localStorage.setItem("igbo_token", res.data.token);
             toast.success(res.data.message);
-            localStorage.setItem(
-              "fName",
-              res.data.data.name_of_member_organization
-            );
+            localStorage.setItem("fName", res.data.data.name_of_member_organization);
             localStorage.setItem("igbo_sub", res.data.data.isSubscribed);
             localStorage.setItem("igbo_email", res.data.data.email);
             usenavigate("/dashboard/");
@@ -66,11 +64,9 @@ const Login = () => {
             toast.error(err?.response?.data?.message);
           }
           if (err?.response?.data?.errors) {
-            Object.entries(err?.response?.data?.errors).forEach(
-              ([key, value]) => {
-                toast.error(value[0]);
-              }
-            );
+            Object.entries(err?.response?.data?.errors).forEach(([key, value]) => {
+              toast.error(value[0]);
+            });
           }
         })
         .finally(() => {
@@ -89,7 +85,6 @@ const Login = () => {
       result = false;
       toast.error("Please enter Password");
     }
-   
 
     return result;
   };
@@ -102,8 +97,8 @@ const Login = () => {
           </a>
           <div className="log_head">
             <h3>Sign in</h3>
-            
-            <p>  Please login to continue</p>
+
+            <p> Please login to continue</p>
           </div>
           <div className="input_log">
             <label htmlFor="email">Email or Username</label>
@@ -133,7 +128,7 @@ const Login = () => {
               />{" "}
               <span className="toggle-password" onClick={togglePassword}>
                 <span className="eye-icon">
-                {showPassword ? (
+                  {showPassword ? (
                     <IoMdEyeOff size={27} color="#015907" />
                   ) : (
                     <IoMdEye size={27} color="#015907" />
@@ -144,14 +139,14 @@ const Login = () => {
           </div>
 
           <p className="text-grey-800 font-normal mt-2 ">
-                 Forgot Password?{" "}
-               <Link to="/forgot-password"
-                  className="text-[#015907] font-medium underline pb-1 cursor-pointer"
-                
-                >
-                  Click here
-                </Link>
-              </p>
+            Forgot Password?{" "}
+            <Link
+              to="/forgot-password"
+              className="text-[#015907] font-medium underline pb-1 cursor-pointer"
+            >
+              Click here
+            </Link>
+          </p>
 
           <button type="submit" className="login_btn" disabled={isLoading}>
             {isLoading ? "Verifying..." : "Login"}
@@ -166,11 +161,7 @@ const Login = () => {
       </div>
 
       <div className="hidden xl:block h-full">
-        <img
-          src={loginImg}
-          alt=""
-          className="object-cover object-center h-full"
-        />
+        <img src={"/new_side.jpeg"} alt="" className="object-cover object-center h-full" />
       </div>
     </section>
   );
