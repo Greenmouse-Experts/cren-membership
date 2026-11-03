@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { API_URL } from "@/app/services/env";
-import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { HiOutlineMail } from "react-icons/hi";
 import { GoLock } from "react-icons/go";
 import "../stylesheet/login.css";
@@ -10,79 +10,46 @@ import logo from "../image/logo.png";
 import axios from "axios";
 
 const AdminLogin = () => {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [logData, setLogData] = useState({
-    email: "",
-    password: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm({
+    defaultValues: { email: "", password: "" },
   });
-
-  const handleInput = (e) => {
-    const { name, value } = e.target;
-    setLogData({ ...logData, [name]: value });
-  };
 
   const usenavigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (logValidate()) {
-      const fd = new FormData();
-      Object.entries(logData).forEach(([key, value]) => {
-        fd.append(key, value);
+  const submitLogin = async (data) => {
+    try {
+      const res = await axios.post(`${API_URL}/auth/admin/login`, data, {
+        headers: { "Content-Type": "application/json" },
       });
-      setIsLoading(true);
-      axios
-        .post(`${API_URL}/auth/admin/login`, fd, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((res) => {
-          console.log(res);
-          if (res.data.code === 200) {
-            toast.success(res.data.message);
-            localStorage.setItem("igbo_token", res.data.token);
-            usenavigate("/admin/");
-          } else {
-            toast.error(res.data.message);
-          }
-        })
-        .catch((err) => {
-          if (err?.response?.data?.message) {
-            toast.error(err?.response?.data?.message);
-          }
-          if (err?.response?.data?.errors) {
-            Object.entries(err?.response?.data?.errors).forEach(
-              ([key, value]) => {
-                toast.error(value[0]);
-              }
-            );
-          }
-        })
-        .finally(() => {
-          setIsLoading(false);
+      if (res.data.code === 200) {
+        toast.success(res.data.message);
+        localStorage.setItem("igbo_token", res.data.token);
+        usenavigate("/admin/");
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (err) {
+      if (err?.response?.data?.message) {
+        toast.error(err.response.data.message);
+      }
+      if (err?.response?.data?.errors) {
+        Object.values(err.response.data.errors).forEach((value) => {
+          toast.error(value[0]);
         });
+      }
     }
   };
 
-  const logValidate = () => {
-    let result = true;
-    if (logData.email === "" || logData.email === null) {
-      result = false;
-      toast.error("Please enter Email");
-    }
-
-    if (logData.password === "" || logData.password === null) {
-      result = false;
-      toast.error("Please enter Password");
-    }
-
-    return result;
+  const onInvalid = (formErrors) => {
+    toast.error(Object.values(formErrors)[0]?.message);
   };
   return (
     <div className="main_login">
-      <form onSubmit={handleSubmit} action="submit" className="login">
+      <form onSubmit={handleSubmit(submitLogin, onInvalid)} noValidate className="login">
         <a href="http://ndiigbogermany.org/">
           <img src={logo} alt="" />
         </a>
@@ -97,10 +64,8 @@ const AdminLogin = () => {
             <HiOutlineMail />{" "}
             <input
               type="text"
-              name="email"
               placeholder="Email"
-              onChange={handleInput}
-              value={logData.email}
+              {...register("email", { required: "Please enter Email" })}
             />
           </div>
         </div>
@@ -111,16 +76,14 @@ const AdminLogin = () => {
             <GoLock />{" "}
             <input
               type="password"
-              name="password"
               placeholder="Password"
-              onChange={handleInput}
-              value={logData.password}
+              {...register("password", { required: "Please enter Password" })}
             />
           </div>
         </div>
 
-        <button type="submit" className="login_btn" disabled={isLoading}>
-          {isLoading ? "Verifying..." : "Login"}
+        <button type="submit" className="login_btn" disabled={isSubmitting}>
+          {isSubmitting ? "Verifying..." : "Login"}
         </button>
       </form>
     </div>

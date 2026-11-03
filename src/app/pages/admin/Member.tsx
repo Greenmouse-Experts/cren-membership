@@ -16,11 +16,7 @@ import { toast } from "react-toastify";
 import MemberModal from "../../admin/members/memberModal";
 
 const Members = () => {
-  const {
-    data,
-    isLoading: loading,
-    refetch,
-  } = useGetHook("admin/member/retrieve/all");
+  const { data, isLoading: loading, refetch } = useGetHook("admin/member/retrieve/all");
   const [showDetails, setShowDetails] = useState(false);
   const [showAddMemberPopup, setShowAddMemberPopup] = useState(false);
 
@@ -37,9 +33,7 @@ const Members = () => {
   const downloadAsPDF = () => {
     const doc = new jsPDF();
     doc.autoTable({
-      head: [
-        ["S/N", "Member Id", "Member Name", "Email", "Date created", "Status"],
-      ],
+      head: [["S/N", "Member Id", "Member Name", "Email", "Date created", "Status"]],
       body: data?.data?.data.map((item, index) => [
         index + 1,
         item.membership_id,
@@ -89,7 +83,7 @@ const Members = () => {
       };
       const res = await axios.get(
         `${API_URL}/admin/member/${status}?user_id=${selected.id}`,
-        config
+        config,
       );
       const data = res.data;
       setIsBusy(false);
@@ -107,9 +101,7 @@ const Members = () => {
       setItems(data.data.data);
     } else {
       const filtered = data.data.data.filter((item) =>
-        item.name_of_representative
-          ?.toLowerCase()
-          .includes(e.target.value.toLowerCase())
+        item.name_of_representative?.toLowerCase().includes(e.target.value.toLowerCase()),
       );
       setItems(filtered);
     }
@@ -143,15 +135,11 @@ const Members = () => {
           </div>
 
           <div className="rightt">
-            <button onClick={handleAddMemberClick}>
+            <button className="" onClick={handleAddMemberClick}>
               <BiPlus /> Add New
             </button>
             <div className="searchh">
-              <input
-                type="text"
-                placeholder="Search by name"
-                onChange={handleSearch}
-              />
+              <input type="text" placeholder="Search by name" onChange={handleSearch} />
               <span>
                 <BiSearch />
               </span>
@@ -231,7 +219,7 @@ const Members = () => {
                       </th>
                     </tr>
                   </thead>
-                  <tbody>
+                  {/*<tbody>
                     {!!items.length &&
                       items?.map((item, i) => (
                         <tr key={i}>
@@ -303,7 +291,7 @@ const Members = () => {
                           </td>
                         </tr>
                       ))}
-                  </tbody>
+                  </tbody>*/}
                 </table>
               </div>
             </div>
@@ -315,9 +303,7 @@ const Members = () => {
           <AddFellow onClose={handleCloseAddMemberPopup} refetch={refetch} />
         </div>
       )}
-      {showDetails && (
-        <MemberModal item={selected} close={() => setShowDetails(false)} />
-      )}
+      {showDetails && <MemberModal item={selected} close={() => setShowDetails(false)} />}
       <Activate title={""} noHead>
         <ReusableModal
           title={"Are you sure you want to activate this account?"}
