@@ -11,24 +11,27 @@ import { useNavigate } from "@/lib/router-compat";
 const Home = () => {
   const currentYear = new Date().getFullYear();
   const { data } = useGetHook(`member/dashboard?year=${currentYear}`);
-  
-  const navigate = useNavigate()
+
+  const navigate = useNavigate();
   return (
     <div className="pl-4">
       <div className="lg:grid grid-cols-2 gap-x-5">
         <div className="bg-white p-6 overflow-y-auto">
           <div className="flex px-2 justify-between items-center">
             <h2 className="text-xl font-semibold">Announcements</h2>
-            <p className="text-[14px] font-medium text-blue-900 cursor-pointer" onClick={() => navigate('/dashboard/announce')}>View All</p>
+            <p
+              className="text-[14px] font-medium text-blue-900 cursor-pointer"
+              onClick={() => navigate("/dashboard/announce")}
+            >
+              View All
+            </p>
           </div>
           <div className="grid gap-5 pr-3">
             {data &&
               data.data.recentFiveAnnouncement.map((item, i) => (
                 <div className="shadow-lg rounded-lg p-2" key={i}>
                   <p className="font-[15px] font-semibold">{item.title}</p>
-                  <p className="text-[13px]">
-                    {formatString(item.content, 60)}
-                  </p>
+                  <p className="text-[13px]">{formatString(item.content, 60)}</p>
                 </div>
               ))}
           </div>
@@ -39,18 +42,19 @@ const Home = () => {
           </div>
           <div className="grid gap-5">
             {/* <p className="py-24 font-semibold text-center">No Payments Yet</p> */}
-            {data && data.data.recentFivePayments.map((item, i) => (
-               <div className="shadow-lg rounded-lg p-2" key={i}>
-                <div className="flex justify-between">
-                  <p className="font-medium text-blue-900">{item.channel}</p>
-                  <p className="font-semibold text-[17px] ">{formatAsNgnMoney(item.amount)}</p>
+            {data &&
+              data.data.recentFivePayments.map((item, i) => (
+                <div className="shadow-lg rounded-lg p-2" key={i}>
+                  <div className="flex justify-between">
+                    <p className="font-medium text-blue-900">{item.channel}</p>
+                    <p className="font-semibold text-[17px] ">{formatAsNgnMoney(item.amount)}</p>
+                  </div>
+                  <p className="font-[15px] font-semibold mt-3">
+                    {item?.due?.description ? item?.due?.description : "Subscription"}
+                  </p>
+                  <p className="text-[13px]">{/* {formatString(item.content, 60)} */}</p>
                 </div>
-               <p className="font-[15px] font-semibold mt-3">{item?.due?.description? item?.due?.description : "Subscription" }</p>
-               <p className="text-[13px]">
-                 {/* {formatString(item.content, 60)} */}
-               </p>
-             </div>
-            ))}
+              ))}
           </div>
         </div>
       </div>
@@ -59,7 +63,6 @@ const Home = () => {
         <div className="w-full bg-white p-5">
           <div className="head_table">
             <h3 className="text-xl font-semibold">Recent Members</h3>
-            
           </div>
           <div className="flex flex-col">
             <div className=" overflow-x-auto">
@@ -91,7 +94,6 @@ const Home = () => {
                       >
                         Date Joined
                       </th>
-                      
                     </tr>
                   </thead>
                   <tbody>
