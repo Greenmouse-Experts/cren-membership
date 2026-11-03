@@ -1,44 +1,51 @@
-// @ts-nocheck
+import { useQuery, type UseQueryOptions, type UseQueryResult } from "@tanstack/react-query";
+import axios, { type AxiosRequestConfig } from "axios";
 import { API_URL } from "@/app/services/env";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import type { ApiResponse } from "@/types/api";
 
-const useGetHook = (url) => {
-  const [item, setItem] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const fetchItem = async () => {
-    setLoading(true);
-    const token  = localStorage.getItem("igbo_token");
-    
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "Application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      };
-     
-      const res = await axios.get(
-        `${API_URL}/${url}`,
-        config
-      );
-      const data = res.data;
-      setItem(data);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-    }
-  };
+export interface UseGetOptions<T = any> extends Omit<
+  UseQueryOptions<ApiResponse<T>, Error, ApiResponse<T>>,
+  "queryKey" | "queryFn"
+> {
+  headers?: Record<string, string>;
+  params?: Record<string, any>;
+  enabled?: boolean;
+}
 
-  const refetch = () => {
-    fetchItem();
-  };
-
-  useEffect(() => {
-    fetchItem();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return { loading, data: item, refetch };
+export const fetchApi = async <T = any,>(
+  url: string,
+  config?: AxiosRequestConfig,
+): Promise<ApiResponse<T>> => {
+  const token = typeof window !== "undefined" ? localStorage.getItem("igbo_token") : null;
+  const res = await axios.get<ApiResponse<T>>(`${API_URL}/${url}`, {
+    ...config,
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...config?.headers,
+    },
+  });
+  return res.data;
 };
+
+const useGetHook = <T = any,>(url: string | null | undefined, options?: UseGetOptions<T>) => {
+  const query = useQuery<ApiResponse<T>, Error>({
+    queryKey: [url, options?.params],
+    queryFn: () => fetchApi<T>(url!, { params: options?.params, headers: options?.headers }),
+    enabled: !!url && (options?.enabled ?? true),
+    ...options,
+  });
+
+  return {
+    ...query,
+    query,
+    data: query.data,
+    loading: query.isLoading,
+    isLoading: query.isLoading,
+    isFetching: query.isFetching,
+    error: query.error,
+    refetch: query.refetch,
+  };
+};
+
 export default useGetHook;

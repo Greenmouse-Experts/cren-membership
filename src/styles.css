@@ -59,6 +59,14 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Theme mappings for page loaders & feedback states */
+  --color-error: var(--destructive);
+  --color-error-foreground: var(--destructive-foreground);
+  --color-base-content: var(--foreground);
+  --color-base-100: var(--card);
+  --color-base-200: var(--muted);
+  --color-primary-content: var(--primary-foreground);
 }
 
 :root {
@@ -142,18 +150,18 @@
     --font: "Montserrat", sans-serif;
     --red: #015907;
   }
-  
+
   a {
     text-decoration: none;
   }
-  
+
   .h2 {
     font-size: 2.3rem;
     font-style: normal;
     font-weight: 700;
     line-height: 185.5%;
   }
-  
+
   * {
     font-family: var(--font) !important;
     margin: 0;
@@ -164,17 +172,17 @@
     box-sizing: border-box;
     scroll-behavior: smooth;
   }
-  
-  svg{
+
+  svg {
     cursor: pointer;
   }
-  
+
   html {
     overflow-x: hidden;
     scroll-behavior: smooth;
     scroll-padding-top: 3rem;
   }
-  
+
   .spinner {
     font-size: 28px;
     position: relative;
@@ -182,7 +190,7 @@
     width: 1em;
     height: 1em;
   }
-  
+
   .spinner.center {
     position: absolute;
     left: 0;
@@ -191,7 +199,7 @@
     bottom: 0;
     margin: auto;
   }
-  
+
   .spinner .spinner-blade {
     position: absolute;
     left: 0.4629em;
@@ -205,7 +213,7 @@
     transform-origin: center -0.2222em;
     animation: spinner-fade9234 1s infinite linear;
   }
-  
+
   .spinner .spinner-blade:nth-child(1) {
     -webkit-animation-delay: 0s;
     animation-delay: 0s;
@@ -213,7 +221,7 @@
     -ms-transform: rotate(0deg);
     transform: rotate(0deg);
   }
-  
+
   .spinner .spinner-blade:nth-child(2) {
     -webkit-animation-delay: 0.083s;
     animation-delay: 0.083s;
@@ -221,7 +229,7 @@
     -ms-transform: rotate(30deg);
     transform: rotate(30deg);
   }
-  
+
   .spinner .spinner-blade:nth-child(3) {
     -webkit-animation-delay: 0.166s;
     animation-delay: 0.166s;
@@ -229,7 +237,7 @@
     -ms-transform: rotate(60deg);
     transform: rotate(60deg);
   }
-  
+
   .spinner .spinner-blade:nth-child(4) {
     -webkit-animation-delay: 0.249s;
     animation-delay: 0.249s;
@@ -237,7 +245,7 @@
     -ms-transform: rotate(90deg);
     transform: rotate(90deg);
   }
-  
+
   .spinner .spinner-blade:nth-child(5) {
     -webkit-animation-delay: 0.332s;
     animation-delay: 0.332s;
@@ -245,7 +253,7 @@
     -ms-transform: rotate(120deg);
     transform: rotate(120deg);
   }
-  
+
   .spinner .spinner-blade:nth-child(6) {
     -webkit-animation-delay: 0.415s;
     animation-delay: 0.415s;
@@ -253,7 +261,7 @@
     -ms-transform: rotate(150deg);
     transform: rotate(150deg);
   }
-  
+
   .spinner .spinner-blade:nth-child(7) {
     -webkit-animation-delay: 0.498s;
     animation-delay: 0.498s;
@@ -261,7 +269,7 @@
     -ms-transform: rotate(180deg);
     transform: rotate(180deg);
   }
-  
+
   .spinner .spinner-blade:nth-child(8) {
     -webkit-animation-delay: 0.581s;
     animation-delay: 0.581s;
@@ -269,7 +277,7 @@
     -ms-transform: rotate(210deg);
     transform: rotate(210deg);
   }
-  
+
   .spinner .spinner-blade:nth-child(9) {
     -webkit-animation-delay: 0.664s;
     animation-delay: 0.664s;
@@ -277,7 +285,7 @@
     -ms-transform: rotate(240deg);
     transform: rotate(240deg);
   }
-  
+
   .spinner .spinner-blade:nth-child(10) {
     -webkit-animation-delay: 0.747s;
     animation-delay: 0.747s;
@@ -285,7 +293,7 @@
     -ms-transform: rotate(270deg);
     transform: rotate(270deg);
   }
-  
+
   .spinner .spinner-blade:nth-child(11) {
     -webkit-animation-delay: 0.83s;
     animation-delay: 0.83s;
@@ -293,7 +301,7 @@
     -ms-transform: rotate(300deg);
     transform: rotate(300deg);
   }
-  
+
   .spinner .spinner-blade:nth-child(12) {
     -webkit-animation-delay: 0.913s;
     animation-delay: 0.913s;
@@ -301,43 +309,53 @@
     -ms-transform: rotate(330deg);
     transform: rotate(330deg);
   }
-  
+
   @keyframes spinner-fade9234 {
     0% {
       background-color: #69717d;
     }
-  
+
     100% {
       background-color: transparent;
     }
   }
-  
 
-  
+  @keyframes spin-reverse {
+    from {
+      transform: rotate(360deg);
+    }
+    to {
+      transform: rotate(0deg);
+    }
+  }
+
+  .animate-spin-reverse {
+    animation: spin-reverse 3s linear infinite;
+  }
+
   @media screen and (max-width: 1024px) {
     html {
       font-size: 90%;
     }
   }
-  
+
   @media screen and (max-width: 850px) {
     html {
       font-size: 85%;
     }
   }
-  
+
   @media screen and (max-width: 640px) {
     html {
       font-size: 80%;
     }
   }
-  
+
   @media screen and (max-width: 550px) {
     html {
       font-size: 75%;
     }
   }
-  
 
   body {
     background-color: var(--color-background);

@@ -1,30 +1,85 @@
-// @ts-nocheck
-import { API_URL } from "@/app/services/env";
 import { useCallback } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { API_URL } from "@/app/services/env";
+import { extract_message } from "@/helpers/auth";
+
+export interface PostReadParams {
+  url: string;
+  type?: string;
+}
 
 const usePostRead = () => {
-  const handlePost = useCallback(async (url, type, success) => {
-    const token  = localStorage.getItem("igbo_token");
-    try {
-      const config = {
-        method: "post",
-        url: `${API_URL}/${url}`,
-        headers: {
-          "Content-Type": type,
-          Authorization: `Bearer ${token}`,
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async ({ url, type }: PostReadParams) => {
+      const token = typeof window !== "undefined" ? localStorage.getItem("igbo_token") : null;
+      const contentType = type && type.includes("/") ? type : "application/json";
+
+      const res = await axios.post(
+        `${API_URL}/${url}`,
+        {},
+        {
+          headers: {
+            "Content-Type": contentType,
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
         },
-      };
-      const res = await axios(config);
-      success();
-    } catch (error) {
-      Object.entries(error.response.data.errors).forEach(([key, value]) => {
-        toast.error(value[0]);
-      });
-    }
-  }, []);
-  return { handlePost };
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
+    onError: (error: any) => {
+      if (error?.response?.data?.errors && typeof error.response.data.errors === "object") {
+        Object.values(error.response.data.errors).forEach((val: any) => {
+          if (Array.isArray(val) && val.length > 0) {
+            toast.error(val[0]);
+          } else if (typeof val === "string") {
+            toast.error(val);
+          }
+        });
+      } else {
+        toast.error(extract_message(error));
+      }
+    },
+  });
+
+  const handlePost = useCallback(
+    async (url: string, type?: any, success?: any) => {
+      const callback =
+        typeof type === "function" ? type : typeof success === "function" ? success : undefined;
+      const contentType = typeof type === "string" ? type : undefined;
+
+      try {
+        const data = await mutation.mutateAsync({ url, type: contentType });
+        if (callback) {
+          callback(data);
+        }
+        return data;
+      } catch (error) {
+        // Error is handled in mutation onError
+      }
+    },
+    [mutation],
+  );
+
+  return {
+    handlePost,
+    mutation,
+    mutate: mutation.mutate,
+    mutateAsync: mutation.mutateAsync,
+    isPending: mutation.isPending,
+    loading: mutation.isPending,
+    isLoading: mutation.isPending,
+    isSuccess: mutation.isSuccess,
+    isError: mutation.isError,
+    error: mutation.error,
+    data: mutation.data,
+  };
 };
 
 export default usePostRead;
