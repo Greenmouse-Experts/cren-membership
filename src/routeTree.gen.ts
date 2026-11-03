@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as HomeRouteRouteImport } from './routes/home/route'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PasswordResetRouteImport } from './routes/password-reset'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
@@ -30,6 +31,7 @@ import { Route as DashboardMembersRouteImport } from './routes/dashboard.members
 import { Route as DashboardNotifyRouteImport } from './routes/dashboard.notify'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
 import { Route as DashboardTransactRouteImport } from './routes/dashboard.transact'
+import { Route as HomeIndexRouteImport } from './routes/home/index'
 import { Route as AdminDuesBankRouteImport } from './routes/admin.dues.bank'
 import { Route as AdminDuesCategoryRouteImport } from './routes/admin.dues.category'
 import { Route as AdminDuesListRouteImport } from './routes/admin.dues.list'
@@ -56,6 +58,11 @@ const DashboardRoute = DashboardRouteImport.update({
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeRouteRoute = HomeRouteRouteImport.update({
+  id: '/home',
+  path: '/home',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -143,6 +150,11 @@ const DashboardTransactRoute = DashboardTransactRouteImport.update({
   path: '/transact',
   getParentRoute: () => DashboardRoute,
 } as any)
+const HomeIndexRoute = HomeIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => HomeRouteRoute,
+} as any)
 const AdminDuesBankRoute = AdminDuesBankRouteImport.update({
   id: '/dues/bank',
   path: '/dues/bank',
@@ -182,6 +194,7 @@ const AdminSubscriptionListRoute = AdminSubscriptionListRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/home': typeof HomeRouteRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
@@ -202,6 +215,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/transact': typeof DashboardTransactRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/home/': typeof HomeIndexRoute
   '/admin/dues/bank': typeof AdminDuesBankRoute
   '/admin/dues/category': typeof AdminDuesCategoryRoute
   '/admin/dues/list': typeof AdminDuesListRoute
@@ -230,6 +244,7 @@ export interface FileRoutesByTo {
   '/dashboard/transact': typeof DashboardTransactRoute
   '/admin': typeof AdminIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/home': typeof HomeIndexRoute
   '/admin/dues/bank': typeof AdminDuesBankRoute
   '/admin/dues/category': typeof AdminDuesCategoryRoute
   '/admin/dues/list': typeof AdminDuesListRoute
@@ -241,6 +256,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/home': typeof HomeRouteRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
@@ -261,6 +277,7 @@ export interface FileRoutesById {
   '/dashboard/transact': typeof DashboardTransactRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/home/': typeof HomeIndexRoute
   '/admin/dues/bank': typeof AdminDuesBankRoute
   '/admin/dues/category': typeof AdminDuesCategoryRoute
   '/admin/dues/list': typeof AdminDuesListRoute
@@ -273,6 +290,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/home'
     | '/admin'
     | '/dashboard'
     | '/forgot-password'
@@ -293,6 +311,7 @@ export interface FileRouteTypes {
     | '/dashboard/transact'
     | '/admin/'
     | '/dashboard/'
+    | '/home/'
     | '/admin/dues/bank'
     | '/admin/dues/category'
     | '/admin/dues/list'
@@ -321,6 +340,7 @@ export interface FileRouteTypes {
     | '/dashboard/transact'
     | '/admin'
     | '/dashboard'
+    | '/home'
     | '/admin/dues/bank'
     | '/admin/dues/category'
     | '/admin/dues/list'
@@ -331,6 +351,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/home'
     | '/admin'
     | '/dashboard'
     | '/forgot-password'
@@ -351,6 +372,7 @@ export interface FileRouteTypes {
     | '/dashboard/transact'
     | '/admin/'
     | '/dashboard/'
+    | '/home/'
     | '/admin/dues/bank'
     | '/admin/dues/category'
     | '/admin/dues/list'
@@ -362,6 +384,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  HomeRouteRoute: typeof HomeRouteRouteWithChildren
   AdminRoute: typeof AdminRouteWithChildren
   DashboardRoute: typeof DashboardRouteWithChildren
   ForgotPasswordRoute: typeof ForgotPasswordRoute
@@ -398,6 +421,13 @@ declare module '@tanstack/react-router' {
       path: '/forgot-password'
       fullPath: '/forgot-password'
       preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -519,6 +549,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardTransactRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/home/': {
+      id: '/home/'
+      path: '/'
+      fullPath: '/home/'
+      preLoaderRoute: typeof HomeIndexRouteImport
+      parentRoute: typeof HomeRouteRoute
+    }
     '/admin/dues/bank': {
       id: '/admin/dues/bank'
       path: '/dues/bank'
@@ -570,6 +607,18 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface HomeRouteRouteChildren {
+  HomeIndexRoute: typeof HomeIndexRoute
+}
+
+const HomeRouteRouteChildren: HomeRouteRouteChildren = {
+  HomeIndexRoute: HomeIndexRoute,
+}
+
+const HomeRouteRouteWithChildren = HomeRouteRoute._addFileChildren(
+  HomeRouteRouteChildren,
+)
 
 interface AdminRouteChildren {
   AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute
@@ -633,6 +682,7 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  HomeRouteRoute: HomeRouteRouteWithChildren,
   AdminRoute: AdminRouteWithChildren,
   DashboardRoute: DashboardRouteWithChildren,
   ForgotPasswordRoute: ForgotPasswordRoute,

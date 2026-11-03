@@ -1,5 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import Register from "@/app/pages/Register";
+import HomeNav from "@/components/HomeNav";
+import HomeHero from "./-home-comps/HomeHero";
+import HomeSections from "./-home-comps/HomeSections";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -13,5 +16,15 @@ export const Route = createFileRoute("/")({
       },
     ],
   }),
-  component: Register,
+  loader: () =>
+    redirect({
+      to: "/home",
+    }),
+  component: () => (
+    <>
+      <HomeNav />
+      <HomeHero />
+      <HomeSections />
+    </>
+  ),
 });
