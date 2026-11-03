@@ -1,17 +1,15 @@
 // @ts-nocheck
 import { API_URL } from "@/app/services/env";
 import "../stylesheet/login.css";
-import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { AiFillEye } from "react-icons/ai";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "@/lib/router-compat";
 import logo from "../image/logo.png";
-import { useNavigate } from "@/lib/router-compat";
 import axios from "axios";
 import useModal from "../hook/useModal";
 import RegisterSuccess from "../users/RegisterSuccess";
-import { useEffect } from "react";
 
 const Register = () => {
   function togglePassword(inputId) {
@@ -31,23 +29,14 @@ const Register = () => {
       toggleIcon.style.backgroundImage = 'url("eye-icon.png")'; // Change back to the normal eye icon
     }
   }
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [logindata, setLoginData] = useState({
-    name_of_representative: "",
-    last_name: "",
-    email: "",
-    password: "",
-    username: "",
-    password_confirmation: "",
-    phone_number: "",
-    address: "",
-    name_of_member_organization:"",
-  
-  });
-
-  const resetInput = () => {
-    setLoginData({
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    reset,
+    formState: { isSubmitting },
+  } = useForm({
+    defaultValues: {
       name_of_representative: "",
       last_name: "",
       email: "",
@@ -56,120 +45,49 @@ const Register = () => {
       password_confirmation: "",
       phone_number: "",
       address: "",
-      name_of_member_organization:"",
-    
-    });
-  };
-
-  const navigate = useNavigate();
-
-  const hadleInput = (e) => {
-    const { name, value, type, files } = e.target;
-
-    if (type === "file") {
-      if (files.length > 0) {
-        setLoginData({
-          ...logindata,
-          [name]: files[0],
-        });
-        console.log(logindata);
-      }
-    } else {
-      setLoginData({ ...logindata, [name]: value });
-    }
-  };
-
-  const isValidate = () => {
-    let isProceed = true;
-    let errorMessages = ""; // Create a variable to store error messages
-
-    if (
-      logindata.name_of_representative === "" ||
-      logindata.username === "" ||
-      logindata.email === "" ||
-      logindata.password === "" ||
-      logindata.password_confirmation === "" ||
-      logindata.name_of_member_organization === "" 
-    ) {
-      isProceed = false;
-      errorMessages += "Please fill all inputs. ";
-    }
-
-    if (logindata.password.length <= 7) {
-      isProceed = false;
-      toast.error("Password must be at least 8 Letters");
-    }
-
-    if (logindata.password_confirmation !== logindata.password) {
-      isProceed = false;
-      errorMessages += "Password and Confirm Password do not match. ";
-    }
-
-    if (!isProceed) {
-      toast.error(errorMessages);
-    } else {
-      if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(logindata.email)) {
-        isProceed = false;
-        toast.warning("Please enter a valid email");
-      }
-    }
-
-    return isProceed;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(logindata);
-    
-
-  const fd = new FormData();
-  Object.entries({ ...logindata}).forEach(([key, value]) => {
-    fd.append(key, value);
+      name_of_member_organization: "",
+    },
   });
-    if (isValidate()) {
-      setIsLoading(true); // Set loading state to true
 
-      axios
-        .post(`${API_URL}/auth/register`, fd, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((res) => {
-          console.log(res);
-          if (res.status) {
-            toast.success("Registered Successfully");
-            setShowModal(true);
-            resetInput();
-            // navigate("/login");
-          } else {
-            toast.error(res.data.message);
-          }
-        })
-        .catch((err) => {
-          if (err?.response?.data?.message) {
-            toast.error(err?.response?.data?.message);
-          }
-          if (err?.response?.data?.errors) {
-            Object.entries(err?.response?.data?.errors).forEach(
-              ([key, value]) => {
-                toast.error(value[0]);
-              }
-            );
-          }
-        })
-        .finally(() => {
-          setIsLoading(false);
+  const submitRegistration = async (data) => {
+    try {
+      const res = await axios.post(`${API_URL}/auth/register`, data, {
+        headers: { "Content-Type": "application/json" },
+      });
+      if (res.status) {
+        toast.success("Registered Successfully");
+        setShowModal(true);
+        reset();
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (err) {
+      if (err?.response?.data?.message) {
+        toast.error(err.response.data.message);
+      }
+      if (err?.response?.data?.errors) {
+        Object.values(err.response.data.errors).forEach((value) => {
+          toast.error(value[0]);
         });
+      }
     }
   };
+
+  const onInvalid = (formErrors) => {
+    toast.error(Object.values(formErrors)[0]?.message);
+  };
+
   // success modal
   const { Modal, setShowModal } = useModal();
 
   return (
     <>
       <div className="main_log">
-        <form onSubmit={handleSubmit} action="submit" className="register">
+        <form
+          onSubmit={handleSubmit(submitRegistration, onInvalid)}
+          noValidate
+          className="register"
+        >
           <img src={logo} alt="" />
           <div className="log_head">
             <h3>Register</h3>
@@ -178,24 +96,19 @@ const Register = () => {
 
           {/* Add Account Type */}
 
-         
-            <div className="input_log">
-              <label htmlFor=" Name of Representative (full names)"> Name of Representative (full names)</label>
-              <div>
-                {/* <HiOutlineUser className="icon" /> */}
-                <input
-                  placeholder="Enter Name of Representative (full names)"
-                  id="name_of_representative"
-                  name="name_of_representative"
-                  type="text"
-                  value={logindata.name_of_representative}
-                  onChange={hadleInput}
-                />
-              </div>
+          <div className="input_log">
+            <label htmlFor="name_of_representative"> Name of Representative (full names)</label>
+            <div>
+              {/* <HiOutlineUser className="icon" /> */}
+              <input
+                placeholder="Enter Name of Representative (full names)"
+                id="name_of_representative"
+                type="text"
+                {...register("name_of_representative", { required: "Please fill all inputs." })}
+              />
             </div>
+          </div>
 
-           
-          
           <div className="double">
             <div className="input_log">
               <label htmlFor="email">Email</label>
@@ -204,10 +117,14 @@ const Register = () => {
                 <input
                   placeholder="Enter Email"
                   id="email"
-                  name="email"
                   type="email"
-                  value={logindata.email}
-                  onChange={hadleInput}
+                  {...register("email", {
+                    required: "Please fill all inputs.",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                      message: "Please enter a valid email",
+                    },
+                  })}
                 />
               </div>
             </div>
@@ -218,10 +135,8 @@ const Register = () => {
                 <input
                   placeholder="Enter Phone Number"
                   id="phone_number"
-                  name="phone_number"
                   type="text"
-                  value={logindata.phone_number}
-                  onChange={hadleInput}
+                  {...register("phone_number")}
                 />
               </div>
             </div>
@@ -234,10 +149,8 @@ const Register = () => {
               <input
                 placeholder="Enter Username"
                 id="username"
-                name="username"
                 type="text"
-                value={logindata.username}
-                onChange={hadleInput}
+                {...register("username", { required: "Please fill all inputs." })}
               />
             </div>
           </div>
@@ -249,10 +162,8 @@ const Register = () => {
               <input
                 placeholder="Enter Your Address"
                 id="address"
-                name="address"
                 type="text"
-                value={logindata.address}
-                onChange={hadleInput}
+                {...register("address")}
               />
             </div>
           </div>
@@ -260,22 +171,18 @@ const Register = () => {
           {/* Add Place of Business */}
 
           <div className="input_log">
-            <label htmlFor="membership_professional_bodies">
-              Name of Member Organization
-            </label>
+            <label htmlFor="name_of_member_organization">Name of Member Organization</label>
             <div>
               <input
                 placeholder=" Name of Member Organization"
                 id="name_of_member_organization"
-                name="name_of_member_organization"
                 type="text"
-                value={logindata.name_of_member_organization}
-                onChange={hadleInput}
+                {...register("name_of_member_organization", {
+                  required: "Please fill all inputs.",
+                })}
               />
             </div>
           </div>
-
-       
 
           <div className="double">
             <div className="input_log">
@@ -285,15 +192,13 @@ const Register = () => {
                 <input
                   placeholder="Enter Passowrd"
                   id="password"
-                  name="password"
                   type="password"
-                  value={logindata.password}
-                  onChange={hadleInput}
+                  {...register("password", {
+                    required: "Please fill all inputs.",
+                    minLength: { value: 8, message: "Password must be at least 8 Letters" },
+                  })}
                 />
-                <span
-                  className="toggle-password"
-                  onClick={() => togglePassword("password")}
-                >
+                <span className="toggle-password" onClick={() => togglePassword("password")}>
                   <span className="eye-icon">
                     <AiFillEye />
                   </span>{" "}
@@ -307,10 +212,13 @@ const Register = () => {
                 <input
                   placeholder="Confirm Password"
                   id="password_confirmation"
-                  name="password_confirmation"
                   type="password"
-                  value={logindata.password_confirmation}
-                  onChange={hadleInput}
+                  {...register("password_confirmation", {
+                    required: "Please fill all inputs.",
+                    validate: (value) =>
+                      value === getValues("password") ||
+                      "Password and Confirm Password do not match.",
+                  })}
                 />
                 <span
                   className="toggle-password"
@@ -323,8 +231,8 @@ const Register = () => {
               </div>
             </div>
           </div>
-          <button className="form_btn" type="submit" disabled={isLoading}>
-            {isLoading ? "Loading..." : "Sign Up"}
+          <button className="form_btn" type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Loading..." : "Sign Up"}
           </button>
           <p>
             Already Registered?{" "}
