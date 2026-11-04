@@ -78,7 +78,7 @@ const Sidebar = ({ showSidebar, toggleSidebar }) => {
       <nav className={`side-nav ${showSidebar ? "active" : ""}`}>
         <ul className="nav-list">
           <li className="nav-item">
-            <NavLink to="/dashboard/" className="nav-link">
+            <NavLink to="/dashboard/" className="nav-link" activeOptions={{ exact: true }}>
               <span className="nav-icon">
                 <LuLayoutDashboard /> {showSidebar && "Dashboard"}
               </span>
