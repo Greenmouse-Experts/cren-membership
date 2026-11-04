@@ -10,6 +10,7 @@ import logo from "../image/logo.png";
 import axios from "axios";
 import useModal from "../hook/useModal";
 import RegisterSuccess from "../users/RegisterSuccess";
+import RenderLogo from "../components/RenderLogo";
 
 const Register = () => {
   function togglePassword(inputId) {
@@ -88,7 +89,7 @@ const Register = () => {
           noValidate
           className="register"
         >
-          <img src={logo} alt="" />
+          <RenderLogo />
           <div className="log_head">
             <h3>Register</h3>
             <p>Fill in your credentials to register as a Member</p>

@@ -12,6 +12,7 @@ import loginImg from "../image/login-img.svg";
 import axios from "axios";
 import { AiFillEye } from "react-icons/ai";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
+import RenderLogo from "../components/RenderLogo";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -68,9 +69,8 @@ const Login = () => {
           noValidate
           className="login md:w-[32rem] w-full mx-auto"
         >
-          <a href="http://ndiigbogermany.org">
-            <img src={logo} alt="logo" />
-          </a>
+          <RenderLogo />
+
           <div className="log_head">
             <h3>Sign in</h3>
 

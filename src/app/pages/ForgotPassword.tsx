@@ -6,6 +6,7 @@ import logo from "../image/logo.png";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useNavigate } from "@/lib/router-compat";
+import RenderLogo from "../components/RenderLogo";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -17,16 +18,19 @@ const ForgotPassword = () => {
     if (logValidate()) {
       setIsLoading(true);
       axios
-        .post(`${API_URL}/auth/password/email`, {email: email}, {
-          headers: {
-            "Content-Type": "multipart/form-data",
+        .post(
+          `${API_URL}/auth/password/email`,
+          { email: email },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
           },
-        })
+        )
         .then((res) => {
           if (res.data.code === 200) {
-            toast.success("check your email to get verification code")
-              navigate("/password-reset/");
-           
+            toast.success("check your email to get verification code");
+            navigate("/password-reset/");
 
             // localStorage.setItem("reset_igbo_email", res.data.data.email);
           }
@@ -36,11 +40,9 @@ const ForgotPassword = () => {
             toast.error(err?.response?.data?.message);
           }
           if (err?.response?.data?.errors) {
-            Object.entries(err?.response?.data?.errors).forEach(
-              ([key, value]) => {
-                toast.error(value[0]);
-              }
-            );
+            Object.entries(err?.response?.data?.errors).forEach(([key, value]) => {
+              toast.error(value[0]);
+            });
           }
         })
         .finally(() => {
@@ -56,9 +58,9 @@ const ForgotPassword = () => {
       toast.error("Please enter Email");
     }
     if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
-        result = false;
-        toast.warning("Please enter a valid email");
-      }
+      result = false;
+      toast.warning("Please enter a valid email");
+    }
 
     return result;
   };
@@ -70,13 +72,9 @@ const ForgotPassword = () => {
             onSubmit={handleSubmit}
             className="md:w-[32rem] bg-white dark:bg-darkMood w-full px-5 py-10 flex flex-col justify-center items-center mx-auto h-full rounded-2xl login"
           >
-            <a href="http://ndiigbogermany.org">
-              <img src={logo} alt="logo" className=" scale-75" />
-            </a>
+            <div className="p-3 bg-red-500 w-full"></div>
             <div className="flex flex-col justify-center gap-4 w-full">
-              <h3 className="text-[2.5rem] font-bold tracking-[-2px] mb-1">
-                Forget Password?
-              </h3>
+              <h3 className="text-[2.5rem] font-bold tracking-[-2px] mb-1">Forget Password?</h3>
               <p className="text-grey-800 text-lg font-normal mb-8">
                 Enter the email address associated with your account.
               </p>
@@ -99,10 +97,7 @@ const ForgotPassword = () => {
                   </div>
                 </div>
 
-                <button
-                  type="submit"
-                  className="login_btn bg-[#015907] text-white"
-                >
+                <button type="submit" className="login_btn bg-[#015907] text-white">
                   {isLoading ? "Verifying..." : "Continue"}
                 </button>
               </div>
@@ -111,11 +106,7 @@ const ForgotPassword = () => {
         </div>
 
         <div className="hidden xl:block h-full">
-          <img
-            src={loginImg}
-            alt=""
-            className="object-cover object-center h-full"
-          />
+          <img src={loginImg} alt="" className="object-cover object-center h-full" />
         </div>
       </section>
     </main>

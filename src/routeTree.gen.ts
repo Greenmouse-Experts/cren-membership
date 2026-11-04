@@ -24,6 +24,7 @@ import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as AdminNotifyRouteImport } from './routes/admin.notify'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminLoginRouteImport } from './routes/admin_.login'
+import { Route as AuthRegisterRouteImport } from './routes/auth.register'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as DashboardAnnounceRouteImport } from './routes/dashboard.announce'
 import { Route as DashboardDuesRouteImport } from './routes/dashboard.dues'
@@ -113,6 +114,11 @@ const AdminSettingsRoute = AdminSettingsRouteImport.update({
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin_/login',
   path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRegisterRoute = AuthRegisterRouteImport.update({
+  id: '/auth/register',
+  path: '/auth/register',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
@@ -207,6 +213,7 @@ export interface FileRoutesByFullPath {
   '/admin/notify': typeof AdminNotifyRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/login': typeof AdminLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
   '/dashboard/announce': typeof DashboardAnnounceRoute
   '/dashboard/dues': typeof DashboardDuesRoute
   '/dashboard/members': typeof DashboardMembersRoute
@@ -236,6 +243,7 @@ export interface FileRoutesByTo {
   '/admin/notify': typeof AdminNotifyRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/login': typeof AdminLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
   '/dashboard/announce': typeof DashboardAnnounceRoute
   '/dashboard/dues': typeof DashboardDuesRoute
   '/dashboard/members': typeof DashboardMembersRoute
@@ -269,6 +277,7 @@ export interface FileRoutesById {
   '/admin/notify': typeof AdminNotifyRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin_/login': typeof AdminLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
   '/dashboard/announce': typeof DashboardAnnounceRoute
   '/dashboard/dues': typeof DashboardDuesRoute
   '/dashboard/members': typeof DashboardMembersRoute
@@ -303,6 +312,7 @@ export interface FileRouteTypes {
     | '/admin/notify'
     | '/admin/settings'
     | '/admin/login'
+    | '/auth/register'
     | '/dashboard/announce'
     | '/dashboard/dues'
     | '/dashboard/members'
@@ -332,6 +342,7 @@ export interface FileRouteTypes {
     | '/admin/notify'
     | '/admin/settings'
     | '/admin/login'
+    | '/auth/register'
     | '/dashboard/announce'
     | '/dashboard/dues'
     | '/dashboard/members'
@@ -364,6 +375,7 @@ export interface FileRouteTypes {
     | '/admin/notify'
     | '/admin/settings'
     | '/admin_/login'
+    | '/auth/register'
     | '/dashboard/announce'
     | '/dashboard/dues'
     | '/dashboard/members'
@@ -391,6 +403,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   PasswordResetRoute: typeof PasswordResetRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AuthRegisterRoute: typeof AuthRegisterRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -498,6 +511,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/login'
       fullPath: '/admin/login'
       preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/register': {
+      id: '/auth/register'
+      path: '/auth/register'
+      fullPath: '/auth/register'
+      preLoaderRoute: typeof AuthRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/': {
@@ -689,6 +709,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   PasswordResetRoute: PasswordResetRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AuthRegisterRoute: AuthRegisterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
