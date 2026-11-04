@@ -1,5 +1,7 @@
-// @ts-nocheck
 import React, { useEffect, useState, useRef } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import useGetHook from "../../hook/useGet";
 import usePostHook from "../../hook/usePost";
 import { toast } from "react-toastify";
@@ -14,9 +16,16 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import {
   Dialog,
   DialogContent,
@@ -37,37 +46,56 @@ import {
   CheckCircle2,
 } from "lucide-react";
 
+const profileFormSchema = z.object({
+  name_of_member_organization: z.string().min(1, "Organization name is required"),
+  name_of_representative: z.string().min(1, "Representative name is required"),
+  username: z.string().min(1, "Username is required"),
+  email: z.string().email("Invalid email address"),
+  phone_number: z.string().min(1, "Phone number is required"),
+  address: z.string().optional().default(""),
+});
+
+type ProfileFormValues = z.infer<typeof profileFormSchema>;
+
 const MembersSetting = () => {
   const { data: user, isLoading: loadingProfile, refetch } = useGetHook("member/profile");
 
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const [isBusy, setIsBusy] = useState(false);
-  const [fname, setFname] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [username, setUserName] = useState("");
-  const [address, setAddress] = useState("");
-  const [representative, setNameOfRepresentative] = useState("");
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { handlePost } = usePostHook();
 
+  const form = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileFormSchema),
+    defaultValues: {
+      name_of_member_organization: "",
+      name_of_representative: "",
+      username: "",
+      email: "",
+      phone_number: "",
+      address: "",
+    },
+  });
+
   useEffect(() => {
     if (user?.data) {
-      setFname(user.data.name_of_member_organization || "");
-      setEmail(user.data.email || "");
-      setPhone(user.data.phone_number || "");
-      setUserName(user.data.username || "");
-      setAddress(user.data.address || "");
-      setNameOfRepresentative(user.data.name_of_representative || "");
+      form.reset({
+        name_of_member_organization: user.data.name_of_member_organization || "",
+        name_of_representative: user.data.name_of_representative || "",
+        username: user.data.username || "",
+        email: user.data.email || "",
+        phone_number: user.data.phone_number || "",
+        address: user.data.address || "",
+      });
 
       if (user.data.avatar) {
         localStorage.setItem("igbo_member_avatar", user.data.avatar);
       }
     }
-  }, [user]);
+  }, [user, form]);
 
   const onSuccess = () => {
     toast.success("Profile updated successfully");
@@ -93,24 +121,17 @@ const MembersSetting = () => {
     });
   };
 
-  const handleUpdateProfile = (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = (values: ProfileFormValues) => {
     setLoading(true);
-
-    const payload = {
-      name_of_member_organization: fname,
-      name_of_representative: representative,
-      username: username,
-      email: email,
-      phone_number: phone,
-      address: address,
-    };
-
-    handlePost("member/profile/update", payload, "application/json", onSuccess);
+    handlePost("member/profile/update", values, "application/json", onSuccess);
   };
 
+  const currentOrgName = form.watch("name_of_member_organization");
+  const currentRep = form.watch("name_of_representative");
+  const currentEmail = form.watch("email");
   const currentAvatar = preview || user?.data?.avatar;
-  const initials = (fname || representative || "U")
+
+  const initials = (currentOrgName || currentRep || "U")
     .split(" ")
     .map((n) => n[0])
     .join("")
@@ -163,163 +184,187 @@ const MembersSetting = () => {
         </Button>
       </div>
 
-      <form onSubmit={handleUpdateProfile}>
-        <Card className="shadow-sm">
-          <CardHeader className="pb-4 border-b">
-            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-              <div className="relative group">
-                <Avatar className="h-28 w-28 border-2 border-border shadow-md">
-                  <AvatarImage src={currentAvatar} alt="Profile" className="object-cover" />
-                  <AvatarFallback className="text-xl font-bold bg-primary/10 text-primary">
-                    {initials}
-                  </AvatarFallback>
-                </Avatar>
-                <button
-                  type="button"
-                  disabled={isBusy}
-                  onClick={() => fileInputRef.current?.click()}
-                  className="absolute bottom-0 right-0 h-9 w-9 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center hover:bg-primary/90 transition-all focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 cursor-pointer disabled:opacity-50"
-                  title="Upload profile picture"
-                >
-                  {isBusy ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <Camera className="h-4 w-4" />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <Card className="shadow-sm">
+            <CardHeader className="pb-4 border-b">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+                <div className="relative group">
+                  <Avatar className="h-28 w-28 border-2 border-border shadow-md">
+                    <AvatarImage src={currentAvatar} alt="Profile" className="object-cover" />
+                    <AvatarFallback className="text-xl font-bold bg-primary/10 text-primary">
+                      {initials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <button
+                    type="button"
+                    disabled={isBusy}
+                    onClick={() => fileInputRef.current?.click()}
+                    className="absolute bottom-0 right-0 h-9 w-9 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center hover:bg-primary/90 transition-all focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 cursor-pointer disabled:opacity-50"
+                    title="Upload profile picture"
+                  >
+                    {isBusy ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Camera className="h-4 w-4" />
+                    )}
+                  </button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={changeProfileImage}
+                    className="hidden"
+                  />
+                </div>
+
+                <div className="text-center sm:text-left space-y-1">
+                  <CardTitle className="text-xl">
+                    {currentOrgName || currentRep || "Organization Member"}
+                  </CardTitle>
+                  <CardDescription className="flex items-center justify-center sm:justify-start gap-2">
+                    <Mail className="h-3.5 w-3.5" />
+                    {currentEmail || "No email provided"}
+                  </CardDescription>
+                  <p className="text-xs text-muted-foreground pt-1">
+                    Click the camera icon to upload a new profile image (PNG, JPG, max 5MB).
+                  </p>
+                </div>
+              </div>
+            </CardHeader>
+
+            <CardContent className="pt-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormField
+                  control={form.control}
+                  name="name_of_member_organization"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <Building2 className="h-4 w-4 text-muted-foreground" />
+                        Name of Organization
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter organization name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                </button>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={changeProfileImage}
-                  className="hidden"
+                />
+
+                <FormField
+                  control={form.control}
+                  name="name_of_representative"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <User className="h-4 w-4 text-muted-foreground" />
+                        Name of Representative
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter representative's name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="username"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <User className="h-4 w-4 text-muted-foreground" />
+                        Username
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter username" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <Mail className="h-4 w-4 text-muted-foreground" />
+                        Email Address
+                      </FormLabel>
+                      <FormControl>
+                        <Input type="email" placeholder="Enter email address" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="phone_number"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <Phone className="h-4 w-4 text-muted-foreground" />
+                        Phone Number
+                      </FormLabel>
+                      <FormControl>
+                        <Input type="tel" placeholder="Enter phone number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="address"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-muted-foreground" />
+                        Address
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter full address" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
               </div>
+            </CardContent>
 
-              <div className="text-center sm:text-left space-y-1">
-                <CardTitle className="text-xl">
-                  {fname || representative || "Organization Member"}
-                </CardTitle>
-                <CardDescription className="flex items-center justify-center sm:justify-start gap-2">
-                  <Mail className="h-3.5 w-3.5" />
-                  {email || "No email provided"}
-                </CardDescription>
-                <p className="text-xs text-muted-foreground pt-1">
-                  Click the camera icon to upload a new profile image (PNG, JPG, max 5MB).
-                </p>
-              </div>
-            </div>
-          </CardHeader>
-
-          <CardContent className="pt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label htmlFor="org_name" className="flex items-center gap-2">
-                  <Building2 className="h-4 w-4 text-muted-foreground" />
-                  Name of Organization
-                </Label>
-                <Input
-                  id="org_name"
-                  value={fname}
-                  onChange={(e) => setFname(e.target.value)}
-                  placeholder="Enter organization name"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="rep_name" className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-muted-foreground" />
-                  Name of Representative
-                </Label>
-                <Input
-                  id="rep_name"
-                  value={representative}
-                  onChange={(e) => setNameOfRepresentative(e.target.value)}
-                  placeholder="Enter representative's name"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="username" className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-muted-foreground" />
-                  Username
-                </Label>
-                <Input
-                  id="username"
-                  value={username}
-                  onChange={(e) => setUserName(e.target.value)}
-                  placeholder="Enter username"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="email" className="flex items-center gap-2">
-                  <Mail className="h-4 w-4 text-muted-foreground" />
-                  Email Address
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter email address"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="phone" className="flex items-center gap-2">
-                  <Phone className="h-4 w-4 text-muted-foreground" />
-                  Phone Number
-                </Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Enter phone number"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="address" className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-muted-foreground" />
-                  Address
-                </Label>
-                <Input
-                  id="address"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  placeholder="Enter full address"
-                />
-              </div>
-            </div>
-          </CardContent>
-
-          <CardFooter className="flex justify-end gap-3 pt-4 border-t bg-muted/20">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => refetch()}
-              disabled={loading || isBusy}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={loading || isBusy} className="gap-2">
-              {loading ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                <>
-                  <CheckCircle2 className="h-4 w-4" />
-                  Save Changes
-                </>
-              )}
-            </Button>
-          </CardFooter>
-        </Card>
-      </form>
+            <CardFooter className="flex justify-end gap-3 pt-4 border-t bg-muted/20">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => form.reset()}
+                disabled={loading || isBusy}
+              >
+                Reset
+              </Button>
+              <Button type="submit" disabled={loading || isBusy} className="gap-2">
+                {loading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle2 className="h-4 w-4" />
+                    Save Changes
+                  </>
+                )}
+              </Button>
+            </CardFooter>
+          </Card>
+        </form>
+      </Form>
 
       <Dialog open={isPasswordModalOpen} onOpenChange={setIsPasswordModalOpen}>
         <DialogContent className="sm:max-w-md">
