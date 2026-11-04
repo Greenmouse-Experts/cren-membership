@@ -4,7 +4,7 @@
  * Relative paths ("members") resolve against the current section ("/dashboard", "/admin").
  */
 import {
-  Link as TsLink,
+  Link,
   useNavigate as useTsNavigate,
   useParams as useTsParams,
   useRouterState,
@@ -31,17 +31,12 @@ type LinkProps = {
   onClick?: () => void;
   [key: string]: unknown;
 };
-
-export function Link({ to, ...rest }: LinkProps) {
-  const resolve = useResolve();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return <TsLink to={resolve(to) as any} {...(rest as any)} />;
-}
+export { Link };
 
 export function NavLink({ to, className = "", ...rest }: LinkProps) {
   const resolve = useResolve();
   return (
-    <TsLink
+    <Link
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       to={resolve(to) as any}
       className={className}

@@ -186,7 +186,7 @@ const ResetPassword = () => {
           </button>
           <p>
             Don,t have an account?{" "}
-            <Link to="/">
+            <Link to="/auth/register">
               <span className="text-[#015907] font-medium">Create Account</span>
             </Link>
           </p>
