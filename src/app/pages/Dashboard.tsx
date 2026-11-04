@@ -15,7 +15,6 @@ import MembersSetting from "./users/Setting";
 import MembersDues from "./users/Dues";
 import Members from "../users/members/Members";
 
-
 const Dashboard = () => {
   const sub = localStorage.getItem("igbo_sub");
   const [subModal, setSubModal] = useState(false);
@@ -27,7 +26,7 @@ const Dashboard = () => {
   };
 
   const { data, isLoading } = useGetHook("member/count/unread/notifications");
-  
+
   useEffect(() => {
     if (sub === "0") {
       setSubModal(true);
@@ -55,9 +54,7 @@ const Dashboard = () => {
           </NotifyDataContext.Provider>
         </div>
       </div>
-      {subModal && (
-        <SubscribeModal/>
-      )}
+      {subModal && <SubscribeModal />}
     </div>
   );
 };

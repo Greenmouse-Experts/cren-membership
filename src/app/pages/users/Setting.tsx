@@ -119,7 +119,7 @@ const MembersSetting = () => {
 
   if (loadingProfile && !user) {
     return (
-      <div className="p-6 max-w-5xl mx-auto space-y-6">
+      <div className="p-4 sm:p-6 lg:p-8 w-full space-y-6">
         <Skeleton className="h-8 w-48" />
         <Card>
           <CardContent className="p-8 space-y-6">
@@ -145,7 +145,7 @@ const MembersSetting = () => {
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto space-y-6">
+    <div className="p-4 sm:p-6 lg:p-8 w-full space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground">Member Settings</h1>
