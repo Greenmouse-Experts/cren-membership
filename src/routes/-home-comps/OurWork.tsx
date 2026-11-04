@@ -5,25 +5,25 @@ const features = [
     title: "Clean Energy Policy & Advocacy",
     description:
       "Advocating for practical clean energy policies and efforts to reduce greenhouse gas emissions.",
-    icon: "/home_page/section_2_clean_energy.png",
+    icon: "/assets/Hero3(1).gif",
   },
   {
     title: "Capacity Building & Green Jobs",
     description:
       "Promoting indigenous capacity, green skills and opportunities for green employment.",
-    icon: "/home_page/section_2_capacity_building.png",
+    icon: "/assets/Hero3(2).gif",
   },
   {
     title: "Renewable Energy Financing",
     description:
       "Advocating for greater access to financing for renewable energy adoption and deployment.",
-    icon: "/home_page/section_2_renewable_energy.png",
+    icon: "/assets/Hero3(3).gif",
   },
   {
     title: "Standards & Awareness",
     description:
       "Supporting industry standards and deeper public awareness of clean energy solutions.",
-    icon: "/home_page/section_2_standards_awareness.png",
+    icon: "/assets/Hero3(4).gif",
   },
 ];
 

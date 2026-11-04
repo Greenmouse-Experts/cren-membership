@@ -11,7 +11,12 @@ vi.mock("axios", () => ({ default: { post: vi.fn() } }));
 vi.mock("react-toastify", () => ({
   toast: { error: vi.fn(), success: vi.fn(), warning: vi.fn() },
 }));
-vi.mock("@/lib/router-compat", () => ({ useNavigate: () => navigate }));
+vi.mock("@/lib/router-compat", () => ({
+  useNavigate: () => navigate,
+  Link: ({ children, to }: { children: React.ReactNode; to: string }) => (
+    <a href={to}>{children}</a>
+  ),
+}));
 
 describe("ForgotPassword", () => {
   beforeEach(() => {
