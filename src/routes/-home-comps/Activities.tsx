@@ -39,18 +39,11 @@ export default function Activities() {
   return (
     <section id="activities" className="relative isolate overflow-hidden bg-white">
       <img
-        src="/home_page/section_3_hex.png"
+        src="/assets/Hero4-bg.png"
         alt=""
         aria-hidden="true"
         loading="lazy"
-        className="pointer-events-none absolute -left-36 top-0 -z-10 w-[680px] max-w-none opacity-80 mix-blend-multiply"
-      />
-      <img
-        src="/home_page/section_3_hex.png"
-        alt=""
-        aria-hidden="true"
-        loading="lazy"
-        className="pointer-events-none absolute -right-40 bottom-0 -z-10 w-[760px] max-w-none rotate-180 opacity-80 mix-blend-multiply"
+        className="pointer-events-none absolute  top-0 -z-10 inset-0 max-w-none opacity-80 h-full"
       />
 
       <div className="mx-auto container px-5 py-16 sm:px-8 sm:py-20 lg:py-24">
