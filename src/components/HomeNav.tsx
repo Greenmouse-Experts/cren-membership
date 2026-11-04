@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 
 import logoMark from "@/app/image/logo-mark.png";
+import { Link } from "@tanstack/react-router";
 
 type HomeNavProps = {
   activeHref?: string;
@@ -22,7 +23,8 @@ const navShape = {
 
 function EnquiriesLink({ className = "" }: { className?: string }) {
   return (
-    <a
+    <Link
+      to="/auth/register"
       href="#enquiries"
       className={`group h-12 items-center justify-center gap-3 bg-[#084c2a] px-6 text-[15px] font-semibold text-white transition-colors duration-200 hover:bg-[#063a20] focus-visible:bg-[#063a20] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white ${className}`}
       style={{
@@ -36,7 +38,7 @@ function EnquiriesLink({ className = "" }: { className?: string }) {
         className="size-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
         strokeWidth={2.2}
       />
-    </a>
+    </Link>
   );
 }
 
