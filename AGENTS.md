@@ -23,6 +23,10 @@
   - `usePostHook()` (`src/app/hook/usePost.tsx`): Powered by TanStack Query's `useMutation`. Automatically invalidates queries on success, safely handles `FormData` / `application/json`, and parses validation errors into user notifications via `react-toastify`.
   - `usePostRead()` (`src/app/hook/usePostRead.tsx`): Mutation wrapper for POST read operations.
 
+- **Forms & Form State Management**:
+  - **Refactor `useState` to `useForm`**: Always migrate and convert local states (`useState`) used for forms to `useForm` (from `react-hook-form`) wherever seen across the codebase. Do not use manual `useState` hooks to manage form field values, inputs, or validation.
+  - Pair `useForm` with `zod` schemas (`@hookform/resolvers/zod`) for validation and utilize shadcn form components from `src/components/ui/form.tsx` (`Form`, `FormField`, `FormItem`, `FormLabel`, `FormControl`, `FormMessage`) for UI consistency and accessibility.
+
 - **Data Types & API Contracts**:
   - `src/types/api.ts` defines standard response contracts:
     - `ApiResponse<T>`: `{ code: number, message: string, data: T }`
