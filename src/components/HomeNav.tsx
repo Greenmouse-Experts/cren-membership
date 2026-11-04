@@ -25,7 +25,6 @@ function EnquiriesLink({ className = "" }: { className?: string }) {
   return (
     <Link
       to="/auth/register"
-      href="#enquiries"
       className={`group h-12 items-center justify-center gap-3 bg-[#084c2a] px-6 text-[15px] font-semibold text-white transition-colors duration-200 hover:bg-[#063a20] focus-visible:bg-[#063a20] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white ${className}`}
       style={{
         clipPath:
