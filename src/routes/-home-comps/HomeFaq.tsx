@@ -40,7 +40,10 @@ const faqs = [
 
 export default function HomeFaq() {
   return (
-    <section id="faq" className="relative isolate overflow-hidden bg-[#f7faf8]">
+    <section
+      id="faq"
+      className="relative isolate overflow-hidden bg-[#f7faf8] border-t border-black/20"
+    >
       <img
         src="/home_page/section_3_hex.png"
         alt=""
@@ -65,9 +68,9 @@ export default function HomeFaq() {
             <AccordionItem
               key={faq.value}
               value={faq.value}
-              className="border-b border-[#075b2f]/20 first:border-t"
+              className="border-b border-[#075b2f]/20 first:border-t bg-white rounded-xl px-4 my-2"
             >
-              <AccordionTrigger className="py-4 text-left text-[0.82rem] font-semibold text-[#202522] hover:no-underline sm:text-[0.88rem] [&>svg]:size-3.5 [&>svg]:text-[#a43f2e]">
+              <AccordionTrigger className="py-4 text-left text-[0.82rem] font-semibold  text-[#075b2f] hover:no-underline sm:text-[0.88rem] [&>svg]:size-3.5 [&>svg]:text-[#a43f2e]">
                 {faq.question}
               </AccordionTrigger>
               <AccordionContent className="pb-5 pr-8 text-[0.76rem] leading-[1.7] text-[#68716a] sm:text-[0.82rem]">
