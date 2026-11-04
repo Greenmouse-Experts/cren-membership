@@ -55,14 +55,14 @@ const PaystackPayButton: React.FC<PaystackPayButtonProps> = ({ item, onVerify })
       size="sm"
       className="bg-primary hover:bg-primary/90 text-primary-foreground gap-1.5 cursor-pointer shadow-sm"
       onClick={() => {
-        initializePayment(
-          (reference: { reference: string }) => {
+        initializePayment({
+          onSuccess: (reference: { reference: string }) => {
             onVerify(reference.reference, item.id);
           },
-          () => {
+          onClose: () => {
             console.log("Paystack dialog closed");
           },
-        );
+        });
       }}
     >
       <RiSecurePaymentFill className="h-4 w-4" />
