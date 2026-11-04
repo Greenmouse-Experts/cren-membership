@@ -49,7 +49,7 @@ export default function HomeFaq() {
         className="pointer-events-none absolute -bottom-24 -right-40 -z-10 w-[780px] max-w-none opacity-80 mix-blend-multiply"
       />
 
-      <div className="mx-auto grid max-w-[1180px] gap-10 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:gap-20 lg:py-24">
+      <div className="mx-auto grid container gap-10 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:gap-20 lg:py-24">
         <div>
           <h2 className="max-w-[360px] text-balance text-[clamp(2.4rem,4.8vw,3.65rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-[#075b2f]">
             Frequently asked questions.

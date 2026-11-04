@@ -24,7 +24,7 @@ export default function Hero({ heroContent, imgSrc }: HeroProps) {
         }}
       />
 
-      <div className="mx-auto w-full max-w-[1440px] px-5 py-20 sm:px-8 sm:py-24 lg:px-10 lg:py-28">
+      <div className="mx-auto w-full container px-5 py-20 sm:px-8 sm:py-24 lg:px-10 lg:py-28">
         {heroContent}
       </div>
     </section>

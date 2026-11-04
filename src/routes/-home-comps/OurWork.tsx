@@ -38,7 +38,7 @@ export default function OurWork() {
         className="absolute inset-0 -z-10 h-full w-full object-cover"
       />
 
-      <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20 lg:py-24">
+      <div className="mx-auto container px-5 py-16 sm:px-8 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-[790px] text-center">
           <h2 className="text-balance text-[clamp(2rem,4.4vw,3.35rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-[#96d64c]">
             Our work for a sustainable energy future.

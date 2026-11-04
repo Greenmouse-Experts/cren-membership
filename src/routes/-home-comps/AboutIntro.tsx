@@ -18,7 +18,7 @@ export default function AboutIntro() {
         className="pointer-events-none absolute -bottom-24 -right-48 -z-10 w-[1080px] max-w-none rotate-180 opacity-100 mix-blend-multiply"
       />
 
-      <div className="mx-auto grid w-full max-w-[1440px] items-center gap-10 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-2 lg:gap-16 lg:px-10 lg:py-24">
+      <div className="mx-auto grid w-full   items-center gap-10 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-2 lg:gap-16 lg:px-10 lg:py-24 container">
         <div className="max-w-[640px]">
           <h2 className="text-balance text-[clamp(2.5rem,5vw,4rem)] font-semibold leading-[1.03] tracking-[-0.04em] text-[#075b2f]">
             Bringing Nigeria&apos;s clean energy voices together.

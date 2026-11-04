@@ -16,9 +16,7 @@
  * 1. Add the variable to :root (light value) and .dark (dark value)
  * 2. Register it in @theme inline as --color-<name>: var(--<name>)
  */
-@utility container {
-  @apply px-4;
-}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -372,3 +370,34 @@
     display: none;
   }
 }
+
+@utility container {
+  max-width: 100%;
+  width: 100%;
+  @media (width >= 40rem /* 640px */) {
+    max-width: 40rem /* 640px */;
+  }
+  @media (width >= 48rem /* 768px */) {
+    max-width: 48rem /* 768px */;
+  }
+  @media (width >= 64rem /* 1024px */) {
+    max-width: 64rem /* 1024px */;
+  }
+  @media (width >= 86rem /* 1280px */) {
+    max-width: 86rem /* 1280px */;
+  }
+  @media (width >= 96rem /* 1536px */) {
+    max-width: 94rem /* 1536px */;
+  }
+  @apply px-4;
+}
+.container {
+  padding-inline: calc(var(--spacing) * 4) /* 1rem = 16px */;
+}
+
+/*@utility page-wrap {
+  @media (width >= 96rem /* 1536px */) {
+    max-width: 96rem /* 1536px */;
+  }
+  @apply px-4;
+}*/

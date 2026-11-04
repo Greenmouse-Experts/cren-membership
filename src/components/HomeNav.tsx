@@ -30,7 +30,7 @@ function EnquiriesLink({ className = "" }: { className?: string }) {
           "polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px)",
       }}
     >
-      <span>Enquiries</span>
+      <span>Become a member</span>
       <ArrowUpRight
         aria-hidden="true"
         className="size-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
@@ -64,7 +64,7 @@ export default function HomeNav({ activeHref = "#home", className = "" }: HomeNa
       id="home"
       className={`w-full bg-transparent px-4 py-4 sm:px-6 lg:px-8 ${className} absolute z-20 top-0`}
     >
-      <div className="mx-auto max-w-[1400px] drop-shadow-[0_18px_36px_rgba(2,30,14,0.08)]">
+      <div className="mx-auto container rop-shadow-[0_18px_36px_rgba(2,30,14,0.08)]">
         <div className="bg-white" style={navShape}>
           <div className="flex min-h-[74px] items-center justify-between gap-5 px-5 py-2 sm:min-h-[82px] sm:px-8 xl:grid xl:grid-cols-[auto_1fr_auto] xl:gap-8 xl:px-10 2xl:px-12">
             <a
