@@ -6,7 +6,7 @@ import HeroContent from "./HeroContent";
 export default function HomeHero() {
   return (
     <Hero
-      imgSrc="/home_hero.png"
+      imgSrc="assets/Hero-bg.gif"
       heroContent={
         <HeroContent
           title={

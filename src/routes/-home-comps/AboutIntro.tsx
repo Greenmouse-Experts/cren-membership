@@ -4,18 +4,11 @@ export default function AboutIntro() {
   return (
     <section id="about" className="relative isolate flex items-center overflow-hidden bg-[#f7f9f7]">
       <img
-        src="/home_page/section_3_hex.png"
+        src="/assets/Hero2-bg.png"
         alt=""
         aria-hidden="true"
         loading="lazy"
-        className="pointer-events-none absolute -left-52 top-0 -z-10 w-[980px] max-w-none opacity-100 mix-blend-multiply"
-      />
-      <img
-        src="/home_page/section_3_hex.png"
-        alt=""
-        aria-hidden="true"
-        loading="lazy"
-        className="pointer-events-none absolute -bottom-24 -right-48 -z-10 w-[1080px] max-w-none rotate-180 opacity-100 mix-blend-multiply"
+        className="pointer-events-none absolute -z-10 inset-0 max-w-none opacity-30"
       />
 
       <div className="mx-auto grid w-full   items-center gap-10 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-2 lg:gap-16 lg:px-10 lg:py-24 container">
@@ -50,7 +43,7 @@ export default function AboutIntro() {
             src="/home_page/section_1.png"
             alt="Renewable energy technicians working on an offshore wind turbine"
             loading="lazy"
-            className="aspect-[1.49] w-full object-cover"
+            className=" w-full object-contain"
           />
         </div>
       </div>

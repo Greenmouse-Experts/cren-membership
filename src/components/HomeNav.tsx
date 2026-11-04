@@ -56,7 +56,7 @@ export default function HomeNav({ activeHref = "#home", className = "" }: HomeNa
   }, [menuOpen]);
 
   const navLinkClass = (href: string) =>
-    `rounded-sm py-2 text-[1rem] font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#015907] focus-visible:ring-offset-4 ${
+    `rounded-sm py-2 text-sm lg:text-base font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#015907] focus-visible:ring-offset-4 ${
       activeHref === href ? "text-[#0a7a3c]" : "text-[#161616] hover:text-[#015907]"
     }`;
 
@@ -103,7 +103,7 @@ export default function HomeNav({ activeHref = "#home", className = "" }: HomeNa
               ))}
             </nav>
 
-            <EnquiriesLink className="hidden xl:flex" />
+            <EnquiriesLink className="hidden lg:flex" />
 
             <button
               type="button"
