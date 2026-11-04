@@ -387,17 +387,10 @@
     max-width: 86rem /* 1280px */;
   }
   @media (width >= 96rem /* 1536px */) {
-    max-width: 94rem /* 1536px */;
+    max-width: 88rem /* 1536px */;
   }
   @apply px-4;
 }
 .container {
   padding-inline: calc(var(--spacing) * 4) /* 1rem = 16px */;
 }
-
-/*@utility page-wrap {
-  @media (width >= 96rem /* 1536px */) {
-    max-width: 96rem /* 1536px */;
-  }
-  @apply px-4;
-}*/

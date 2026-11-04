@@ -53,7 +53,7 @@ export default function Activities() {
         className="pointer-events-none absolute -right-40 bottom-0 -z-10 w-[760px] max-w-none rotate-180 opacity-80 mix-blend-multiply"
       />
 
-      <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20 lg:py-24">
+      <div className="mx-auto container px-5 py-16 sm:px-8 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-[720px] text-center">
           <h2 className="text-balance text-[clamp(2.15rem,4.6vw,3.4rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-[#075b2f]">
             CREN&apos;s activities and priorities.
