@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Hubot+Sans:ital,wght@0,200..900;1,200..900&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -70,7 +71,7 @@
 
 :root {
   --radius: 0.625rem;
-  --font-sans: "Montserrat", sans-serif;
+  --font-sans: "Hubot Sans", sans-serif;
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 264.695);
   --card: oklch(1 0 0);
@@ -146,7 +147,7 @@
   }
 
   :root {
-    --font: "Montserrat", sans-serif;
+    --font: "Hubot Sans", sans-serif;
     --red: #015907;
   }
 
