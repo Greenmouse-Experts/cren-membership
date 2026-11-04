@@ -19,10 +19,11 @@ const AddDuesCategory = ({ close, refetch }) => {
   };
   const handleSubmit = async () => {
     setLoading(true);
-    const fd = new FormData();
-    fd.append("name", name);
-    fd.append("bank_id", accNo);
-    handlePost(`admin/category/post`, fd, `multipart/form-data`, onSuccess);
+    const payload = {
+      name,
+      bank_id: accNo,
+    };
+    handlePost(`admin/category/post`, payload, `application/json`, onSuccess);
   };
   return (
     <>
@@ -37,14 +38,11 @@ const AddDuesCategory = ({ close, refetch }) => {
       <div className="mt-4">
         <label className="text-lg font-medium">Selected Bank</label>
         <div className="border border-gray-400 rounded mt-2">
-          <select
-            className="w-full py-3 p-2 rounded"
-            onChange={(e) => setAccNo(e.target.value)}
-          >
+          <select className="w-full py-3 p-2 rounded" onChange={(e) => setAccNo(e.target.value)}>
             <option value={""}></option>
             {data?.data.map((item, i) => (
               <option value={item.id} key={i}>
-                {item.account_name}
+                {item.bank_name}
               </option>
             ))}
           </select>

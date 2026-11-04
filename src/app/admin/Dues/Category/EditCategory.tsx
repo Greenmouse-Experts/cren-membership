@@ -19,11 +19,12 @@ const EditDuesCategory = ({ item, close, refetch }) => {
   };
   const handleSubmit = async () => {
     setLoading(true);
-    const fd = new FormData();
-    fd.append("name", name);
-    fd.append("bank_id", accNo);
-    fd.append("category_id", item.id);
-    handlePost(`admin/category/update`, fd, `multipart/form-data`, onSuccess);
+    const payload = {
+      name,
+      bank_id: accNo,
+      category_id: item.id,
+    };
+    handlePost(`admin/category/update`, payload, `application/json`, onSuccess);
   };
   return (
     <>
@@ -47,7 +48,7 @@ const EditDuesCategory = ({ item, close, refetch }) => {
             <option value={""}></option>
             {data?.data.map((item, i) => (
               <option value={item.id} key={i}>
-                {item.account_name}
+                {item.bank_name}
               </option>
             ))}
           </select>

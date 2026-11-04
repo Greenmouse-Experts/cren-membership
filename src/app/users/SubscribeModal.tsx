@@ -14,46 +14,22 @@ const SubscribeModal = () => {
   const [receipt, setReceipt] = useState(null);
   const email = localStorage.getItem("igbo_email");
   const { handlePost } = usePostHook();
-  // const config = {
-  //   reference: new Date().getTime().toString(),
-  //   email: email,
-  //   amount: data?.data?.amount * 100, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
-  //   publicKey: `pk_test_49f890a833251838e552b28276e8e42006444ce7`,
-  // };
   const isSuccess = () => {
     localStorage.setItem("igbo_sub", "1");
     toast.success("Subscription paid successfully");
     window.location.reload();
   };
-  // you can call this function anything
   const handleSubmit = () => {
-    console.log();
-    const fd = new FormData();
-    fd.append("subscription_id", data?.data?.id);
-    fd.append("receipt", receipt);
-    handlePost(`member/subscription/upload/manual/receipt`, fd, `multipart/form-data`, isSuccess);
+    const payload = {
+      subscription_id: data?.data?.id,
+      receipt: receipt,
+    };
+    handlePost(`member/subscription/upload/manual/receipt`, payload, `application/json`, isSuccess);
   };
 
-  // you can call this function anything
   const onClose = () => {
-    // implementation for  whatever you want to do when the Paystack dialog closed.
     console.log("closed");
   };
-  // const PaystackHookButton = () => {
-  //   // const initializePayment = usePaystackPayment(config);
-  //   return (
-  //     <div>
-  //       <button
-  //         className="bg-blue-900 text-white font-semibold px-6 py-2 rounded-lg"
-  //         onClick={() => {
-  //           initializePayment(onSuccess, onClose);
-  //         }}
-  //       >
-  //         Subscribe Now
-  //       </button>
-  //     </div>
-  //   );
-  // };
 
   return (
     <div className="fixed flex justify-center items-center h-screen w-full top-0 left-0 bg-[#00000066]">
@@ -76,7 +52,6 @@ const SubscribeModal = () => {
                 <label htmlFor=""> click upload receipt</label>
                 <input type="file" name="" id="" onChange={(e) => setReceipt(e.target.files[0])} />
               </div>
-              {/* <PaystackHookButton /> */}
             </div>
             <button
               onClick={() => handleSubmit()}

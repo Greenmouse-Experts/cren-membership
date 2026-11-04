@@ -17,16 +17,12 @@ const ChangePassword = ({ close, refetch }) => {
   };
   const handleSubmit = async () => {
     setLoading(true);
-    const fd = new FormData();
-    fd.append("old_password", oldPassword);
-    fd.append("new_password", newPassword);
-    fd.append("new_password_confirmation", newPassword2);
-    handlePost(
-      `member/profile/update/password`,
-      fd,
-      `multipart/form-data`,
-      onSuccess
-    );
+    const payload = {
+      old_password: oldPassword,
+      new_password: newPassword,
+      new_password_confirmation: newPassword2,
+    };
+    handlePost(`member/profile/update/password`, payload, `application/json`, onSuccess);
   };
   return (
     <>

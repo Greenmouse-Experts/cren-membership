@@ -20,19 +20,13 @@ const EditAnnounce = ({ item, refetch, close }) => {
   };
   const handleSubmit = async () => {
     setLoading(true);
-    const fd = new FormData();
-    fd.append("title", title);
-    fd.append("content", body);
-    fd.append("announcement_id", item.id);
-    if (image) {
-      fd.append("image", image);
-    }
-    handlePost(
-      `admin/announcements/update`,
-      fd,
-      `multipart/form-data`,
-      onSuccess
-    );
+    const payload = {
+      title,
+      content: body,
+      announcement_id: item.id,
+      ...(image ? { image } : {}),
+    };
+    handlePost(`admin/announcements/update`, payload, `application/json`, onSuccess);
   };
   return (
     <>
@@ -54,13 +48,12 @@ const EditAnnounce = ({ item, refetch, close }) => {
         />
       </div>
       <div className="mt-4">
-        <img src={item.image} alt="image" className="w-24" />
-        <label className="text-lg font-medium w-full">Image Cover</label>
+        <label className="text-lg font-medium">Image</label>
         <input
           type="file"
           accept="image/*"
-          onChange={handleImage}
           className="border border-gray-400 w-full mt-2 p-2 rounded"
+          onChange={handleImage}
         />
       </div>
       <div className="mt-8">
@@ -69,7 +62,7 @@ const EditAnnounce = ({ item, refetch, close }) => {
           onClick={handleSubmit}
           className="w-full py-3 bg-[#015907] font-semibold text-lg rounded text-white"
         >
-          {loading ? `Updating...` : `Submit`}
+          {loading ? `Submiting...` : `Submit`}
         </button>
       </div>
     </>

@@ -1,13 +1,12 @@
 // @ts-nocheck
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {IoClose} from "react-icons/io5"
-import { CustomAdd } from '../services/config';
-import { ThreeDots} from "react-loader-spinner";
+import { IoClose } from "react-icons/io5";
+import { CustomAdd } from "../services/config";
+import { ThreeDots } from "react-loader-spinner";
 
-
-const AddAssociate = ({onClose}) => {
+const AddAssociate = ({ onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [logindata, setLoginData] = useState({
@@ -20,9 +19,9 @@ const AddAssociate = ({onClose}) => {
   });
 
   const handleInput = (e) => {
-    const{name, value} = e.target;
+    const { name, value } = e.target;
     setLoginData({ ...logindata, [name]: value });
-  }
+  };
 
   const isValidate = () => {
     let isProceed = true;
@@ -53,46 +52,44 @@ const AddAssociate = ({onClose}) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log(logindata);
-    const fd = new FormData();
-    Object.entries(logindata).forEach(([key, value]) => {
-      fd.append(key, value);
-    });
+    const payload = {
+      ...logindata,
+    };
     if (isValidate()) {
-      setIsLoading(true); 
+      setIsLoading(true);
 
-      CustomAdd.post("admin/member/add", fd)
+      CustomAdd.post("admin/member/add", payload)
         .then((res) => {
           // console.log(res);
-            if(res.status === 200){
-              // console.log(res.data)
-              // console.log(res.data.errors);
-              toast.success("Member Added Successfully");
-              onClose(); 
-            }
-            else{
-              // console.log(res);
-              // toast.error(res.response.data.code)
-            }
-            
+          if (res.status === 200) {
+            // console.log(res.data)
+            // console.log(res.data.errors);
+            toast.success("Member Added Successfully");
+            onClose();
+          } else {
+            // console.log(res);
+            // toast.error(res.response.data.code)
+          }
         })
         .catch((err) => {
-          
-          Object.entries(err.response.data.errors).forEach(([key,value])=> {
+          Object.entries(err.response.data.errors).forEach(([key, value]) => {
             toast.error(value[0]);
-          })
-          
+          });
         })
         .finally(() => {
           setIsLoading(false);
         });
     }
-  
   };
 
   return (
     <div className="add_member">
-        <div className="add_head"><p>Add New Member</p> <span onClick={onClose}><IoClose/></span></div>
+      <div className="add_head">
+        <p>Add New Member</p>{" "}
+        <span onClick={onClose}>
+          <IoClose />
+        </span>
+      </div>
       <form onSubmit={handleSubmit} action="submit" className="add_mem">
         <div className="input_">
           <label>Account Type</label>
@@ -198,21 +195,28 @@ const AddAssociate = ({onClose}) => {
             />
           </div>
         </div>
-      
-        {isLoading ? <div className="dotss"><ThreeDots 
-height="80" 
-width="80" 
-radius="9"
-color="#4fa94d" 
-ariaLabel="three-dots-loading"
-wrapperStyle={{}}
-wrapperClassName=""
-visible={true}
- /></div>  : <button className="add_btn" type="submit" disabled={isLoading}>Add Member </button>}
+
+        {isLoading ? (
+          <div className="dotss">
+            <ThreeDots
+              height="80"
+              width="80"
+              radius="9"
+              color="#4fa94d"
+              ariaLabel="three-dots-loading"
+              wrapperStyle={{}}
+              wrapperClassName=""
+              visible={true}
+            />
+          </div>
+        ) : (
+          <button className="add_btn" type="submit" disabled={isLoading}>
+            Add Member{" "}
+          </button>
+        )}
       </form>
     </div>
   );
 };
 
 export default AddAssociate;
-

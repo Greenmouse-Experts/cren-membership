@@ -19,15 +19,11 @@ const UploadReceipt = ({ refetch, close, id }) => {
   };
   const handleSubmit = async () => {
     setLoading(true);
-    const fd = new FormData();
-    fd.append("due_id", id);
-    fd.append("receipt", image);
-    handlePost(
-      `member/upload/manual/receipt`,
-      fd,
-      `multipart/form-data`,
-      onSuccess
-    );
+    const payload = {
+      due_id: id,
+      receipt: image,
+    };
+    handlePost(`member/upload/manual/receipt`, payload, `application/json`, onSuccess);
   };
   return (
     <>

@@ -19,15 +19,11 @@ const AddGallery = ({ close, refetch }) => {
   };
   const handleSubmit = async () => {
     setLoading(true);
-    const fd = new FormData();
-    fd.append("title", title);
-    fd.append("image", image);
-    handlePost(
-      `admin/frontend/add/gallery`,
-      fd,
-      `multipart/form-data`,
-      onSuccess
-    );
+    const payload = {
+      title,
+      image,
+    };
+    handlePost(`admin/frontend/add/gallery`, payload, `application/json`, onSuccess);
   };
   return (
     <>
@@ -39,14 +35,13 @@ const AddGallery = ({ close, refetch }) => {
           onChange={(e) => setTitle(e.target.value)}
         />
       </div>
-    
       <div className="mt-4">
-        <label className="text-lg font-medium w-full">Image Cover</label>
+        <label className="text-lg font-medium">Image</label>
         <input
           type="file"
           accept="image/*"
-          onChange={handleImage}
           className="border border-gray-400 w-full mt-2 p-2 rounded"
+          onChange={handleImage}
         />
       </div>
       <div className="mt-8">

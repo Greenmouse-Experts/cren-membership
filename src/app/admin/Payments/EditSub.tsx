@@ -1,12 +1,11 @@
 // @ts-nocheck
-import React from "react";
-import { useState } from "react";
-import usePostHook from "../../hook/usePost";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
+import usePostHook from "../../hook/usePost";
 
-const EditSubscription = ({ item, refetch, close }) => {
+const EditSubModal = ({ item, close, refetch }) => {
+  console.log(item);
   const [loading, setLoading] = useState(false);
-  console.log(item.item);
   const [bank, setBank] = useState("");
   const [amt, setAmt] = useState(Number(item.amount));
   const { handlePost } = usePostHook();
@@ -18,11 +17,12 @@ const EditSubscription = ({ item, refetch, close }) => {
   };
   const handleSubmit = async () => {
     setLoading(true);
-    const fd = new FormData();
-    fd.append("subscription_id", item.id);
-    fd.append("amount", amt);
-    fd.append("bank", bank);
-    handlePost(`admin/subscription`, fd, `multipart/form-data`, onSuccess);
+    const payload = {
+      subscription_id: item.id,
+      amount: amt,
+      bank: bank,
+    };
+    handlePost(`admin/subscription`, payload, `application/json`, onSuccess);
   };
   return (
     <>
@@ -51,7 +51,7 @@ const EditSubscription = ({ item, refetch, close }) => {
             onClick={handleSubmit}
             className="w-full py-3 bg-[#015907] font-semibold text-lg rounded text-white"
           >
-            {loading ? `Updating...` : `Update`}
+            {loading ? `Submiting...` : `Submit`}
           </button>
         </div>
       </div>
@@ -59,4 +59,4 @@ const EditSubscription = ({ item, refetch, close }) => {
   );
 };
 
-export default EditSubscription;
+export default EditSubModal;

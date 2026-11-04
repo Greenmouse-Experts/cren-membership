@@ -18,11 +18,12 @@ const AddBanksModal = ({ close, refetch }) => {
   };
   const handleSubmit = async () => {
     setLoading(true);
-    const fd = new FormData();
-    fd.append("account_name", accName);
-    fd.append("account_number", accNo);
-    fd.append("bank_name", bankName);
-    handlePost(`admin/bank/post`, fd, `multipart/form-data`, onSuccess);
+    const payload = {
+      account_name: accName,
+      account_number: accNo,
+      bank_name: bankName,
+    };
+    handlePost(`admin/bank/post`, payload, `application/json`, onSuccess);
   };
   return (
     <>
@@ -45,7 +46,7 @@ const AddBanksModal = ({ close, refetch }) => {
       <div className="mt-4">
         <label className="text-lg font-medium">Account Number</label>
         <input
-          type="number"
+          type="text"
           className="border border-gray-400 w-full mt-2 p-2 rounded"
           onChange={(e) => setAccNo(e.target.value)}
         />

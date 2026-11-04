@@ -14,9 +14,9 @@ const AddFellow = ({ onClose, refetch }) => {
     email: "",
     username: "",
     phone_number: "",
-    name_of_member_organization:"",
+    name_of_member_organization: "",
     address: "",
-    password:"password"
+    password: "password",
   });
 
   const handleInput = (e) => {
@@ -29,11 +29,10 @@ const AddFellow = ({ onClose, refetch }) => {
     let errorMessages = ""; // Create a variable to store error messages
 
     if (
-      logindata.name_of_representative === "" |
-      logindata.username === "" ||
+      (logindata.name_of_representative === "") | (logindata.username === "") ||
       logindata.email === "" ||
       logindata.phone_number === "" ||
-      logindata.name_of_member_organization === "" || 
+      logindata.name_of_member_organization === "" ||
       logindata.address === ""
     ) {
       isProceed = false;
@@ -54,26 +53,24 @@ const AddFellow = ({ onClose, refetch }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log(logindata);
-    const fd = new FormData();
-    Object.entries(logindata).forEach(([key, value]) => {
-      fd.append(key, value);
-    });
+    const payload = {
+      ...logindata,
+    };
     if (isValidate()) {
       setIsLoading(true);
 
-      CustomAdd.post("admin/member/add", fd)
+      CustomAdd.post("admin/member/add", payload)
         .then((res) => {
           console.log(res);
           if (res.status === 200) {
             console.log(res?.data);
             console.log(res?.data?.errors);
             toast.success("Member Added Successfully");
-            refetch()
+            refetch();
             onClose();
           } else {
             console.log(res);
-            toast.error(res?.response?.data?.code)
+            toast.error(res?.response?.data?.code);
           }
         })
         .catch((err) => {
@@ -115,10 +112,7 @@ const AddFellow = ({ onClose, refetch }) => {
           </div>
         </div>
         <div className="input_log">
-          <label htmlFor=" Name of Representative (full names)">
-            {" "}
-            Name of Organization
-          </label>
+          <label htmlFor=" Name of Representative (full names)"> Name of Organization</label>
           <div>
             {/* <HiOutlineUser className="icon" /> */}
             <input
@@ -132,67 +126,65 @@ const AddFellow = ({ onClose, refetch }) => {
           </div>
         </div>
         <div className="double">
-
-        <div className="input_log">
-          <label htmlFor="username">Username</label>
-          <div>
-            {/* <HiOutlineUser className="icon" /> */}
-            <input
-              placeholder="Enter Username"
-              id="username"
-              name="username"
-              type="text"
-              value={logindata.username}
-              onChange={handleInput}
-            />
+          <div className="input_log">
+            <label htmlFor="username">Username</label>
+            <div>
+              {/* <HiOutlineUser className="icon" /> */}
+              <input
+                placeholder="Enter Username"
+                id="username"
+                name="username"
+                type="text"
+                value={logindata.username}
+                onChange={handleInput}
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="input_log">
-          <label htmlFor="email">Email</label>
-          <div>
-            {/* <AiOutlineMail className="icon" /> */}
-            <input
-              placeholder="Enter Email"
-              id="email"
-              name="email"
-              type="email"
-              value={logindata.email}
-              onChange={handleInput}
-            />
+          <div className="input_log">
+            <label htmlFor="email">Email</label>
+            <div>
+              {/* <AiOutlineMail className="icon" /> */}
+              <input
+                placeholder="Enter Email"
+                id="email"
+                name="email"
+                type="email"
+                value={logindata.email}
+                onChange={handleInput}
+              />
+            </div>
           </div>
-        </div>
         </div>
 
         <div className="double">
-        <div className="input_log">
-          <label htmlFor="phone_number">Phone Number</label>
-          <div>
-            <input
-              placeholder="Enter Phone Number"
-              id="phone_number"
-              name="phone_number"
-              type="text"
-              value={logindata.phone_number}
-              onChange={handleInput}
-            />
+          <div className="input_log">
+            <label htmlFor="phone_number">Phone Number</label>
+            <div>
+              <input
+                placeholder="Enter Phone Number"
+                id="phone_number"
+                name="phone_number"
+                type="text"
+                value={logindata.phone_number}
+                onChange={handleInput}
+              />
+            </div>
           </div>
-        </div>
-        <div className="input_log">
-          <label htmlFor="address">Address</label>
-          <div>
-            {/* <HiOutlineUser className="icon" /> */}
-            <input
-              placeholder="Enter Address"
-              id="address"
-              name="address"
-              type="text"
-              value={logindata.address}
-              onChange={handleInput}
-            />
+          <div className="input_log">
+            <label htmlFor="address">Address</label>
+            <div>
+              {/* <HiOutlineUser className="icon" /> */}
+              <input
+                placeholder="Enter Address"
+                id="address"
+                name="address"
+                type="text"
+                value={logindata.address}
+                onChange={handleInput}
+              />
+            </div>
           </div>
-        </div>
-
         </div>
 
         {isLoading ? (

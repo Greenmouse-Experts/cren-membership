@@ -10,8 +10,8 @@ const EditDues = ({ item, close, refetch }) => {
   const { data } = useGetHook(`admin/category`);
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState(item.description || "");
-  const [accNo, setAccNo] = useState(item.category.id || "");
-  const [amt, setAmt] = useState(Number(item.amount) || "");
+  const [accNo, setAccNo] = useState(item.payment_category.id || "");
+  const [amt, setAmt] = useState(item.amount || "");
   const [sDate, setSDate] = useState(item.start_date || "");
   const [eDate, setEDate] = useState(item.end_date || "");
   const { handlePost } = usePostHook();
@@ -23,15 +23,15 @@ const EditDues = ({ item, close, refetch }) => {
   };
   const handleSubmit = async () => {
     setLoading(true);
-    const fd = new FormData();
-    fd.append("description", name);
-    fd.append("payment_category_id", accNo);
-    fd.append("payment_category_id", accNo);
-    fd.append("amount", amt);
-    fd.append("due_id", item.id);
-    fd.append("start_date", dayjs(sDate).format("DD/MM/YYYY"));
-    fd.append("end_date", dayjs(eDate).format("DD/MM/YYYY"));
-    handlePost(`admin/dues/update`, fd, `multipart/form-data`, onSuccess);
+    const payload = {
+      description: name,
+      payment_category_id: accNo,
+      amount: amt,
+      due_id: item.id,
+      start_date: dayjs(sDate).format("DD/MM/YYYY"),
+      end_date: dayjs(eDate).format("DD/MM/YYYY"),
+    };
+    handlePost(`admin/dues/update`, payload, `application/json`, onSuccess);
   };
   return (
     <>
@@ -55,50 +55,50 @@ const EditDues = ({ item, close, refetch }) => {
         </div>
         <div className="mt-4">
           <label className="text-lg font-medium">Description</label>
-          <textarea
-            value={name}
+          <input
+            type="text"
             className="border border-gray-400 w-full mt-2 p-2 rounded"
+            value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </div>
+
         <div className="mt-4">
           <label className="text-lg font-medium">Amount</label>
           <input
             type="number"
-            value={amt}
             className="border border-gray-400 w-full mt-2 p-2 rounded"
+            value={amt}
             onChange={(e) => setAmt(e.target.value)}
           />
         </div>
-        <div className="grid grid-cols-2 gap-x-4">
-          <div className="mt-4">
-            <label className="text-lg font-medium">Start Date</label>
-            <input
-              type="date"
-              value={sDate}
-              className="border border-gray-400 w-full mt-2 p-2 rounded"
-              onChange={(e) => setSDate(e.target.value)}
-            />
-          </div>
-          <div className="mt-4">
-            <label className="text-lg font-medium">End Date</label>
-            <input
-              type="date"
-              value={eDate}
-              className="border border-gray-400 w-full mt-2 p-2 rounded"
-              onChange={(e) => setEDate(e.target.value)}
-            />
-          </div>
+        <div className="mt-4">
+          <label className="text-lg font-medium">Start Date</label>
+          <input
+            type="date"
+            className="border border-gray-400 w-full mt-2 p-2 rounded"
+            value={sDate}
+            onChange={(e) => setSDate(e.target.value)}
+          />
         </div>
-      </div>
-      <div className="mt-8">
-        <button
-          type="submit"
-          onClick={handleSubmit}
-          className="w-full py-3 bg-[#015907] font-semibold text-lg rounded text-white"
-        >
-          {loading ? `Submiting...` : `Submit`}
-        </button>
+        <div className="mt-4">
+          <label className="text-lg font-medium">End Date</label>
+          <input
+            type="date"
+            className="border border-gray-400 w-full mt-2 p-2 rounded"
+            value={eDate}
+            onChange={(e) => setEDate(e.target.value)}
+          />
+        </div>
+        <div className="mt-8">
+          <button
+            type="submit"
+            onClick={handleSubmit}
+            className="w-full py-3 bg-[#015907] font-semibold text-lg rounded text-white"
+          >
+            {loading ? `Submiting...` : `Submit`}
+          </button>
+        </div>
       </div>
     </>
   );

@@ -39,14 +39,15 @@ const MembersDues = () => {
     localStorage.removeItem("igbo_id");
   };
   const verifyPayment = (reference) => {
-    const fd = new FormData();
-    fd.append("due_id", localStorage.getItem("igbo_id"));
-    fd.append("ref_id", reference);
-    handlePost(`member/payment/callback`, fd, `multipart/form-data`, mySuccess);
-  }
+    const payload = {
+      due_id: localStorage.getItem("igbo_id"),
+      ref_id: reference,
+    };
+    handlePost(`member/payment/callback`, payload, `application/json`, mySuccess);
+  };
   // you can call this function anything
   const onSuccess = (reference) => {
-    verifyPayment(reference.reference)
+    verifyPayment(reference.reference);
   };
 
   // you can call this function anything
@@ -188,11 +189,7 @@ const MembersDues = () => {
         </div>
       </div>
       <Modal title={"Upload Payment Receipt"}>
-        <UploadReceipt
-          close={() => setShowModal(false)}
-          id={selected}
-          refetch={refetch}
-        />
+        <UploadReceipt close={() => setShowModal(false)} id={selected} refetch={refetch} />
       </Modal>
     </>
   );

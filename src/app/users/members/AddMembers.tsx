@@ -67,21 +67,20 @@ const AddMembers = ({ onClose, refetch }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(logindata);
-    const fd = new FormData();
-    Object.entries(logindata).forEach(([key, value]) => {
-      fd.append(key, value);
-    });
+    const payload = {
+      ...logindata,
+    };
     if (isValidate()) {
       setIsLoading(true);
 
-      CustomAdd.post("member/add/member", fd)
+      CustomAdd.post("member/add/member", payload)
         .then((res) => {
           console.log(res);
           if (res.status === 200) {
             console.log(res.data);
             console.log(res.data.errors);
             toast.success("Member Added Successfully");
-            refetch()
+            refetch();
             onClose();
           } else {
             console.log(res);
@@ -227,12 +226,7 @@ const AddMembers = ({ onClose, refetch }) => {
           <div className="input_log">
             <label htmlFor="passport">Photo</label>
             <div>
-              <input
-                id="passport"
-                name="passport"
-                type="file"
-                onChange={handleFileInput}
-              />
+              <input id="passport" name="passport" type="file" onChange={handleFileInput} />
             </div>
           </div>
         </div>
