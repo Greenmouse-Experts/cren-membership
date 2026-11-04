@@ -32,24 +32,36 @@ const SettingsPage = () => {
     refetch();
   };
   const changeProfileImage = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
     setIsBusy(true);
-    e.preventDefault();
-    const objectUrl = URL.createObjectURL(e.target.files[0]);
+    const objectUrl = URL.createObjectURL(file);
     setPreview(objectUrl);
     const payload = {
-      avatar: e.target.files[0],
+      avatar: file,
     };
-    handlePost(`admin/profile/upload/profile-picture`, payload, "application/json", onSuccess);
+    handlePost(`admin/profile/upload/profile-picture`, payload, "application/json", () => {
+      toast.success("Profile picture updated successfully");
+      setIsBusy(false);
+      refetch();
+    });
   };
   const handleUpateProfile = () => {
     setLoading(true);
     const payload = {
-      first_name: fname,
-      last_name: lname,
+      name_of_member_organization: fname,
+      name_of_representative: lname,
+      username: user?.data?.username || email,
       email: email,
       phone_number: phone,
+      address: user?.data?.address || "",
     };
-    handlePost(`admin/profile/update`, payload, "application/json", onSuccess);
+    handlePost(
+      `admin/profile/update`,
+      payloadpayload,
+      "applicationapplication/jsonjson",
+      onSuccess,
+    );
   };
   return (
     <>
@@ -72,16 +84,12 @@ const SettingsPage = () => {
                   {isBusy ? "" : <BsFillCameraFill className="text-primary relative" />}
                   <input
                     type="file"
+                    accept="image/*"
                     onChange={(e) => changeProfileImage(e)}
                     className="w-full h-full absolute z-10 opacity-0 cursor-pointer"
                   />
                 </p>
               </div>
-              {/* <div className="">
-                <p className="fw-600 mt-1 text-center">{`${
-                  user?.data?.first_name ? user?.data?.first_name : ""
-                } ${user?.data?.last_name ? user?.data?.last_name : ""}`}</p>
-              </div> */}
             </div>
             <div className="col-span-3 mt-9 lg:pl-6">
               <div className="grid gap-6">
