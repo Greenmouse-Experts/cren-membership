@@ -13,6 +13,10 @@
 
 # Architecture & Development Guidelines
 
+- **Package Manager & Tooling**:
+  - **Always use `bun` instead of `npm`**: Always use Bun commands (`bun install`, `bun run <script>`, `bun add <package>`, `bunx`) instead of `npm` or `npx`.
+  - **Typecheck Commands**: For TypeScript type checking, always use `tsgo` or `bun run typecheck` (`tsgo --noEmit`).
+
 - **Routing & SSR**:
   - Thin route files reside in `src/routes/` and mount screen components from `src/app/`.
   - `defaultSsr: false` is configured in `src/start.ts` because authentication tokens (`igbo_token`) are read from `localStorage`.
@@ -38,7 +42,7 @@
 - **UI Components & Layout**:
   - **shadcn/ui**: Preconfigured in `components.json` with 40+ components located in `src/components/ui/` (`Table`, `Button`, `Input`, `Badge`, `AlertDialog`, `Dialog`, `Card`, `Skeleton`, etc.).
   - **Global Loaders**:
-    - `PageLoader` (`src/components/layout/PageLoader.tsx`): Full-featured query observer layout with animated spinner rings, 403 Access Denied views, error recovery ("Try Again"), and empty states.
+    - `PageLoader` (`src/components/layout/PageLoader.tsx`): Full-featured query observer layout with animated spinner rings, 403 Access Denied views, error recovery (\"Try Again\"), and empty states.
     - `QueryCompLayout` (`src/components/layout/QueryCompLayout.tsx`): Lightweight container for query states.
   - **Design System & Tailwind**:
     - Tailwind CSS v4 configured in `src/styles.css`.
