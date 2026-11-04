@@ -56,6 +56,7 @@ const usePostHook = () => {
       const contentType = typeof type === "string" ? type : undefined;
 
       try {
+        //@ts-ignore
         const data = await mutation.mutateAsync({ url, payload, type: contentType });
         if (callback) {
           callback(data);

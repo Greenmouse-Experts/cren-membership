@@ -3,10 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { NavLink } from "@/lib/router-compat";
 import logo from "../image/logo.png";
 import { FiUsers, FiSettings, FiLogOut } from "react-icons/fi";
-import {
-  MdAccessTime,
-  MdOutlinePayment,
-} from "react-icons/md";
+import { MdAccessTime, MdOutlinePayment } from "react-icons/md";
 import { GrTransaction } from "react-icons/gr";
 
 // import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
@@ -23,7 +20,7 @@ import useModal from "../hook/useModal";
 const Sidebar = ({ showSidebar, toggleSidebar }) => {
   const [showUsersMenu, setShowUsersMenu] = useState(false);
   // const [showInventoriesMenu, setShowInventoriesMenu] = useState(false);
-  const {Modal, setShowModal} = useModal()
+  const { Modal, setShowModal } = useModal();
   const toggleUsersMenu = () => {
     if (showSidebar) {
       setShowUsersMenu(!showUsersMenu);
@@ -69,12 +66,11 @@ const Sidebar = ({ showSidebar, toggleSidebar }) => {
   }, [showSidebar, toggleSidebar]);
 
   return (
-    <div
-      ref={sidebarRef}
-      className={showSidebar ? "sidebar" : "sidebar closed"}
-    >
+    <div ref={sidebarRef} className={showSidebar ? "sidebar" : "sidebar closed"}>
       <div className={showSidebar ? "side_img" : "img-side"}>
-      <a href="https://ndiigbogermany.org"><img className="img-logo" src={logo} alt="Logo" /></a>{" "}
+        <a href="https://ndiigbogermany.org">
+          <img className="img-logo" src={logo} alt="Logo" />
+        </a>{" "}
         <div className="men" onClick={toggleSidebar}>
           <AiOutlineClose />
         </div>
@@ -91,7 +87,7 @@ const Sidebar = ({ showSidebar, toggleSidebar }) => {
           <li className="nav-item">
             <NavLink to="members" className="nav-link">
               <span className="nav-icon">
-              <FiUsers />
+                <FiUsers />
                 {showSidebar && "Members"}
               </span>
             </NavLink>
@@ -115,7 +111,7 @@ const Sidebar = ({ showSidebar, toggleSidebar }) => {
           <li className="nav-item">
             <NavLink to="transact" className="nav-link">
               <span className="nav-icon">
-              <GrTransaction />
+                <GrTransaction />
                 {showSidebar && "Transaction"}
               </span>
             </NavLink>
@@ -146,12 +142,19 @@ const Sidebar = ({ showSidebar, toggleSidebar }) => {
           </li>
         </ul>
       </nav>
-      <Modal title={''} noHead>
+      <Modal title={""} noHead>
         <div className="p-5">
           <p className="text-center">Are you sure you want to logout?</p>
           <div className="mt-6 flex items-center justify-between">
-            <button className="px-5 py-2 bg-red-500 rounded text-white" onClick={() => setShowModal(false)}>Cancel</button>
-            <button className="px-5 py-2 bg-blue-900 rounded text-white" onClick={handleLogOut}>Logout</button>
+            <button
+              className="px-5 py-2 bg-red-500 rounded text-white"
+              onClick={() => setShowModal(false)}
+            >
+              Cancel
+            </button>
+            <button className="px-5 py-2 bg-blue-900 rounded text-white" onClick={handleLogOut}>
+              Logout
+            </button>
           </div>
         </div>
       </Modal>

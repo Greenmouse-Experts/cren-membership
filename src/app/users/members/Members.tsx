@@ -216,14 +216,6 @@ const Members = () => {
                 <FileDown className="h-4 w-4 text-destructive" />
                 <span>Export PDF</span>
               </Button>
-              <Button
-                size="sm"
-                onClick={handleAddMemberClick}
-                className="gap-2 bg-[#015907] hover:bg-[#015907]/90 text-white cursor-pointer"
-              >
-                <Plus className="h-4 w-4" />
-                <span>Add New Member</span>
-              </Button>
             </div>
           </div>
 
