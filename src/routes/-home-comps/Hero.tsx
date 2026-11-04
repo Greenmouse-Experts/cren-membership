@@ -7,7 +7,7 @@ interface HeroProps {
 
 export default function Hero({ heroContent, imgSrc }: HeroProps) {
   return (
-    <section className="relative isolate flex min-h-[620px] items-center overflow-hidden bg-[#1b241e] lg:min-h-[720px]">
+    <section className="relative isolate flex min-h-[720px] items-center overflow-hidden bg-[#1b241e] lg:min-h-[820px]">
       <img
         src={imgSrc}
         alt=""
