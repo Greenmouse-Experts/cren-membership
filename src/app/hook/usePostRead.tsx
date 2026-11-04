@@ -7,7 +7,7 @@ import { extract_message } from "@/helpers/auth";
 
 export interface PostReadParams {
   url: string;
-  type?: string;
+  type?: string | undefined;
 }
 
 const usePostRead = () => {
@@ -55,7 +55,10 @@ const usePostRead = () => {
       const contentType = typeof type === "string" ? type : undefined;
 
       try {
-        const data = await mutation.mutateAsync({ url, type: contentType });
+        const data = await mutation.mutateAsync({
+          url,
+          ...(contentType !== undefined ? { type: contentType } : {}),
+        });
         if (callback) {
           callback(data);
         }

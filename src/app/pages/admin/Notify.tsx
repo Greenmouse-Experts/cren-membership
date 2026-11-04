@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect, useMemo } from "react";
 import { formatDistanceToNow } from "date-fns";
 import useGetHook from "../../hook/useGet";
@@ -20,7 +19,11 @@ interface NotificationItem {
   created_at?: string;
 }
 
-const AdminNotify = () => {
+export interface AdminNotifyProps {
+  datas?: any;
+}
+
+const AdminNotify = ({ datas }: AdminNotifyProps = {}) => {
   const { data, isLoading, refetch } = useGetHook("admin/get/all/notifications");
   const { handlePost } = usePostHook();
 
@@ -28,10 +31,11 @@ const AdminNotify = () => {
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
 
   useEffect(() => {
-    if (data?.data && Array.isArray(data.data)) {
-      setNotifications(data.data);
+    const list = data?.data ?? datas;
+    if (list && Array.isArray(list)) {
+      setNotifications(list);
     }
-  }, [data]);
+  }, [data, datas]);
 
   const formatTimeAgo = (timestamp?: string) => {
     if (!timestamp) return "";

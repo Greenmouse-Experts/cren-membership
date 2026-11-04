@@ -52,7 +52,7 @@ const profileFormSchema = z.object({
   username: z.string().min(1, "Username is required"),
   email: z.string().email("Invalid email address"),
   phone_number: z.string().min(1, "Phone number is required"),
-  address: z.string().optional().default(""),
+  address: z.string(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;

@@ -285,7 +285,7 @@ td {
     display: flex;
     flex-direction: column;
     flex: 1;
-    background: wheat;
+    background: #f6f7fb;
     margin-left: 0;
   }
 }

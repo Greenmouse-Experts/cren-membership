@@ -1,165 +1,300 @@
 // @ts-nocheck
 import React, { useState, useEffect, useRef } from "react";
-import { NavLink } from "@/lib/router-compat";
+import { NavLink, useNavigate } from "@/lib/router-compat";
 import logo from "../image/logo.png";
-import { FiUsers, FiSettings, FiLogOut } from "react-icons/fi";
-import { MdAccessTime, MdOutlinePayment } from "react-icons/md";
-import { GrTransaction } from "react-icons/gr";
-
-// import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { LuLayoutDashboard } from "react-icons/lu";
-import "../stylesheet/component.css";
-import { AiOutlineClose } from "react-icons/ai";
-import axios from "axios";
-import { useNavigate } from "@/lib/router-compat";
-import { toast } from "react-toastify";
-import { GoBell } from "react-icons/go";
+import {
+  LayoutDashboard,
+  Users,
+  Megaphone,
+  CreditCard,
+  ArrowLeftRight,
+  Bell,
+  Settings,
+  LogOut,
+  X,
+} from "lucide-react";
 import { Custom } from "../services/config";
-import useModal from "../hook/useModal";
+import { toast } from "react-toastify";
+import useGetHook from "../hook/useGet";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
+import { cn } from "@/lib/utils";
 
-const Sidebar = ({ showSidebar, toggleSidebar }) => {
-  const [showUsersMenu, setShowUsersMenu] = useState(false);
-  // const [showInventoriesMenu, setShowInventoriesMenu] = useState(false);
-  const { Modal, setShowModal } = useModal();
-  const toggleUsersMenu = () => {
-    if (showSidebar) {
-      setShowUsersMenu(!showUsersMenu);
-    }
-  };
+const Sidenav = ({ showSidebar, toggleSidebar }) => {
+  const navigate = useNavigate();
+  const [logoutOpen, setLogoutOpen] = useState(false);
+  const sidebarRef = useRef(null);
 
-  const Navigate = useNavigate();
+  const { data: countData } = useGetHook("member/count/unread/notifications");
+  const unreadCount = Number(countData?.data) || 0;
 
   const handleLogOut = async () => {
     try {
-      Custom.post("logout");
-      localStorage.clear();
-      toast.success("Logged Out Successfully");
-      Navigate("/login");
-    } catch (err) {
-      toast.error("Log-out failed: " + err);
+      await Custom.post("logout");
+    } catch {
+      // Ignore network errors and complete logout
     }
+    localStorage.clear();
+    toast.success("Logged Out Successfully");
+    navigate("/login");
   };
 
-  const sidebarRef = useRef(null);
-
+  // Close on outside click on mobile
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (showSidebar && sidebarRef.current && window.innerWidth <= 550) {
-        const sidebarRect = sidebarRef.current.getBoundingClientRect();
-        const isOutsideSidebar =
-          event.clientX < sidebarRect.left - 550 ||
-          event.clientX > sidebarRect.right + 550 ||
-          event.clientY < sidebarRect.top - 550 ||
-          event.clientY > sidebarRect.bottom + 550;
-
-        if (isOutsideSidebar) {
-          toggleSidebar(false);
-        }
+      if (
+        showSidebar &&
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target) &&
+        window.innerWidth < 768
+      ) {
+        toggleSidebar(false);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showSidebar, toggleSidebar]);
 
+  const navItems = [
+    {
+      to: "/dashboard/",
+      label: "Dashboard",
+      icon: LayoutDashboard,
+      exact: true,
+    },
+    {
+      to: "members",
+      label: "Members",
+      icon: Users,
+    },
+    {
+      to: "announce",
+      label: "Announcements",
+      icon: Megaphone,
+    },
+    {
+      to: "dues",
+      label: "Dues",
+      icon: CreditCard,
+    },
+    {
+      to: "transact",
+      label: "Transactions",
+      icon: ArrowLeftRight,
+    },
+    {
+      to: "notify",
+      label: "Notifications",
+      icon: Bell,
+      badge: unreadCount,
+    },
+    {
+      to: "settings",
+      label: "Settings",
+      icon: Settings,
+    },
+  ];
+
   return (
-    <div ref={sidebarRef} className={showSidebar ? "sidebar" : "sidebar closed"}>
-      <div className={showSidebar ? "side_img" : "img-side"}>
-        <a href="https://ndiigbogermany.org">
-          <img className="img-logo" src={logo} alt="Logo" />
-        </a>{" "}
-        <div className="men" onClick={toggleSidebar}>
-          <AiOutlineClose />
-        </div>
-      </div>
-      <nav className={`side-nav ${showSidebar ? "active" : ""}`}>
-        <ul className="nav-list">
-          <li className="nav-item">
-            <NavLink to="/dashboard/" className="nav-link" activeOptions={{ exact: true }}>
-              <span className="nav-icon">
-                <LuLayoutDashboard /> {showSidebar && "Dashboard"}
-              </span>
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink to="members" className="nav-link">
-              <span className="nav-icon">
-                <FiUsers />
-                {showSidebar && "Members"}
-              </span>
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink to="announce" className="nav-link">
-              <span className="nav-icon">
-                <MdAccessTime />
-                {showSidebar && "Announcement"}
-              </span>
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink to="dues" className="nav-link">
-              <span className="nav-icon">
-                <MdOutlinePayment />
-                {showSidebar && "Dues"}
-              </span>
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink to="transact" className="nav-link">
-              <span className="nav-icon">
-                <GrTransaction />
-                {showSidebar && "Transaction"}
-              </span>
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink to="notify" className="nav-link">
-              <span className="nav-icon">
-                <GoBell />
-                {showSidebar && "Notification"}
-              </span>
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink to="settings" className="nav-link">
-              <span className="nav-icon">
-                <FiSettings />
-                {showSidebar && "Settings"}
-              </span>
-            </NavLink>
-          </li>
-          <li className="nav-item cursor-pointer">
-            <button onClick={() => setShowModal(true)} className="nav-link">
-              <span className="nav-icon">
-                {" "}
-                <FiLogOut /> {showSidebar && "Logout"}
-              </span>
-            </button>
-          </li>
-        </ul>
-      </nav>
-      <Modal title={""} noHead>
-        <div className="p-5">
-          <p className="text-center">Are you sure you want to logout?</p>
-          <div className="mt-6 flex items-center justify-between">
-            <button
-              className="px-5 py-2 bg-red-500 rounded text-white"
-              onClick={() => setShowModal(false)}
+    <TooltipProvider delayDuration={150}>
+      {/* Mobile Backdrop */}
+      {showSidebar && (
+        <div
+          className="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 md:hidden transition-opacity"
+          onClick={() => toggleSidebar(false)}
+        />
+      )}
+
+      <aside
+        ref={sidebarRef}
+        className={cn(
+          "h-screen bg-white border-r border-border/80 flex flex-col justify-between select-none z-50 transition-all duration-200",
+          showSidebar ? "w-56" : "w-24",
+          // Slide over on mobile when open, hidden when closed
+          showSidebar ? "fixed inset-y-0 left-0 shadow-2xl md:shadow-none" : "hidden md:flex",
+        )}
+      >
+        {/* Top: Branding / Logo Header */}
+        <div>
+          <div
+            className={cn(
+              "flex items-center border-b border-border/70 py-4 px-3 sm:px-4",
+              showSidebar ? "justify-between" : "justify-center",
+            )}
+          >
+            <a
+              href="https://ndiigbogermany.org"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-2.5 overflow-hidden group"
             >
-              Cancel
-            </button>
-            <button className="px-5 py-2 bg-blue-900 rounded text-white" onClick={handleLogOut}>
-              Logout
-            </button>
+              <img
+                src={logo}
+                alt="CREN Logo"
+                className={cn(
+                  "object-contain transition-transform group-hover:scale-105",
+                  showSidebar ? "h-9 w-auto" : "h-8 w-8",
+                )}
+              />
+              {showSidebar && (
+                <div className="flex flex-col text-left">
+                  <span className="text-xs font-bold text-emerald-950 tracking-wider leading-none">
+                    NDI IGBO
+                  </span>
+                  <span className="text-[10px] text-muted-foreground font-medium mt-1 leading-none">
+                    Germany Portal
+                  </span>
+                </div>
+              )}
+            </a>
+
+            {/* Mobile close button */}
+            {showSidebar && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={() => toggleSidebar(false)}
+                className="md:hidden h-8 w-8 text-gray-500 hover:text-gray-900 rounded-md"
+                aria-label="Close menu"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            )}
           </div>
+
+          {/* Navigation Links */}
+          <nav className="p-3 space-y-1.5 overflow-y-auto max-h-[calc(100vh-140px)]">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const linkContent = (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  activeOptions={item.exact ? { exact: true } : undefined}
+                  className={cn(
+                    "flex items-center rounded-lg text-sm font-medium transition-all group relative cursor-pointer",
+                    showSidebar
+                      ? "gap-3 px-3 py-2.5 justify-start text-gray-700 hover:text-emerald-900 hover:bg-emerald-50/70 [&.active]:bg-emerald-800 [&.active]:text-white [&.active]:shadow-xs"
+                      : "justify-center p-2.5 text-gray-700 hover:text-emerald-900 hover:bg-emerald-50/70 [&.active]:bg-emerald-800 [&.active]:text-white [&.active]:shadow-xs",
+                  )}
+                  onClick={() => {
+                    if (window.innerWidth < 768) {
+                      toggleSidebar(false);
+                    }
+                  }}
+                >
+                  <Icon className="h-5 w-5 shrink-0 transition-colors" />
+
+                  {showSidebar && <span className="truncate flex-1 text-left">{item.label}</span>}
+
+                  {/* Badge for notifications */}
+                  {Boolean(item.badge && item.badge > 0) && (
+                    <Badge
+                      variant="destructive"
+                      className={cn(
+                        "rounded-full text-[10px] font-bold shrink-0",
+                        showSidebar
+                          ? "ml-auto px-1.5 py-0 h-4 min-w-4 flex items-center justify-center bg-red-600 text-white"
+                          : "absolute -top-1 -right-1 px-1 py-0 h-4 min-w-4 flex items-center justify-center bg-red-600 text-white",
+                      )}
+                    >
+                      {item.badge > 99 ? "99+" : item.badge}
+                    </Badge>
+                  )}
+                </NavLink>
+              );
+
+              if (!showSidebar) {
+                return (
+                  <Tooltip key={item.to}>
+                    <TooltipTrigger asChild>{linkContent}</TooltipTrigger>
+                    <TooltipContent side="right" className="font-medium text-xs">
+                      {item.label}
+                    </TooltipContent>
+                  </Tooltip>
+                );
+              }
+
+              return linkContent;
+            })}
+          </nav>
         </div>
-      </Modal>
-    </div>
+
+        {/* Bottom Section: Logout Action */}
+        <div className="p-3 border-t border-border/70 bg-gray-50/50">
+          {showSidebar ? (
+            <button
+              type="button"
+              onClick={() => setLogoutOpen(true)}
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors cursor-pointer"
+            >
+              <LogOut className="h-5 w-5 shrink-0" />
+              <span className="truncate">Logout</span>
+            </button>
+          ) : (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => setLogoutOpen(true)}
+                  className="w-full flex items-center justify-center p-2.5 rounded-lg text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors cursor-pointer"
+                  aria-label="Logout"
+                >
+                  <LogOut className="h-5 w-5 shrink-0" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent
+                side="right"
+                className="font-medium text-xs text-red-600 bg-white border shadow-md"
+              >
+                Logout
+              </TooltipContent>
+            </Tooltip>
+          )}
+        </div>
+      </aside>
+
+      {/* Logout Confirmation Dialog */}
+      <AlertDialog open={logoutOpen} onOpenChange={setLogoutOpen}>
+        <AlertDialogContent className="w-11/12 max-w-md rounded-xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2 text-gray-900">
+              <LogOut className="h-5 w-5 text-red-600" />
+              Log Out of Your Account
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-600 text-sm">
+              Are you sure you want to end your session? You will need your login credentials to
+              access the portal again.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="mt-4 gap-2 sm:gap-0">
+            <AlertDialogCancel className="cursor-pointer">Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleLogOut}
+              className="bg-red-600 hover:bg-red-700 text-white cursor-pointer font-medium"
+            >
+              Yes, Log Out
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </TooltipProvider>
   );
 };
 
-export default Sidebar;
+export default Sidenav;

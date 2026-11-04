@@ -31,7 +31,12 @@ export const fetchApi = async <T = any,>(
 const useGetHook = <T = any,>(url: string | null | undefined, options?: UseGetOptions<T>) => {
   const query = useQuery<ApiResponse<T>, Error>({
     queryKey: [url, options?.params],
-    queryFn: () => fetchApi<T>(url!, { params: options?.params, headers: options?.headers }),
+    queryFn: () => {
+      const config: AxiosRequestConfig = {};
+      if (options?.params !== undefined) config.params = options.params;
+      if (options?.headers !== undefined) config.headers = options.headers;
+      return fetchApi<T>(url!, config);
+    },
     enabled: !!url && (options?.enabled ?? true),
     ...options,
   });

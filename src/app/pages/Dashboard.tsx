@@ -5,24 +5,19 @@ import { Topnav } from "../components/Topnav";
 import { Outlet } from "@tanstack/react-router";
 import { NotifyDataContext } from "@/app/services/notify-context";
 import "../stylesheet/layout.css";
-import Home from "./Home";
-import Notify from "./Notify";
 import useGetHook from "../hook/useGet";
 import SubscribeModal from "../users/SubscribeModal";
-import MembersAnnoucement from "./users/Annoucement";
-import MembersTransactions from "./users/Transactions";
-import MembersSetting from "./users/Setting";
-import MembersDues from "./users/Dues";
-import Members from "../users/members/Members";
 
 const Dashboard = () => {
   const sub = localStorage.getItem("igbo_sub");
   const [subModal, setSubModal] = useState(false);
 
-  const [showSidebar, setShowSidebar] = useState(window.innerWidth >= 650);
+  const [showSidebar, setShowSidebar] = useState(
+    typeof window !== "undefined" ? window.innerWidth >= 768 : true,
+  );
 
   const toggleSidebar = () => {
-    setShowSidebar(!showSidebar);
+    setShowSidebar((prev) => !prev);
   };
 
   const { data, isLoading } = useGetHook("member/count/unread/notifications");
@@ -34,20 +29,18 @@ const Dashboard = () => {
   }, [sub]);
 
   return (
-    <div className="layout">
-      <div className="cide">
+    <div className="layout min-h-screen bg-[#f6f7fb]">
+      <div className={`cide ${showSidebar ? "block z-50" : "hidden md:block"}`}>
         <Sidenav showSidebar={showSidebar} toggleSidebar={toggleSidebar} />
       </div>
       <div className={showSidebar ? "component" : "close-side"}>
-        <div className="pl-4">
-          <Topnav
-            data={data?.data}
-            isLoading={isLoading}
-            setShowSidebar={setShowSidebar}
-            showSidebar={showSidebar}
-            toggleSidebar={toggleSidebar}
-          />
-        </div>
+        <Topnav
+          data={data?.data}
+          isLoading={isLoading}
+          setShowSidebar={setShowSidebar}
+          showSidebar={showSidebar}
+          toggleSidebar={toggleSidebar}
+        />
         <div className="pages">
           <NotifyDataContext.Provider value={data?.data}>
             <Outlet />
