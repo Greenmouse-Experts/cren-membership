@@ -43,7 +43,7 @@ export default function Activities() {
         alt=""
         aria-hidden="true"
         loading="lazy"
-        className="pointer-events-none absolute  top-0 -z-10 inset-0 max-w-none opacity-80 h-full"
+        className="pointer-events-none absolute  rotate-360  top-0 -z-10 inset-0 max-w-none opacity-40 h-full"
       />
 
       <div className="mx-auto container px-5 py-16 sm:px-8 sm:py-20 lg:py-24">
