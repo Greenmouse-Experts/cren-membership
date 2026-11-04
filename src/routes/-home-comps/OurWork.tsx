@@ -23,7 +23,7 @@ const features = [
     title: "Standards & Awareness",
     description:
       "Supporting industry standards and deeper public awareness of clean energy solutions.",
-    icon: null,
+    icon: "/home_page/section_2_standards_awareness.png",
   },
 ];
 
