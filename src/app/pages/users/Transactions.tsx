@@ -1,43 +1,49 @@
-// @ts-nocheck
 import React from "react";
-import { useState } from "react";
+import { CheckCircle2, Clock, Receipt } from "lucide-react";
 import ConfirmedPayments from "../../users/ConfirmedPayments";
 import PendingPayments from "../../users/PendingPayments";
 
-const MembersTransactions = () => {
-  const [open, setOpen] = useState(1);
-  const handleOpen = (val) => {
-    setOpen(val);
-  };
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+const MembersTransactions: React.FC = () => {
   return (
-    <>
-      <div className="mx-2 p-6 bg-white min-h-[70vh]">
-        <div className="">
-          <p className="font-semibold text-xl">Transactions</p>
-          <p className="text-[14px]">Record of your payments on CREN</p>
-        </div>
-        <div className="mt-12">
-          <div className="flex gap-x-4">
-            <p
-              className={`font-medium border-b-[3px] px-4 cursor-pointer ${open === 1 ? "text-blue-900 font-semibold border-blue-900" : "opacity-50"}`}
-              onClick={() => handleOpen(1)}
-            >
-              Completed Payments
-            </p>
-            <p
-              className={`font-medium border-b-[3px] px-4 cursor-pointer ${open === 2 ? "text-blue-900 font-semibold border-blue-900" : "opacity-50"}`}
-              onClick={() => handleOpen(2)}
-            >
-              Pending Payments
-            </p>
+    <div className="container mx-auto p-4 sm:p-6 space-y-6">
+      <Card className="shadow-sm border-base-200">
+        <CardHeader className="space-y-1 pb-6">
+          <div className="flex items-center gap-2">
+            <Receipt className="h-6 w-6 text-primary" />
+            <CardTitle className="text-2xl font-bold tracking-tight">Transactions</CardTitle>
           </div>
-          <div>
-            {open === 1 && <ConfirmedPayments />}
-            {open === 2 && <PendingPayments />}
-          </div>
-        </div>
-      </div>
-    </>
+          <CardDescription>
+            Record and history of your subscription and payment dues on CREN.
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent>
+          <Tabs defaultValue="completed" className="space-y-6">
+            <TabsList className="grid w-full sm:w-[400px] grid-cols-2">
+              <TabsTrigger value="completed" className="gap-2">
+                <CheckCircle2 className="h-4 w-4" />
+                Completed
+              </TabsTrigger>
+              <TabsTrigger value="pending" className="gap-2">
+                <Clock className="h-4 w-4" />
+                Pending
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="completed" className="space-y-4 focus-visible:outline-none">
+              <ConfirmedPayments />
+            </TabsContent>
+
+            <TabsContent value="pending" className="space-y-4 focus-visible:outline-none">
+              <PendingPayments />
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

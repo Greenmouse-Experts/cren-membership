@@ -64,6 +64,27 @@ export interface DueItem {
   updated_at?: string;
 }
 
+export interface MemberPaymentTransaction {
+  id?: number | string;
+  ref_id: string;
+  amount: number | string;
+  channel?: string | null;
+  status: "success" | "pending" | "failed" | string;
+  created_at?: string;
+  updated_at?: string;
+  receipt?: string | null;
+  due?: {
+    id?: number | string;
+    description?: string;
+    amount?: number | string;
+    start_date?: string;
+    end_date?: string;
+    status?: string;
+  } | null;
+  user?: Member | null;
+}
+
 export type MembersResponse = ApiResponse<Member[]>;
 export type MemberResponse = ApiResponse<Member>;
 export type DuesResponse = ApiResponse<DueItem[]>;
+export type PaymentTransactionsResponse = ApiResponse<MemberPaymentTransaction[]>;
