@@ -1,197 +1,272 @@
-// @ts-nocheck
-import React, { useEffect, useState } from "react";
-import useGetHook from "../../hook/useGet";
-import dayjs from "dayjs";
-import { formatAsNgnMoney } from "../../services/helpers";
-import { RiSecurePaymentFill } from "react-icons/ri";
-import { FiUploadCloud } from "react-icons/fi";
-import useModal from "../../hook/useModal";
-import UploadReceipt from "../../users/UploadReceipt";
-import usePostHook from "../../hook/usePost";
+import React, { useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { usePaystackPayment } from "react-paystack";
+import { RiSecurePaymentFill } from "react-icons/ri";
+import { FiUploadCloud } from "react-icons/fi";
+import { CreditCard, Landmark, Calendar, RefreshCcw } from "lucide-react";
 
-const MembersDues = () => {
-  const { data: due, loading, refetch } = useGetHook("member/payments");
-  const [data, setData] = useState([]);
-  const [selected, setSelected] = useState("");
-  const [id, setId] = useState("");
-  const { Modal, setShowModal } = useModal();
-  const openUpload = (item) => {
-    setId(item);
-    setSelected(item);
-    setShowModal(true);
+import useGetHook from "../../hook/useGet";
+import usePostHook from "../../hook/usePost";
+import { formatAsNgnMoney } from "../../services/helpers";
+import type { DueItem } from "@/types/api";
+
+import PageLoader from "@/components/layout/PageLoader";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import UploadReceipt from "../../users/UploadReceipt";
+
+interface PaystackPayButtonProps {
+  item: DueItem;
+  onVerify: (reference: string, dueId: string | number) => void;
+}
+
+const PaystackPayButton: React.FC<PaystackPayButtonProps> = ({ item, onVerify }) => {
+  const email = typeof window !== "undefined" ? localStorage.getItem("igbo_email") || "" : "";
+
+  const amountInKobo = Math.round(Number(item.amount || 0) * 100);
+
+  const config = {
+    reference: new Date().getTime().toString(),
+    email: email || "member@example.com",
+    amount: amountInKobo,
+    publicKey: "pk_test_49f890a833251838e552b28276e8e42006444ce7",
   };
-  useEffect(() => {
-    if (!!due?.data.length) {
-      const filtered = due?.data.filter((where) => where.status === "Active");
-      setData(filtered);
-    }
-  }, [due]);
 
-  // paystack
-  const email = localStorage.getItem("igbo_email");
+  const initializePayment = usePaystackPayment(config);
 
+  return (
+    <Button
+      size="sm"
+      className="bg-primary hover:bg-primary/90 text-primary-foreground gap-1.5 cursor-pointer shadow-sm"
+      onClick={() => {
+        initializePayment(
+          (reference: { reference: string }) => {
+            onVerify(reference.reference, item.id);
+          },
+          () => {
+            console.log("Paystack dialog closed");
+          },
+        );
+      }}
+    >
+      <RiSecurePaymentFill className="h-4 w-4" />
+      Pay Online
+    </Button>
+  );
+};
+
+const MembersDues: React.FC = () => {
+  const { data: response, refetch, query } = useGetHook<DueItem[]>("member/payments");
   const { handlePost } = usePostHook();
-  const mySuccess = () => {
-    refetch();
-    toast.success("Payment successfully");
-    localStorage.removeItem("igbo_id");
+
+  const [selectedDue, setSelectedDue] = useState<DueItem | null>(null);
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
+
+  const duesList = useMemo(() => {
+    if (!response?.data || !Array.isArray(response.data)) return [];
+    return response.data.filter((item) => !item.status || item.status === "Active");
+  }, [response]);
+
+  const openUpload = (item: DueItem) => {
+    setSelectedDue(item);
+    setIsUploadOpen(true);
   };
-  const verifyPayment = (reference) => {
+
+  const handleVerifyPayment = (reference: string, dueId: string | number) => {
     const payload = {
-      due_id: localStorage.getItem("igbo_id"),
+      due_id: dueId,
       ref_id: reference,
     };
-    handlePost(`member/payment/callback`, payload, `application/json`, mySuccess);
-  };
-  // you can call this function anything
-  const onSuccess = (reference) => {
-    verifyPayment(reference.reference);
-  };
-
-  // you can call this function anything
-  const onClose = () => {
-    // implementation for  whatever you want to do when the Paystack dialog closed.
-    console.log("closed");
+    handlePost("member/payment/callback", payload, "application/json", () => {
+      refetch();
+      toast.success("Payment verified successfully!");
+    });
   };
 
-  const PaystackHookButton = ({ item }) => {
-    const config = {
-      reference: new Date().getTime().toString(),
-      email: email,
-      amount: Number(item?.amount) * 100, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
-      publicKey: `pk_test_49f890a833251838e552b28276e8e42006444ce7`,
-    };
-    const initializePayment = usePaystackPayment(config);
-    return (
-      <div>
-        <p
-          className="flex cursor-pointer bg-blue-900 text-white justify-center py-1 rounded-lg gap-x-2 items-center"
-          onClick={() => {
-            initializePayment(onSuccess, onClose);
-          }}
-        >
-          <RiSecurePaymentFill />
-          Pay Now
-        </p>
-      </div>
-    );
-  };
-  console.log(selected);
   return (
-    <>
-      <div className="mx-2 p-6 bg-white min-h-[70vh]">
-        <div className="flex justify-between items-center">
-          <p className="font-semibold text-xl">Subscription Payments</p>
-        </div>
-        <div className="mt-12">
-          <div className="flex flex-col">
-            <div className=" overflow-x-auto">
-              <div className="py-2 align-middle inline-block min-w-full ">
-                <table className="items-center w-full bg-transparent border-collapse">
-                  <thead className="thead-light border-y-2 border-[#CECECE]">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
-                      >
-                        S/N
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
-                      >
-                        Description
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
-                      >
-                        Category
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
-                      >
-                        Duration
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
-                      >
-                        Amount
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
-                      >
-                        Account Details
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
-                      >
-                        Date
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data &&
-                      data.map((item, i) => (
-                        <tr key={i}>
-                          <td className="align-middle fs-500 whitespace-nowrap px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
-                            {i + 1}
-                          </td>
-                          <td className="align-middle fs-500  px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
-                            <div className="w-48">{item.description}</div>
-                          </td>
-                          <td className="align-middle fs-500 whitespace-nowrap px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
-                            <div>
-                              <p>{item.category.name}</p>
-                            </div>
-                          </td>
-                          <td className="align-middle fs-500 whitespace-nowrap px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
-                            <div className="flex gap-x-2">
-                              <p>{item.start_date}</p>
-                              <p>{item.end_date}</p>
-                            </div>
-                          </td>
-                          <td className="align-middle fs-500 whitespace-nowrap px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
-                            <div>
-                              <p>{formatAsNgnMoney(item.amount)}</p>
-                            </div>
-                          </td>
-                          <td className="align-middle fs-500 whitespace-nowrap px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
-                            <p>{item.category.bank.bank_name}</p>
-                            <p>{item.category.bank.account_name}</p>
-                            <p>{item.category.bank.account_number}</p>
-                          </td>
-                          <td className="align-middle text-[14px] whitespace-nowrap px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
-                            {/* <div onClick={() => localStorage.setItem("igbo_id", item.id)}>
-                              <PaystackHookButton item={item} />
-                            </div> */}
-                            <p
-                              className="mt-4 cursor-pointer flex bg-gray-900 w-44 text-white justify-center py-1 rounded-lg gap-x-2 items-center"
-                              onClick={() => openUpload(item.id)}
-                            >
-                              <FiUploadCloud />
-                              Upload Receipt
-                            </p>
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+    <div className="container mx-auto p-4 sm:p-6 space-y-6">
+      <Card className="shadow-sm border-base-200">
+        <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6">
+          <div className="space-y-1">
+            <CardTitle className="text-2xl font-bold tracking-tight">
+              Subscription Payments
+            </CardTitle>
+            <CardDescription>
+              View active dues, pay securely via Paystack, or upload proof of manual transfer.
+            </CardDescription>
           </div>
-        </div>
-      </div>
-      <Modal title={"Upload Payment Receipt"}>
-        <UploadReceipt close={() => setShowModal(false)} id={selected} refetch={refetch} />
-      </Modal>
-    </>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => refetch()}
+            className="gap-2 self-start sm:self-auto cursor-pointer"
+          >
+            <RefreshCcw className="h-4 w-4" />
+            Refresh
+          </Button>
+        </CardHeader>
+
+        <CardContent className="p-0 sm:p-6">
+          <PageLoader
+            query={query}
+            emptyState={{
+              title: "No Subscription Dues",
+              description: "You have no outstanding or active subscription payments at this time.",
+            }}
+          >
+            {() =>
+              duesList.length === 0 ? (
+                <div className="min-h-[30vh] flex flex-col items-center justify-center p-8 text-center text-muted-foreground">
+                  <CreditCard className="h-12 w-12 stroke-1 mb-3 text-muted-foreground/60" />
+                  <p className="font-semibold text-lg text-foreground">No Active Dues Found</p>
+                  <p className="text-sm max-w-sm mt-1">
+                    There are currently no active dues or pending payments assigned to your account.
+                  </p>
+                </div>
+              ) : (
+                <div className="overflow-x-auto rounded-md border">
+                  <Table>
+                    <TableHeader className="bg-muted/50">
+                      <TableRow>
+                        <TableHead className="w-12 text-center">S/N</TableHead>
+                        <TableHead>Description</TableHead>
+                        <TableHead>Category</TableHead>
+                        <TableHead>Duration</TableHead>
+                        <TableHead>Amount</TableHead>
+                        <TableHead>Account Details</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {duesList.map((item, index) => {
+                        const bank = item.category?.bank;
+                        return (
+                          <TableRow key={item.id ?? index} className="hover:bg-muted/30">
+                            <TableCell className="font-medium text-center">{index + 1}</TableCell>
+
+                            <TableCell
+                              className="font-medium max-w-[200px] truncate"
+                              title={item.description}
+                            >
+                              {item.description || "—"}
+                            </TableCell>
+
+                            <TableCell>
+                              {item.category?.name ? (
+                                <Badge variant="secondary" className="font-normal">
+                                  {item.category.name}
+                                </Badge>
+                              ) : (
+                                "—"
+                              )}
+                            </TableCell>
+
+                            <TableCell className="whitespace-nowrap text-xs text-muted-foreground">
+                              {item.start_date || item.end_date ? (
+                                <div className="flex items-center gap-1.5">
+                                  <Calendar className="h-3.5 w-3.5 shrink-0" />
+                                  <span>
+                                    {item.start_date || "—"} to {item.end_date || "—"}
+                                  </span>
+                                </div>
+                              ) : (
+                                "—"
+                              )}
+                            </TableCell>
+
+                            <TableCell className="font-semibold text-foreground whitespace-nowrap">
+                              {formatAsNgnMoney(item.amount)}
+                            </TableCell>
+
+                            <TableCell className="text-xs">
+                              {bank?.bank_name || bank?.account_number ? (
+                                <div className="space-y-0.5">
+                                  <div className="flex items-center gap-1 font-medium text-foreground">
+                                    <Landmark className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                                    <span>{bank.bank_name}</span>
+                                  </div>
+                                  {bank.account_name && (
+                                    <p className="text-muted-foreground">{bank.account_name}</p>
+                                  )}
+                                  {bank.account_number && (
+                                    <p className="font-mono text-muted-foreground">
+                                      {bank.account_number}
+                                    </p>
+                                  )}
+                                </div>
+                              ) : (
+                                <span className="text-muted-foreground">—</span>
+                              )}
+                            </TableCell>
+
+                            <TableCell className="text-right whitespace-nowrap">
+                              <div className="flex items-center justify-end gap-2">
+                                <PaystackPayButton item={item} onVerify={handleVerifyPayment} />
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="gap-1.5 cursor-pointer"
+                                  onClick={() => openUpload(item)}
+                                >
+                                  <FiUploadCloud className="h-4 w-4" />
+                                  Upload Receipt
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
+              )
+            }
+          </PageLoader>
+        </CardContent>
+      </Card>
+
+      <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Upload Payment Receipt</DialogTitle>
+            <DialogDescription>
+              Upload bank deposit slip or transaction screenshot for{" "}
+              <span className="font-semibold text-foreground">
+                {selectedDue?.description || "Subscription Due"}
+              </span>
+              .
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedDue && (
+            <UploadReceipt
+              id={selectedDue.id}
+              refetch={refetch}
+              close={() => {
+                setIsUploadOpen(false);
+                setSelectedDue(null);
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 };
 

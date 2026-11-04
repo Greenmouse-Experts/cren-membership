@@ -19,6 +19,8 @@
   - Legacy screens use navigation compatibility layer `@/lib/router-compat` so relative paths and hooks resolve cleanly.
 
 - **Data Fetching & State Management (TanStack Query)**:
+  - **Query & Mutation Standards**: Always use TanStack Query's `useQuery` (or `useGetHook<T>`) for data fetching endpoints and `useMutation` (or `usePostHook`) for mutations (POST, PUT, DELETE). Avoid raw fetch/axios calls directly inside UI handlers.
+  - **Proper Typing**: Ensure queries, mutations, responses, and payloads are strongly typed with explicit TypeScript interfaces (avoid `@ts-nocheck` and `any`).
   - `useGetHook<T>(url, options?)` (`src/app/hook/useGet.tsx`): Powered by TanStack Query's `useQuery`. Provides caching, background refetching, and query observer results while maintaining backward compatibility with `{ data, loading, isLoading, isError, error, refetch, query }`.
   - `usePostHook()` (`src/app/hook/usePost.tsx`): Powered by TanStack Query's `useMutation`. Automatically invalidates queries on success, safely handles `FormData` / `application/json`, and parses validation errors into user notifications via `react-toastify`.
   - `usePostRead()` (`src/app/hook/usePostRead.tsx`): Mutation wrapper for POST read operations.

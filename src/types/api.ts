@@ -37,5 +37,33 @@ export interface Member {
   updated_at?: string;
 }
 
+export interface BankDetails {
+  id?: number | string;
+  bank_name?: string;
+  account_name?: string;
+  account_number?: string;
+}
+
+export interface DueCategory {
+  id?: number | string;
+  name: string;
+  description?: string;
+  bank?: BankDetails;
+}
+
+export interface DueItem {
+  id: number | string;
+  due_id?: number | string;
+  description: string;
+  category: DueCategory;
+  start_date: string;
+  end_date: string;
+  amount: number | string;
+  status: "Active" | "Inactive" | "Pending" | string;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export type MembersResponse = ApiResponse<Member[]>;
 export type MemberResponse = ApiResponse<Member>;
+export type DuesResponse = ApiResponse<DueItem[]>;
