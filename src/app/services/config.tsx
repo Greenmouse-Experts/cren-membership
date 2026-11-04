@@ -1,6 +1,7 @@
 // @ts-nocheck
 import axios from "axios";
 import { getLocalToken } from "./helpers";
+import { API_URL } from "./env";
 
 const requestAutorization = () => {
   const token = getLocalToken("igbo_token");
@@ -10,7 +11,7 @@ const requestAutorization = () => {
 // console.log(requestAutorization());
 
 export const Custom = axios.create({
-  baseURL: "https://api.ndiigbogermany.org/api",
+  baseURL: API_URL,
   headers: {
     "Content-Type": "application/json",
     Authorization: requestAutorization(),
@@ -18,9 +19,9 @@ export const Custom = axios.create({
 });
 
 export const CustomAdd = axios.create({
-  baseURL: "https://api.ndiigbogermany.org/api",
+  baseURL: API_URL,
   headers: {
-    "Content-Type": "multipart/form-data",
+    "Content-Type": "application/json",
     Authorization: requestAutorization(),
   },
 });

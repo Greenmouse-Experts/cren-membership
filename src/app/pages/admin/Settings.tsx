@@ -29,35 +29,27 @@ const SettingsPage = () => {
   const onSuccess = () => {
     toast.success("Profile updated successfully");
     setLoading(false);
-    refetch()
+    refetch();
   };
   const changeProfileImage = async (e) => {
     setIsBusy(true);
     e.preventDefault();
     const objectUrl = URL.createObjectURL(e.target.files[0]);
     setPreview(objectUrl);
-    const formData = new FormData();
-    formData.append("avatar", e.target.files[0]);
-    handlePost(
-      `admin/profile/upload/profile-picture`,
-      formData,
-      "multipart/form-data",
-      onSuccess
-    );
+    const payload = {
+      avatar: e.target.files[0],
+    };
+    handlePost(`admin/profile/upload/profile-picture`, payload, "application/json", onSuccess);
   };
   const handleUpateProfile = () => {
-    setLoading(true)
-    const formData = new FormData();
-    formData.append("first_name", fname);
-    formData.append("last_name", lname);
-    formData.append("email", email);
-    formData.append("phone_number", phone);
-    handlePost(
-      `admin/profile/update`,
-      formData,
-      "multipart/form-data",
-      onSuccess
-    );
+    setLoading(true);
+    const payload = {
+      first_name: fname,
+      last_name: lname,
+      email: email,
+      phone_number: phone,
+    };
+    handlePost(`admin/profile/update`, payload, "application/json", onSuccess);
   };
   return (
     <>
@@ -77,11 +69,7 @@ const SettingsPage = () => {
                   className="rounded-[80px] border w-full h-full mx-auto"
                 />
                 <p className="w-8 h-8 rounded-[80px] grid place-content-center bg-white absolute overflow-hidden z-10 bottom-[1px] right-[15px] border cursor-pointer">
-                  {isBusy ? (
-                    ""
-                  ) : (
-                    <BsFillCameraFill className="text-primary relative" />
-                  )}
+                  {isBusy ? "" : <BsFillCameraFill className="text-primary relative" />}
                   <input
                     type="file"
                     onChange={(e) => changeProfileImage(e)}
@@ -167,7 +155,7 @@ const SettingsPage = () => {
               className="px-6 py-2 border border-green-600 bg-blue-800 text-white font-semibold rounded-lg"
               onClick={handleUpateProfile}
             >
-             {loading? "Saving..." : "Save Changes"}
+              {loading ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </div>

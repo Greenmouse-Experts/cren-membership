@@ -11,6 +11,7 @@ import loginImg from "../image/login-img.svg";
 import axios from "axios";
 import { AiFillEye } from "react-icons/ai";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
+import RenderLogo from "../components/RenderLogo";
 
 const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -41,15 +42,11 @@ const ResetPassword = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isValidate()) {
-      const fd = new FormData();
-      Object.entries(logData).forEach(([key, value]) => {
-        fd.append(key, value);
-      });
       setIsLoading(true);
       axios
-        .post(`${API_URL}/auth/password/reset`, fd, {
+        .post(`${API_URL}/auth/password/reset`, logData, {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
           },
         })
         .then((res) => {
@@ -65,11 +62,9 @@ const ResetPassword = () => {
             toast.error(err?.response?.data?.message);
           }
           if (err?.response?.data?.errors) {
-            Object.entries(err?.response?.data?.errors).forEach(
-              ([key, value]) => {
-                toast.error(value[0]);
-              }
-            );
+            Object.entries(err?.response?.data?.errors).forEach(([key, value]) => {
+              toast.error(value[0]);
+            });
           }
         })
         .finally(() => {
@@ -81,11 +76,7 @@ const ResetPassword = () => {
     let isProceed = true;
     let errorMessages = ""; // Create a variable to store error messages
 
-    if (
-      logData.code === "" ||
-      logData.password === "" ||
-      logData.password_confirmation === ""
-    ) {
+    if (logData.code === "" || logData.password === "" || logData.password_confirmation === "") {
       isProceed = false;
       errorMessages += "Please fill all inputs. ";
     }
@@ -113,14 +104,9 @@ const ResetPassword = () => {
   return (
     <section className="px-0 py-0 grid xl:grid-cols-2 grid-cols-1 items-center">
       <div className="">
-        <form
-          onSubmit={handleSubmit}
-          action="submit"
-          className="login md:w-[32rem] w-full mx-auto"
-        >
-          <a href="http://ndiigbogermany.org">
-            <img src={logo} alt="logo" />
-          </a>
+        <form onSubmit={handleSubmit} action="submit" className="login md:w-[32rem] w-full mx-auto">
+          <RenderLogo />
+
           <div className="log_head">
             <h3>Reset Password</h3>
           </div>
@@ -187,7 +173,6 @@ const ResetPassword = () => {
           </div>
 
           <p className="text-grey-800 font-normal mt-2 ">
-            
             <Link
               to="/forgot-password"
               className="text-[#015907] font-medium underline pb-1 cursor-pointer"
@@ -209,11 +194,7 @@ const ResetPassword = () => {
       </div>
 
       <div className="hidden xl:block h-full">
-        <img
-          src={loginImg}
-          alt=""
-          className="object-cover object-center h-full"
-        />
+        <img src={loginImg} alt="" className="object-cover object-center h-full" />
       </div>
     </section>
   );

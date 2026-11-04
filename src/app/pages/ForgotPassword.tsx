@@ -72,7 +72,7 @@ const ForgotPassword = () => {
             onSubmit={handleSubmit}
             className="md:w-[32rem] bg-white dark:bg-darkMood w-full px-5 py-10 flex flex-col justify-center items-center mx-auto h-full rounded-2xl login"
           >
-            <div className="p-3 bg-red-500 w-full"></div>
+            <RenderLogo />
             <div className="flex flex-col justify-center gap-4 w-full">
               <h3 className="text-[2.5rem] font-bold tracking-[-2px] mb-1">Forget Password?</h3>
               <p className="text-grey-800 text-lg font-normal mb-8">
@@ -106,7 +106,7 @@ const ForgotPassword = () => {
         </div>
 
         <div className="hidden xl:block h-full">
-          <img src={loginImg} alt="" className="object-cover object-center h-full" />
+          <img src={"/new_side.jpeg"} alt="" className="object-cover object-center h-full" />
         </div>
       </section>
     </main>

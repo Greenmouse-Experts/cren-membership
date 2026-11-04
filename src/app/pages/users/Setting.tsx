@@ -7,14 +7,14 @@ import { BsFillCameraFill, BsHouseAdd, BsTelephonePlusFill } from "react-icons/b
 import usePostHook from "../../hook/usePost";
 import { toast } from "react-toastify";
 import useModal from "../../hook/useModal";
-import { IoBusinessOutline } from "react-icons/io5"
-import { FaUsersLine } from "react-icons/fa6"
+import { IoBusinessOutline } from "react-icons/io5";
+import { FaUsersLine } from "react-icons/fa6";
 import ChangePassword from "../../users/ChangePassword";
 
 const MembersSetting = () => {
   const { data: user, refetch } = useGetHook("member/profile");
 
-  console.log(user)
+  console.log(user);
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState();
   const [isBusy, setIsBusy] = useState(false);
@@ -22,9 +22,9 @@ const MembersSetting = () => {
   const [lname, setLname] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [username, setUserName] = useState("")
-  const [address, setAddress] = useState("")
-  const [representative, setNameOfRepresentative] = useState("")
+  const [username, setUserName] = useState("");
+  const [address, setAddress] = useState("");
+  const [representative, setNameOfRepresentative] = useState("");
   // const [piwe, setPiwe] = useState("")
   // const [rea, setRea] = useState("")
   const { handlePost } = usePostHook();
@@ -34,57 +34,44 @@ const MembersSetting = () => {
     setLname(user?.data?.last_name);
     setEmail(user?.data?.email);
     setPhone(user?.data?.phone_number);
-    setUserName(user?.data?.username)
-    setAddress(user?.data?.address)
-    setNameOfRepresentative(user?.data?.name_of_representative)
-    localStorage.setItem(
-      "igbo_member_avatar",
-      user?.data?.avatar
-    );
+    setUserName(user?.data?.username);
+    setAddress(user?.data?.address);
+    setNameOfRepresentative(user?.data?.name_of_representative);
+    localStorage.setItem("igbo_member_avatar", user?.data?.avatar);
     // setPiwe(user?.data?.previous_insolvency_work_experience)
     // setRea(user?.data?.referee_email_address)
   }, [user, preview, loading]);
   const onSuccess = () => {
     toast.success("Profile updated successfully");
     setLoading(false);
-    refetch()
+    refetch();
   };
   const changeProfileImage = async (e) => {
     setIsBusy(true);
     e.preventDefault();
     const objectUrl = URL.createObjectURL(e.target.files[0]);
     setPreview(objectUrl);
-    const formData = new FormData();
-    formData.append("avatar", e.target.files[0]);
-    handlePost(
-      `member/profile/upload/profile-picture`,
-      formData,
-      "multipart/form-data",
-      onSuccess
-    
-    );
-    if(onSuccess){
-      setLoading(false)
+    const payload = {
+      avatar: e.target.files[0],
+    };
+    handlePost(`member/profile/upload/profile-picture`, payload, "application/json", onSuccess);
+    if (onSuccess) {
+      setLoading(false);
     }
   };
   const handleUpateProfile = () => {
-    setLoading(true)
-    const formData = new FormData();
-    formData.append("first_name", fname);
-    formData.append("last_name", lname);
-    formData.append("email", email);
-    formData.append("phone_number", phone);
-    formData.append("username", username)
-    formData.append("address", address)
-    formData.append("name_of_representative", representative)
-     formData.append("name_of_member_organization", fname)
-    // formData.append("referee_email_address", rea)
-    handlePost(
-      `member/profile/update`,
-      formData,
-      "multipart/form-data",
-      onSuccess
-    );
+    setLoading(true);
+    const payload = {
+      first_name: fname,
+      last_name: lname,
+      email,
+      phone_number: phone,
+      username,
+      address,
+      name_of_representative: representative,
+      name_of_member_organization: fname,
+    };
+    handlePost(`member/profile/update`, payload, "application/json", onSuccess);
   };
   return (
     <>
@@ -104,11 +91,7 @@ const MembersSetting = () => {
                   className="rounded-[80px] border w-full h-full mx-auto"
                 />
                 <p className="w-8 h-8 rounded-[80px] grid place-content-center bg-white absolute overflow-hidden z-10 bottom-[1px] right-[15px] border cursor-pointer">
-                  {isBusy ? (
-                    ""
-                  ) : (
-                    <BsFillCameraFill className="text-primary relative" />
-                  )}
+                  {isBusy ? "" : <BsFillCameraFill className="text-primary relative" />}
                   <input
                     type="file"
                     onChange={(e) => changeProfileImage(e)}
@@ -222,48 +205,6 @@ const MembersSetting = () => {
                     />
                   </div>
                 </div>
-                {/* <div className="flex items-center gap-x-2">
-                  <div className="w-16 h-16 grid place-content-center shadow-lg">
-                    <MdOutlineWorkHistory className="text-2xl text-gray-400" />
-                  </div>
-                  <div className="w-full">
-                    <p className="text-[14px] text-primary">Previous Insolvency Work Experience:</p>
-                    <input
-                      type="text"
-                      value={piwe}
-                      onChange={(e) => setPiwe(e.target.value)}
-                      className="border-b w-full bg-transparent p-2"
-                    />
-                  </div>
-                </div>
-                <div className="flex items-center gap-x-2">
-                  <div className="w-16 h-16 grid place-content-center shadow-lg">
-                    <MdOutlineMarkEmailRead className="text-2xl text-gray-400" />
-                  </div>
-                  <div className="w-full">
-                    <p className="text-[14px] text-primary">Referee Email Address:</p>
-                    <input
-                      type="text"
-                      value={rea}
-                      onChange={(e) => setRea(e.target.value)}
-                      className="border-b w-full bg-transparent p-2"
-                    />
-                  </div>
-                </div> */}
-                {/* <div className="flex items-center gap-x-2">
-                  <div className="w-16 h-16 grid place-content-center shadow-lg">
-                    <FaUserShield className="text-2xl text-gray-400" />
-                  </div>
-                  <div className="w-full">
-                    <p className="text-[14px] text-primary">First Name:</p>
-                    <input
-                      type="text"
-                      value={fname}
-                      onChange={(e) => setFname(e.target.value)}
-                      className="border-b w-full bg-transparent p-2"
-                    />
-                  </div>
-                </div> */}
               </div>
             </div>
           </div>
@@ -278,7 +219,7 @@ const MembersSetting = () => {
               className="px-6 py-2 border border-green-600 bg-blue-800 text-white font-semibold rounded-lg"
               onClick={handleUpateProfile}
             >
-             {loading? "Saving..." : "Save Changes"}
+              {loading ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </div>
