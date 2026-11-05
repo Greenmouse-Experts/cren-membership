@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { anchored_shape } from "@/helpers/ui";
 
 const CONTACT_EMAIL = "cren.nigeria@gmail.com";
 
@@ -108,15 +109,19 @@ export default function ContactDetails() {
                   </>
                 );
 
-                const cardClass =
-                  "flex items-start gap-3 rounded-xl bg-[#edf4e6] p-7 transition-colors";
+                const cardClass = "flex items-start gap-3 bg-[#edf4e6] p-7 transition-colors";
 
                 return href ? (
-                  <a key={label} href={href} className={`${cardClass} hover:bg-[#e5efdb]`}>
+                  <a
+                    key={label}
+                    href={href}
+                    className={`${cardClass} hover:bg-[#e5efdb]`}
+                    style={anchored_shape}
+                  >
                     {content}
                   </a>
                 ) : (
-                  <div key={label} className={cardClass}>
+                  <div key={label} className={cardClass} style={anchored_shape}>
                     {content}
                   </div>
                 );
@@ -124,7 +129,7 @@ export default function ContactDetails() {
             </div>
           </div>
 
-          <div className="rounded-2xl bg-[#f3f5f1] p-6 sm:p-8 lg:p-9">
+          <div className="rounded-2xl bg-[#f3f5f1] p-6 sm:p-8 lg:p-9" style={anchored_shape}>
             <h2 className="text-[1.6rem] font-semibold leading-[1.2] tracking-[-0.025em] text-[#075b2f]">
               Make an enquiry.
             </h2>
