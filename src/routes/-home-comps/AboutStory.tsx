@@ -24,9 +24,13 @@ function PillarCard({ title, body, featured }: Pillar) {
   const cardHeight = "md:min-h-[190px]";
 
   return (
-    <article className={`relative isolate overflow-hidden rounded-xl ${featured
-      ? "bg-[#0b4b2b] p-6 text-white shadow-[0_26px_50px_-30px_rgba(6,58,32,0.75)]"
-      : "border border-[#075b2f]/10 bg-[linear-gradient(145deg,#ffffff_15%,#eef5e7_100%)] p-6 shadow-[0_18px_40px_-34px_rgba(7,91,47,0.6)]"}${cardHeight}`}>
+    <article
+      className={`relative isolate overflow-hidden rounded-xl ${
+        featured
+          ? "bg-[#0b4b2b] p-6 text-white shadow-[0_26px_50px_-30px_rgba(6,58,32,0.75)]"
+          : "border border-[#075b2f]/10 bg-[linear-gradient(145deg,#ffffff_15%,#eef5e7_100%)] p-6 shadow-[0_18px_40px_-34px_rgba(7,91,47,0.6)]"
+      }${cardHeight} `}
+    >
       {featured ? (
         <div>
           <img
@@ -39,7 +43,9 @@ function PillarCard({ title, body, featured }: Pillar) {
           <h3 className="text-[1.45rem] font-semibold leading-[1.15] tracking-[-0.025em] text-white">
             {title}
           </h3>
-          <p className="mt-3 text-[0.78rem] leading-[1.7] text-white/80 sm:text-[0.82rem]">{body}</p>
+          <p className="mt-3 text-[0.78rem] leading-[1.7] text-white/80 sm:text-[0.82rem]">
+            {body}
+          </p>
         </div>
       ) : (
         <div>
@@ -50,7 +56,9 @@ function PillarCard({ title, body, featured }: Pillar) {
           <h3 className="text-[1.45rem] font-semibold leading-[1.15] tracking-[-0.025em] text-[#075b2f]">
             {title}
           </h3>
-          <p className="mt-3 text-[0.78rem] leading-[1.7] text-[#62705f] sm:text-[0.82rem]">{body}</p>
+          <p className="mt-3 text-[0.78rem] leading-[1.7] text-[#62705f] sm:text-[0.82rem]">
+            {body}
+          </p>
         </div>
       )}
     </article>
