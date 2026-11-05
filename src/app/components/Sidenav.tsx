@@ -31,6 +31,7 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
+import { Link } from "@tanstack/react-router";
 
 const Sidenav = ({ showSidebar, toggleSidebar }) => {
   const navigate = useNavigate();
@@ -137,8 +138,8 @@ const Sidenav = ({ showSidebar, toggleSidebar }) => {
               showSidebar ? "justify-between" : "justify-center",
             )}
           >
-            <a
-              href="https://ndiigbogermany.org"
+            <Link
+              to="/"
               target="_blank"
               rel="noreferrer"
               className="flex items-center gap-2.5 overflow-hidden group"
@@ -148,15 +149,15 @@ const Sidenav = ({ showSidebar, toggleSidebar }) => {
                 alt="CREN Logo"
                 className={cn(
                   "object-contain transition-transform group-hover:scale-105",
-                  showSidebar ? "h-9 w-auto" : "h-8 w-8",
+                  showSidebar ? "h-12 w-auto" : "h-8",
                 )}
               />
-              {showSidebar && (
+              {/*{showSidebar && (
                 <div className="flex flex-col text-left">
                   <Menu />
                 </div>
-              )}
-            </a>
+              )}*/}
+            </Link>
 
             {/* Mobile close button */}
             {showSidebar && (

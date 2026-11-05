@@ -12,6 +12,7 @@ import "../stylesheet/component.css";
 import { AiOutlineClose } from "react-icons/ai";
 import useModal from "../hook/useModal";
 import { TiMessages } from "react-icons/ti";
+import { Link } from "@tanstack/react-router";
 
 const Sidebar = ({ showSidebar, toggleSidebar }) => {
   const [showUsersMenu, setShowUsersMenu] = useState(false);
@@ -76,9 +77,9 @@ const Sidebar = ({ showSidebar, toggleSidebar }) => {
   return (
     <div ref={sidebarRef} className={showSidebar ? "sidebar" : "sidebar closed"}>
       <div className={showSidebar ? "side_img" : "img-side"}>
-        <a href="http://ndiigbogermany.org/">
+        <Link to="/">
           <img className="img-logo" src={logo} alt="Logo" />
-        </a>{" "}
+        </Link>{" "}
         <div className="men" onClick={toggleSidebar}>
           <AiOutlineClose />
         </div>
