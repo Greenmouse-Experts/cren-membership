@@ -27,19 +27,11 @@ export default function HomeFooter() {
         <div className="grid gap-10 md:grid-cols-[1.25fr_0.75fr_1.2fr] md:gap-8 lg:gap-16">
           <div>
             <a
-              href="#home"
+              href="/home"
               aria-label="CREN home"
               className="inline-flex items-center gap-3 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-[#0b4b2b]"
             >
-              <img src={logoMark} alt="" className="h-14 w-14 object-contain sm:h-16 sm:w-16" />
-              <span className="flex flex-col">
-                <span className="text-[1.55rem] font-bold leading-none tracking-[-0.03em] text-white">
-                  CREN
-                </span>
-                <span className="mt-1 max-w-[170px] text-[0.68rem] font-medium leading-[1.3] text-white/75">
-                  Council for Renewable Energy Nigeria
-                </span>
-              </span>
+              <img src={"/footer_logo.png"} alt="" className="h-20 object-contain " />
             </a>
             <p className="mt-8 max-w-[220px] text-sm font-medium leading-[1.65] text-white/75">
               Powering Nigeria&apos;s Green Growth, Today and Tomorrow.
