@@ -1,5 +1,5 @@
 import HomeNav from "@/components/HomeNav";
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useRouterState } from "@tanstack/react-router";
 import HomeFooter from "../-home-comps/HomeFooter";
 
 export const Route = createFileRoute("/home")({
@@ -7,9 +7,12 @@ export const Route = createFileRoute("/home")({
 });
 
 function RouteComponent() {
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const activeHref = pathname.startsWith("/home/") ? pathname : "#home";
+
   return (
     <div>
-      <HomeNav />
+      <HomeNav activeHref={activeHref} />
       <main className="">
         <Outlet />
       </main>

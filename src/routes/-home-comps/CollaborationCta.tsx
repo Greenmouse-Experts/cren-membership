@@ -33,7 +33,7 @@ export default function CollaborationCta({
             financing, standards and awareness.
           </p>
           <a
-            href="/home#contact"
+            href="#contact"
             className="group mt-8 inline-flex h-10 items-center justify-center gap-2.5 rounded-md bg-[#9bd64e] px-5 text-[0.74rem] font-semibold text-[#083d23] transition-colors duration-200 hover:bg-[#aae267] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b4b2b]"
           >
             Contact CREN

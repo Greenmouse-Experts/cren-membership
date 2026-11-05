@@ -65,7 +65,7 @@ export default function OurWorkActions() {
                 alt=""
                 aria-hidden="true"
                 loading="lazy"
-                className="h-9 w-auto object-contain transition-transform duration-500 ease-out group-hover:scale-[1.05] sm:h-10"
+                className="h-9 w-fit object-contain transition-transform duration-500 ease-out group-hover:scale-[1.05] sm:h-10"
               />
               <div className="mt-auto pt-10">
                 <h3 className="text-[1.15rem] font-semibold leading-[1.25] tracking-[-0.015em] text-white sm:text-[1.3rem]">
