@@ -21,15 +21,13 @@ const pillars: Pillar[] = [
 ];
 
 function PillarCard({ title, body, featured }: Pillar) {
-  const cardHeight = "md:min-h-[190px]";
-
   return (
     <article
-      className={`relative isolate overflow-hidden rounded-xl ${
+      className={`relative isolate flex min-h-[190px] flex-col overflow-hidden rounded-xl ${
         featured
           ? "bg-[#0b4b2b] p-6 text-white shadow-[0_26px_50px_-30px_rgba(6,58,32,0.75)]"
           : "border border-[#075b2f]/10 bg-[linear-gradient(145deg,#ffffff_15%,#eef5e7_100%)] p-6 shadow-[0_18px_40px_-34px_rgba(7,91,47,0.6)]"
-      }${cardHeight} `}
+      }`}
     >
       {featured ? (
         <div>
@@ -91,7 +89,7 @@ export default function AboutStory() {
           </p>
         </div>
 
-        <div className="mt-10 grid gap-4 md:grid-cols-3 md:items-center lg:mt-12 lg:gap-5">
+        <div className="mt-10 grid gap-4 md:grid-cols-3 lg:mt-12 lg:gap-5">
           {pillars.map((pillar) => (
             <PillarCard key={pillar.title} {...pillar} />
           ))}
