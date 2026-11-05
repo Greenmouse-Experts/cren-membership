@@ -50,7 +50,7 @@ export default function AboutLeadership() {
             <span className="block">Meet CREN&apos;s</span>
             <span className="block">leadership.</span>
           </h2>
-          <p className="mx-auto mt-4 max-w-[430px] text-pretty text-[0.8rem] leading-[1.7] text-[#6d766f] sm:text-[0.86rem]">
+          <p className="mx-auto mt-4 max-w-[430px] text-pretty  leading-[1.7] text-[#6d766f] ">
             The 2026 executive leadership and board representation, as presented in CREN&apos;s
             supplied organisational materials.
           </p>
