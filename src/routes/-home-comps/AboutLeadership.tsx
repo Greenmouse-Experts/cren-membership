@@ -74,9 +74,7 @@ export default function AboutLeadership() {
                 <h3 className="text-[0.78rem] font-bold leading-[1.35] tracking-[-0.01em] text-[#1b2a20] sm:text-[0.82rem]">
                   {leader.name}
                 </h3>
-                <p className="mt-1 text-[0.64rem] leading-[1.4] text-[#6e7a71] sm:text-[0.68rem]">
-                  {leader.role}
-                </p>
+                <p className="mt-1 text-sm leading-[1.4] text-[#6e7a71] ">{leader.role}</p>
               </div>
             </article>
           ))}
