@@ -64,7 +64,7 @@ export default function HomeFooter() {
                   strokeWidth={1.8}
                 />
                 <span>
-                  8 Bright Rise Plaza, 50 Ebiu Ukuwa Street,
+                  8 Bright Star Plaza, 50 Ebitu Ukiwe Street,
                   <br />
                   Jabi, Abuja, Nigeria.
                 </span>
@@ -89,7 +89,7 @@ export default function HomeFooter() {
                   className="size-4 shrink-0 text-[#97d64c]"
                   strokeWidth={1.8}
                 />
-                <span>+234 803 504 8073</span>
+                <span>+234 803 504 9073</span>
               </a>
             </address>
           </div>
