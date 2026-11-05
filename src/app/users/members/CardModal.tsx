@@ -5,9 +5,7 @@ import { FaTimes } from "react-icons/fa";
 import dayjs from "dayjs";
 
 const CardModal = ({ item, close }) => {
-  const { data, loading } = useGetHook(
-    `member/view/member?member_id=${item.id}`
-  );
+  const { data, loading } = useGetHook(`member/view/member?member_id=${item.id}`);
   const { data: user, refetch } = useGetHook("member/profile");
 
   console.log(data);
@@ -32,12 +30,10 @@ const CardModal = ({ item, close }) => {
             <div className="relative w-full ">
               <img src="/card-bg.png" alt="" />
               <div className=" absolute top-2 left-1/2 -translate-x-1/2 flex  flex-col items-center gap-3">
-                <img
-                  src={user?.data?.avatar}
-                  alt=""
-                  className="rounded-full w-[5rem] h-[5rem]"
-                />
-                <p className=" uppercase text-center text-white font-semibold">{user?.data?.name_of_member_organization}</p>
+                <img src={user?.data?.avatar} alt="" className="rounded-full w-[5rem] h-[5rem]" />
+                <p className=" uppercase text-center text-white font-semibold">
+                  {user?.data?.name_of_member_organization}
+                </p>
                 <img
                   src={data.data.passport}
                   alt="passport"
@@ -69,21 +65,28 @@ const CardModal = ({ item, close }) => {
                 </p>
                 <p className="text-sm font-medium flex gap-3">
                   {" "}
-                  <span>MARITAL STATUS :</span>{" "}
-                  <span>{data.data.marital_status}</span>
+                  <span>MARITAL STATUS :</span> <span>{data.data.marital_status}</span>
                 </p>
                 <p className="text-sm font-medium flex gap-3">
                   {" "}
                   <span>ADDRESS :</span> <span>{data.data.address}</span>
                 </p>
               </div>
-                <p className="text-sm mt-4rem text-center  border border-t-[#222222] italic py-1 mt-2"> {dayjs(data.data.created_at).format("DD-MMM -YYYY")}</p>
+              <p className="text-sm mt-4rem text-center  border border-t-[#222222] italic py-1 mt-2">
+                {" "}
+                {dayjs(data.data.created_at).format("DD-MMM -YYYY")}
+              </p>
             </div>
           </div>
           <div className="p-5 w-[20rem] h-[38rem] flex flex-col items-center mx-auto bg-[#f4f4f4]  relative pt-20">
-            <p className="text-lg font-semibold text-center">This ID card remains the property of {user?.data?.name_of_member_organization}</p>
-            <p className="text-lg font-semibold text-center mt-3">If found please contact {user?.data?.email} or call {user?.data?.phone_number} or visit {user?.data?.address}</p>
-            <img src="/card-back.png" alt="" className="bottom-0 absolute" />
+            <p className="text-lg font-semibold text-center">
+              This ID card remains the property of {user?.data?.name_of_member_organization}
+            </p>
+            <p className="text-lg font-semibold text-center mt-3">
+              If found please contact {user?.data?.email} or call {user?.data?.phone_number} or
+              visit {user?.data?.address}
+            </p>
+            <img src="/logo.png" alt="" className="bottom-0 absolute" />
           </div>
         </div>
       )}
