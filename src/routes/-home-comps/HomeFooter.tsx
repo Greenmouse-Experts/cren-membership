@@ -41,14 +41,14 @@ export default function HomeFooter() {
                 </span>
               </span>
             </a>
-            <p className="mt-8 max-w-[220px] text-[0.72rem] font-medium leading-[1.65] text-white/75">
+            <p className="mt-8 max-w-[220px] text-sm font-medium leading-[1.65] text-white/75">
               Powering Nigeria&apos;s Green Growth, Today and Tomorrow.
             </p>
           </div>
 
           <div>
             <h2 className="text-[0.82rem] font-semibold text-[#97d64c]">Quick Links</h2>
-            <ul className="mt-4 grid gap-2.5 text-[0.78rem] text-white/85">
+            <ul className="mt-4 grid gap-2.5 text-sm text-white/85">
               {quickLinks.map((link) => (
                 <li key={link.label}>
                   <a
@@ -64,7 +64,7 @@ export default function HomeFooter() {
 
           <div>
             <h2 className="text-[0.82rem] font-semibold text-[#97d64c]">Get in Touch</h2>
-            <address className="mt-4 flex flex-col gap-3.5 text-[0.76rem] not-italic leading-[1.65] text-white/85">
+            <address className="mt-4 flex flex-col gap-3.5 text-sm not-italic leading-[1.65] text-white/85">
               <p className="flex items-start gap-3">
                 <MapPin
                   aria-hidden="true"
@@ -86,7 +86,7 @@ export default function HomeFooter() {
                   className="size-4 shrink-0 text-[#97d64c]"
                   strokeWidth={1.8}
                 />
-                <span>c.ren@greenmail.com</span>
+                <span>cren.nigeria@greenmail.com</span>
               </a>
               <a
                 href="tel:+2348035048073"
