@@ -68,26 +68,26 @@ export default function HomeNav({ activeHref = "#home", className = "" }: HomeNa
       <div className="mx-auto container drop-shadow-[0_18px_36px_rgba(2,30,14,0.08)]">
         <div className="bg-white" style={navShape}>
           <div className="flex min-h-[74px] items-center justify-between gap-5 px-5 py-2 sm:min-h-[82px] sm:px-8 xl:grid xl:grid-cols-[auto_1fr_auto] xl:gap-8 xl:px-10 2xl:px-12">
-            <a
-              href="#home"
+            <Link
+              to="/home"
               className="group flex shrink-0 items-center gap-3 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#015907] focus-visible:ring-offset-4"
             >
               <img src={"/logo.png"} alt="" className="h-14 object-contain" />
-            </a>
+            </Link>
 
             <nav
               aria-label="Primary"
               className="hidden items-center justify-center gap-8 xl:flex 2xl:gap-12"
             >
               {navigation.map((item) => (
-                <a
+                <Link
                   key={item.label}
-                  href={item.href}
+                  to={item.href}
                   aria-current={activeHref === item.href ? "page" : undefined}
                   className={navLinkClass(item.href)}
                 >
                   {item.label}
-                </a>
+                </Link>
               ))}
             </nav>
 
@@ -118,8 +118,8 @@ export default function HomeNav({ activeHref = "#home", className = "" }: HomeNa
               <ul className="flex flex-col">
                 {navigation.map((item) => (
                   <li key={item.label}>
-                    <a
-                      href={item.href}
+                    <Link
+                      to={item.href}
                       aria-current={activeHref === item.href ? "page" : undefined}
                       onClick={() => setMenuOpen(false)}
                       className={`block rounded-md px-2 py-3 text-[1rem] font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#015907] ${
@@ -129,7 +129,7 @@ export default function HomeNav({ activeHref = "#home", className = "" }: HomeNa
                       }`}
                     >
                       {item.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
