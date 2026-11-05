@@ -84,7 +84,7 @@
   --secondary-foreground: oklch(0.208 0.042 265.755);
   --muted: oklch(0.968 0.007 247.896);
   --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
+  --accent: #97d64c;
   --accent-foreground: oklch(0.208 0.042 265.755);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
@@ -394,4 +394,8 @@
 }
 .container {
   padding-inline: calc(var(--spacing) * 4) /* 1rem = 16px */;
+}
+
+@utility text-primary {
+  @apply text-[#97d64c];
 }

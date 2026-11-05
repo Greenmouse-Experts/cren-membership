@@ -17,7 +17,7 @@ import SetSubscribe from "../../../admin/Payments/SetSubscribe";
 
 const SubList = () => {
   const { data, isLoading, refetch } = useGetHook(`admin/subscription`);
-  console.log("sub", data)
+  console.log("sub", data);
   const { handlePost } = usePostHook();
   const [isBusy, setIsBusy] = useState(false);
   const { Modal: Delete, setShowModal: showDelete } = useModal();
@@ -41,24 +41,17 @@ const SubList = () => {
   const handleDelete = () => {
     setIsBusy(true);
     const payload = {
-       due_id: selected.id,
+      due_id: selected.id,
     };
-    handlePost(
-      `admin/dues/delete`,
-      payload,
-      `application/json`,
-      onSuccess
-    );
+    handlePost(`admin/dues/delete`, payload, `application/json`, onSuccess);
   };
   return (
     <>
       <div className="mx-2 p-5 bg-white min-h-[70vh] ml-6">
         <div className="flex justify-between">
           <div className="lg:w-8/12">
-            <p className="text-xl font-semibold">Igbos in Germany Subscription List</p>
-            <p className="mt-2">
-              Add, edit and delete dues informations for members.
-            </p>
+            <p className="text-xl font-semibold">Subscription List</p>
+            <p className="mt-2">Add, edit and delete dues informations for members.</p>
           </div>
           <div>
             {/* <button
@@ -77,11 +70,11 @@ const SubList = () => {
                 <table className="items-center w-full bg-transparent border-collapse">
                   <thead className="thead-light border-y-2 border-[#CECECE]">
                     <tr>
-                    <th
+                      <th
                         scope="col"
                         className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
                       >
-                       S/N
+                        S/N
                       </th>
                       {/* <th
                         scope="col"
@@ -101,7 +94,7 @@ const SubList = () => {
                       >
                         Amount
                       </th>
-                    
+
                       <th
                         scope="col"
                         className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
@@ -138,7 +131,7 @@ const SubList = () => {
                           {item.end_date}
                         </td> */}
                         <td className="align-middle fs-500 whitespace-nowrap px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
-                        <SetSubscribe/>
+                          <SetSubscribe />
                         </td>
                       </tr>
                     ))}
@@ -149,13 +142,10 @@ const SubList = () => {
           </div>
         </div>
       </div>
-      <Modal title={'Set Subscription'}>
-        <AddSubscription close={() => setShowModal(false)} refetch={refetch}/>
+      <Modal title={"Set Subscription"}>
+        <AddSubscription close={() => setShowModal(false)} refetch={refetch} />
       </Modal>
-      <Edit title={selected?.name}>
-      
-      </Edit>
-    
+      <Edit title={selected?.name}></Edit>
     </>
   );
 };

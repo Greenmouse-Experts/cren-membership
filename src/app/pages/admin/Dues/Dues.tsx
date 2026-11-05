@@ -38,24 +38,17 @@ const AdminDues = () => {
   const handleDelete = () => {
     setIsBusy(true);
     const payload = {
-       due_id: selected.id,
+      due_id: selected.id,
     };
-    handlePost(
-      `admin/dues/delete`,
-      payload,
-      `application/json`,
-      onSuccess
-    );
+    handlePost(`admin/dues/delete`, payload, `application/json`, onSuccess);
   };
   return (
     <>
       <div className="mx-2 p-5 bg-white min-h-[70vh]">
         <div className="flex justify-between">
           <div className="lg:w-8/12">
-            <p className="text-xl font-semibold">Igbos in Germany Dues List</p>
-            <p className="mt-2">
-              Add, edit and delete dues informations for members.
-            </p>
+            <p className="text-xl font-semibold">Dues List</p>
+            <p className="mt-2">Add, edit and delete dues informations for members.</p>
           </div>
           <div>
             <button
@@ -74,11 +67,11 @@ const AdminDues = () => {
                 <table className="items-center w-full bg-transparent border-collapse">
                   <thead className="thead-light border-y-2 border-[#CECECE]">
                     <tr>
-                    <th
+                      <th
                         scope="col"
                         className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
                       >
-                       S/N
+                        S/N
                       </th>
                       <th
                         scope="col"
@@ -125,9 +118,7 @@ const AdminDues = () => {
                           {i + 1}
                         </td>
                         <td className="align-middle fs-500  px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
-                          <div className="w-48">
-                          {item.description}
-                          </div>
+                          <div className="w-48">{item.description}</div>
                         </td>
                         <td className="align-middle fs-500 whitespace-nowrap px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
                           <div>
@@ -166,8 +157,8 @@ const AdminDues = () => {
           </div>
         </div>
       </div>
-      <Modal title={'Add Dues'}>
-        <AddDues close={() => setShowModal(false)} refetch={refetch}/>
+      <Modal title={"Add Dues"}>
+        <AddDues close={() => setShowModal(false)} refetch={refetch} />
       </Modal>
       <Edit title={selected?.name}>
         <EditDues item={selected} close={() => showEdit(false)} refetch={refetch} />

@@ -11,7 +11,7 @@ export default function HomeSections() {
       <OurWork />
       <Activities />
       <HomeFaq />
-      <HomeFooter />
+      {/*<HomeFooter />*/}
     </>
   );
 }

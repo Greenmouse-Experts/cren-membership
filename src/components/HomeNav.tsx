@@ -11,8 +11,8 @@ type HomeNavProps = {
 
 const navigation = [
   { label: "Home", href: "#home" },
-  { label: "About Us", href: "#about" },
-  { label: "Our Work", href: "#our-work" },
+  { label: "About Us", href: "/home/about-us" },
+  { label: "Our Work", href: "/home/our-work" },
   { label: "Contact Us", href: "#contact" },
 ];
 

@@ -33,6 +33,8 @@ import { Route as DashboardNotifyRouteImport } from './routes/dashboard.notify'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
 import { Route as DashboardTransactRouteImport } from './routes/dashboard.transact'
 import { Route as HomeIndexRouteImport } from './routes/home/index'
+import { Route as HomeAboutUsRouteImport } from './routes/home/about-us'
+import { Route as HomeOurWorkRouteImport } from './routes/home/our-work'
 import { Route as AdminDuesBankRouteImport } from './routes/admin.dues.bank'
 import { Route as AdminDuesCategoryRouteImport } from './routes/admin.dues.category'
 import { Route as AdminDuesListRouteImport } from './routes/admin.dues.list'
@@ -161,6 +163,16 @@ const HomeIndexRoute = HomeIndexRouteImport.update({
   path: '/',
   getParentRoute: () => HomeRouteRoute,
 } as any)
+const HomeAboutUsRoute = HomeAboutUsRouteImport.update({
+  id: '/about-us',
+  path: '/about-us',
+  getParentRoute: () => HomeRouteRoute,
+} as any)
+const HomeOurWorkRoute = HomeOurWorkRouteImport.update({
+  id: '/our-work',
+  path: '/our-work',
+  getParentRoute: () => HomeRouteRoute,
+} as any)
 const AdminDuesBankRoute = AdminDuesBankRouteImport.update({
   id: '/dues/bank',
   path: '/dues/bank',
@@ -220,6 +232,8 @@ export interface FileRoutesByFullPath {
   '/dashboard/notify': typeof DashboardNotifyRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/transact': typeof DashboardTransactRoute
+  '/home/about-us': typeof HomeAboutUsRoute
+  '/home/our-work': typeof HomeOurWorkRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/home/': typeof HomeIndexRoute
@@ -250,6 +264,8 @@ export interface FileRoutesByTo {
   '/dashboard/notify': typeof DashboardNotifyRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/transact': typeof DashboardTransactRoute
+  '/home/about-us': typeof HomeAboutUsRoute
+  '/home/our-work': typeof HomeOurWorkRoute
   '/admin': typeof AdminIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/home': typeof HomeIndexRoute
@@ -284,6 +300,8 @@ export interface FileRoutesById {
   '/dashboard/notify': typeof DashboardNotifyRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/transact': typeof DashboardTransactRoute
+  '/home/about-us': typeof HomeAboutUsRoute
+  '/home/our-work': typeof HomeOurWorkRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/home/': typeof HomeIndexRoute
@@ -319,6 +337,8 @@ export interface FileRouteTypes {
     | '/dashboard/notify'
     | '/dashboard/settings'
     | '/dashboard/transact'
+    | '/home/about-us'
+    | '/home/our-work'
     | '/admin/'
     | '/dashboard/'
     | '/home/'
@@ -349,6 +369,8 @@ export interface FileRouteTypes {
     | '/dashboard/notify'
     | '/dashboard/settings'
     | '/dashboard/transact'
+    | '/home/about-us'
+    | '/home/our-work'
     | '/admin'
     | '/dashboard'
     | '/home'
@@ -382,6 +404,8 @@ export interface FileRouteTypes {
     | '/dashboard/notify'
     | '/dashboard/settings'
     | '/dashboard/transact'
+    | '/home/about-us'
+    | '/home/our-work'
     | '/admin/'
     | '/dashboard/'
     | '/home/'
@@ -576,6 +600,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeIndexRouteImport
       parentRoute: typeof HomeRouteRoute
     }
+    '/home/about-us': {
+      id: '/home/about-us'
+      path: '/about-us'
+      fullPath: '/home/about-us'
+      preLoaderRoute: typeof HomeAboutUsRouteImport
+      parentRoute: typeof HomeRouteRoute
+    }
+    '/home/our-work': {
+      id: '/home/our-work'
+      path: '/our-work'
+      fullPath: '/home/our-work'
+      preLoaderRoute: typeof HomeOurWorkRouteImport
+      parentRoute: typeof HomeRouteRoute
+    }
     '/admin/dues/bank': {
       id: '/admin/dues/bank'
       path: '/dues/bank'
@@ -629,10 +667,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface HomeRouteRouteChildren {
+  HomeAboutUsRoute: typeof HomeAboutUsRoute
+  HomeOurWorkRoute: typeof HomeOurWorkRoute
   HomeIndexRoute: typeof HomeIndexRoute
 }
 
 const HomeRouteRouteChildren: HomeRouteRouteChildren = {
+  HomeAboutUsRoute: HomeAboutUsRoute,
+  HomeOurWorkRoute: HomeOurWorkRoute,
   HomeIndexRoute: HomeIndexRoute,
 }
 
