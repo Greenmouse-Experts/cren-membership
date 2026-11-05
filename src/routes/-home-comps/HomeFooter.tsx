@@ -106,7 +106,7 @@ export default function HomeFooter() {
         <div className="mt-12 flex flex-col gap-2 border-t border-white/15 pt-5 text-[0.68rem] text-white/60 sm:mt-16 sm:flex-row sm:items-center sm:justify-between">
           <p>© {year} Council for Renewable Energy Nigeria. All rights reserved.</p>
           <p>
-            Design by: <span className="text-[#97d64c]">greenmind</span>
+            Design by: <span className="text-[#97d64c]">greenmouse</span>
           </p>
         </div>
       </div>
