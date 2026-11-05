@@ -12,6 +12,7 @@ import {
   Settings,
   LogOut,
   X,
+  Menu,
 } from "lucide-react";
 import { Custom } from "../services/config";
 import { toast } from "react-toastify";
@@ -152,12 +153,7 @@ const Sidenav = ({ showSidebar, toggleSidebar }) => {
               />
               {showSidebar && (
                 <div className="flex flex-col text-left">
-                  <span className="text-xs font-bold text-emerald-950 tracking-wider leading-none">
-                    NDI IGBO
-                  </span>
-                  <span className="text-[10px] text-muted-foreground font-medium mt-1 leading-none">
-                    Germany Portal
-                  </span>
+                  <Menu />
                 </div>
               )}
             </a>

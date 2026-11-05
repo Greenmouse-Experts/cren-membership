@@ -72,19 +72,7 @@ export default function HomeNav({ activeHref = "#home", className = "" }: HomeNa
               href="#home"
               className="group flex shrink-0 items-center gap-3 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#015907] focus-visible:ring-offset-4"
             >
-              <img
-                src={logoMark}
-                alt=""
-                className="h-12 w-12 object-contain sm:h-[62px] sm:w-[64px]"
-              />
-              <span className="flex flex-col">
-                <span className="text-[1.65rem] font-bold leading-none tracking-[-0.03em] text-[#075b2f] transition-colors duration-200 group-hover:text-[#015907] sm:text-[2rem]">
-                  CREN
-                </span>
-                <span className="mt-1 max-w-[158px] text-[0.68rem] font-medium leading-[1.25] text-[#075b2f] sm:max-w-[185px] sm:text-[0.8rem]">
-                  Council for Renewable Energy Nigeria
-                </span>
-              </span>
+              <img src={"/logo.png"} alt="" className="h-14 object-contain" />
             </a>
 
             <nav
