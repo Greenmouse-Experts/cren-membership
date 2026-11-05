@@ -3,11 +3,11 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import logoMark from "@/app/image/logo-mark.png";
 
 const quickLinks = [
-  { label: "Home", href: "#home" },
-  { label: "About Us", href: "#about" },
-  { label: "Our Work", href: "#our-work" },
-  { label: "Contact Us", href: "#contact" },
-  { label: "Policies", href: "#policies" },
+  { label: "Home", href: "/home" },
+  { label: "About Us", href: "/home/about-us" },
+  { label: "Our Work", href: "/home/our-work" },
+  { label: "Contact Us", href: "/home/contact-us" },
+  { label: "Policies", href: "/home/policies" },
 ];
 
 export default function HomeFooter() {

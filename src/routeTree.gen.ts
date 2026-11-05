@@ -34,7 +34,9 @@ import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settin
 import { Route as DashboardTransactRouteImport } from './routes/dashboard.transact'
 import { Route as HomeIndexRouteImport } from './routes/home/index'
 import { Route as HomeAboutUsRouteImport } from './routes/home/about-us'
+import { Route as HomeContactUsRouteImport } from './routes/home/contact-us'
 import { Route as HomeOurWorkRouteImport } from './routes/home/our-work'
+import { Route as HomePoliciesRouteImport } from './routes/home/policies'
 import { Route as AdminDuesBankRouteImport } from './routes/admin.dues.bank'
 import { Route as AdminDuesCategoryRouteImport } from './routes/admin.dues.category'
 import { Route as AdminDuesListRouteImport } from './routes/admin.dues.list'
@@ -168,9 +170,19 @@ const HomeAboutUsRoute = HomeAboutUsRouteImport.update({
   path: '/about-us',
   getParentRoute: () => HomeRouteRoute,
 } as any)
+const HomeContactUsRoute = HomeContactUsRouteImport.update({
+  id: '/contact-us',
+  path: '/contact-us',
+  getParentRoute: () => HomeRouteRoute,
+} as any)
 const HomeOurWorkRoute = HomeOurWorkRouteImport.update({
   id: '/our-work',
   path: '/our-work',
+  getParentRoute: () => HomeRouteRoute,
+} as any)
+const HomePoliciesRoute = HomePoliciesRouteImport.update({
+  id: '/policies',
+  path: '/policies',
   getParentRoute: () => HomeRouteRoute,
 } as any)
 const AdminDuesBankRoute = AdminDuesBankRouteImport.update({
@@ -233,7 +245,9 @@ export interface FileRoutesByFullPath {
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/transact': typeof DashboardTransactRoute
   '/home/about-us': typeof HomeAboutUsRoute
+  '/home/contact-us': typeof HomeContactUsRoute
   '/home/our-work': typeof HomeOurWorkRoute
+  '/home/policies': typeof HomePoliciesRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/home/': typeof HomeIndexRoute
@@ -265,7 +279,9 @@ export interface FileRoutesByTo {
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/transact': typeof DashboardTransactRoute
   '/home/about-us': typeof HomeAboutUsRoute
+  '/home/contact-us': typeof HomeContactUsRoute
   '/home/our-work': typeof HomeOurWorkRoute
+  '/home/policies': typeof HomePoliciesRoute
   '/admin': typeof AdminIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/home': typeof HomeIndexRoute
@@ -301,7 +317,9 @@ export interface FileRoutesById {
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/transact': typeof DashboardTransactRoute
   '/home/about-us': typeof HomeAboutUsRoute
+  '/home/contact-us': typeof HomeContactUsRoute
   '/home/our-work': typeof HomeOurWorkRoute
+  '/home/policies': typeof HomePoliciesRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/home/': typeof HomeIndexRoute
@@ -338,7 +356,9 @@ export interface FileRouteTypes {
     | '/dashboard/settings'
     | '/dashboard/transact'
     | '/home/about-us'
+    | '/home/contact-us'
     | '/home/our-work'
+    | '/home/policies'
     | '/admin/'
     | '/dashboard/'
     | '/home/'
@@ -370,7 +390,9 @@ export interface FileRouteTypes {
     | '/dashboard/settings'
     | '/dashboard/transact'
     | '/home/about-us'
+    | '/home/contact-us'
     | '/home/our-work'
+    | '/home/policies'
     | '/admin'
     | '/dashboard'
     | '/home'
@@ -405,7 +427,9 @@ export interface FileRouteTypes {
     | '/dashboard/settings'
     | '/dashboard/transact'
     | '/home/about-us'
+    | '/home/contact-us'
     | '/home/our-work'
+    | '/home/policies'
     | '/admin/'
     | '/dashboard/'
     | '/home/'
@@ -607,11 +631,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeAboutUsRouteImport
       parentRoute: typeof HomeRouteRoute
     }
+    '/home/contact-us': {
+      id: '/home/contact-us'
+      path: '/contact-us'
+      fullPath: '/home/contact-us'
+      preLoaderRoute: typeof HomeContactUsRouteImport
+      parentRoute: typeof HomeRouteRoute
+    }
     '/home/our-work': {
       id: '/home/our-work'
       path: '/our-work'
       fullPath: '/home/our-work'
       preLoaderRoute: typeof HomeOurWorkRouteImport
+      parentRoute: typeof HomeRouteRoute
+    }
+    '/home/policies': {
+      id: '/home/policies'
+      path: '/policies'
+      fullPath: '/home/policies'
+      preLoaderRoute: typeof HomePoliciesRouteImport
       parentRoute: typeof HomeRouteRoute
     }
     '/admin/dues/bank': {
@@ -668,13 +706,17 @@ declare module '@tanstack/react-router' {
 
 interface HomeRouteRouteChildren {
   HomeAboutUsRoute: typeof HomeAboutUsRoute
+  HomeContactUsRoute: typeof HomeContactUsRoute
   HomeOurWorkRoute: typeof HomeOurWorkRoute
+  HomePoliciesRoute: typeof HomePoliciesRoute
   HomeIndexRoute: typeof HomeIndexRoute
 }
 
 const HomeRouteRouteChildren: HomeRouteRouteChildren = {
   HomeAboutUsRoute: HomeAboutUsRoute,
+  HomeContactUsRoute: HomeContactUsRoute,
   HomeOurWorkRoute: HomeOurWorkRoute,
+  HomePoliciesRoute: HomePoliciesRoute,
   HomeIndexRoute: HomeIndexRoute,
 }
 
