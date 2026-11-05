@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 
 export default function CollaborationCta({
@@ -32,8 +33,8 @@ export default function CollaborationCta({
             Connect with the Council for Renewable Energy Nigeria on clean energy policy, skills,
             financing, standards and awareness.
           </p>
-          <a
-            href="#contact"
+          <Link
+            to="/home/contact-us"
             className="group mt-8 inline-flex h-10 items-center justify-center gap-2.5 rounded-md bg-[#9bd64e] px-5 text-[0.74rem] font-semibold text-[#083d23] transition-colors duration-200 hover:bg-[#aae267] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b4b2b]"
           >
             Contact CREN
@@ -42,7 +43,7 @@ export default function CollaborationCta({
               className="size-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
               strokeWidth={2.4}
             />
-          </a>
+          </Link>
         </div>
       </div>
     </section>

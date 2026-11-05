@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 
 const activities = [
@@ -101,8 +102,8 @@ export default function Activities() {
           <h3 className="text-balance text-[1.4rem] font-semibold tracking-[-0.02em] text-[#075b2f] sm:text-[1.7rem]">
             Let&apos;s advance clean energy together.
           </h3>
-          <a
-            href="#contact"
+          <Link
+            to="/home/contact-us"
             className="group mt-6 inline-flex h-11 items-center justify-center gap-3 bg-[#084c2a] px-5 text-[0.78rem] font-medium text-white transition-colors duration-200 hover:bg-[#063a20] focus-visible:bg-[#063a20] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white"
             style={{
               clipPath:
@@ -115,7 +116,7 @@ export default function Activities() {
               className="size-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
               strokeWidth={2.2}
             />
-          </a>
+          </Link>
         </div>
       </div>
     </section>

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import CollaborationCta from "../-home-comps/CollaborationCta";
 import Hero from "../-home-comps/Hero";
 import HeroContent from "../-home-comps/HeroContent";
@@ -17,8 +17,8 @@ function RouteComponent() {
             title="Public Policies"
             subtitle="Advancing renewable energy policy and sustainable development in Nigeria."
             action={
-              <a
-                href="#contact"
+              <Link
+                to="/home/contact-us"
                 className="group inline-flex h-12 items-center justify-center gap-3 bg-[#97d64c] px-7 text-[0.82rem] font-semibold text-[#182b1b] transition-colors duration-200 hover:bg-[#a9e65a] focus-visible:bg-[#a9e65a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white"
                 style={{
                   clipPath:
@@ -38,7 +38,7 @@ function RouteComponent() {
                 >
                   <path d="M5 12h3M17 12h3m0 0h3m-3-3h3m3-3h3" />
                 </svg>
-              </a>
+              </Link>
             }
           />
         }
