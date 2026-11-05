@@ -23,14 +23,14 @@ const pillars: Pillar[] = [
 function PillarCard({ title, body, featured }: Pillar) {
   return (
     <article
-      className={`relative isolate flex min-h-[190px] flex-col overflow-hidden rounded-xl ${
+      className={`relative isolate flex h-full flex-col overflow-hidden rounded-xl p-6 ${
         featured
-          ? "bg-[#0b4b2b] p-6 text-white shadow-[0_26px_50px_-30px_rgba(6,58,32,0.75)]"
-          : "border border-[#075b2f]/10 bg-[linear-gradient(145deg,#ffffff_15%,#eef5e7_100%)] p-6 shadow-[0_18px_40px_-34px_rgba(7,91,47,0.6)]"
+          ? "bg-[#0b4b2b] text-white shadow-[0_26px_50px_-30px_rgba(6,58,32,0.75)]"
+          : "border border-[#075b2f]/10 bg-[linear-gradient(145deg,#ffffff_15%,#eef5e7_100%)] shadow-[0_18px_40px_-34px_rgba(7,91,47,0.6)]"
       }`}
     >
       {featured ? (
-        <div>
+        <>
           <img
             src="/about-us/section_3_bg.png"
             alt=""
@@ -44,9 +44,9 @@ function PillarCard({ title, body, featured }: Pillar) {
           <p className="mt-3 text-[0.78rem] leading-[1.7] text-white/80 sm:text-[0.82rem]">
             {body}
           </p>
-        </div>
+        </>
       ) : (
-        <div>
+        <>
           <span
             aria-hidden="true"
             className="pointer-events-none absolute -right-10 -top-12 -z-10 size-36 rounded-full bg-[#97d64c]/20 blur-2xl"
@@ -57,7 +57,7 @@ function PillarCard({ title, body, featured }: Pillar) {
           <p className="mt-3 text-[0.78rem] leading-[1.7] text-[#62705f] sm:text-[0.82rem]">
             {body}
           </p>
-        </div>
+        </>
       )}
     </article>
   );

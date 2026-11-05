@@ -97,7 +97,7 @@ export default function ContactDetails() {
                     />
                     <div>
                       <p className="text-[0.82rem] font-semibold text-[#173d28]">{label}</p>
-                      <div className="mt-1 text-[0.76rem] leading-[1.55] text-[#5f6b62]">
+                      <div className="mt-1 text-sm leading-[1.55] text-[#5f6b62]">
                         {lines.map((line) => (
                           <span key={line} className="block">
                             {line}
@@ -109,7 +109,7 @@ export default function ContactDetails() {
                 );
 
                 const cardClass =
-                  "flex items-start gap-3 rounded-xl bg-[#edf4e6] px-5 py-4 transition-colors";
+                  "flex items-start gap-3 rounded-xl bg-[#edf4e6] p-7 transition-colors";
 
                 return href ? (
                   <a key={label} href={href} className={`${cardClass} hover:bg-[#e5efdb]`}>
