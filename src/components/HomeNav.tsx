@@ -26,7 +26,7 @@ function EnquiriesLink({ className = "" }: { className?: string }) {
   return (
     <Link
       to="/auth/register"
-      className={`group h-12 items-center justify-center gap-3 bg-[#084c2a] px-6 text-[15px] font-semibold text-white transition-colors duration-200 hover:bg-[#063a20] focus-visible:bg-[#063a20] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white ${className}`}
+      className={`group h-12 lg:text-sm text-xs items-center justify-center gap-3 bg-[#084c2a] px-6 text-[15px] font-semibold text-white transition-colors duration-200 hover:bg-[#063a20] focus-visible:bg-[#063a20] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white ${className}`}
       style={{
         clipPath:
           "polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px)",
@@ -57,7 +57,7 @@ export default function HomeNav({ activeHref = "#home", className = "" }: HomeNa
   }, [menuOpen]);
 
   const navLinkClass = (href: string) =>
-    `rounded-sm py-2 text-sm lg:text-base font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#015907] focus-visible:ring-offset-4 ${
+    `rounded-sm py-2 text-xs lg:text-sm lg:text-base font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#015907] focus-visible:ring-offset-4 ${
       activeHref === href ? "text-[#0a7a3c]" : "text-[#161616] hover:text-[#015907]"
     }`;
 
@@ -68,7 +68,7 @@ export default function HomeNav({ activeHref = "#home", className = "" }: HomeNa
     >
       <div className="mx-auto container drop-shadow-[0_18px_36px_rgba(2,30,14,0.08)]">
         <div className="bg-white" style={navShape}>
-          <div className="flex min-h-[74px] items-center justify-between gap-5 px-5 py-2 sm:min-h-[82px] sm:px-8 xl:grid xl:grid-cols-[auto_1fr_auto] xl:gap-8 xl:px-10 2xl:px-12">
+          <div className="flex min-h-[74px] items-center justify-between gap-5 px-5 py-2 sm:min-h-[82px] sm:px-8 xl:grid xl:grid-cols-[auto_1fr_auto] xl:gap-8 ">
             <Link
               to="/home"
               className="group flex shrink-0 items-center gap-3 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#015907] focus-visible:ring-offset-4"
