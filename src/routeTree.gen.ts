@@ -35,6 +35,7 @@ import { Route as DashboardTransactRouteImport } from './routes/dashboard.transa
 import { Route as HomeIndexRouteImport } from './routes/home/index'
 import { Route as HomeAboutUsRouteImport } from './routes/home/about-us'
 import { Route as HomeContactUsRouteImport } from './routes/home/contact-us'
+import { Route as HomeEventsGalleryRouteImport } from './routes/home/events-gallery'
 import { Route as HomeOurWorkRouteImport } from './routes/home/our-work'
 import { Route as HomePoliciesRouteImport } from './routes/home/policies'
 import { Route as AdminDuesBankRouteImport } from './routes/admin.dues.bank'
@@ -175,6 +176,11 @@ const HomeContactUsRoute = HomeContactUsRouteImport.update({
   path: '/contact-us',
   getParentRoute: () => HomeRouteRoute,
 } as any)
+const HomeEventsGalleryRoute = HomeEventsGalleryRouteImport.update({
+  id: '/events-gallery',
+  path: '/events-gallery',
+  getParentRoute: () => HomeRouteRoute,
+} as any)
 const HomeOurWorkRoute = HomeOurWorkRouteImport.update({
   id: '/our-work',
   path: '/our-work',
@@ -246,6 +252,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/transact': typeof DashboardTransactRoute
   '/home/about-us': typeof HomeAboutUsRoute
   '/home/contact-us': typeof HomeContactUsRoute
+  '/home/events-gallery': typeof HomeEventsGalleryRoute
   '/home/our-work': typeof HomeOurWorkRoute
   '/home/policies': typeof HomePoliciesRoute
   '/admin/': typeof AdminIndexRoute
@@ -280,6 +287,7 @@ export interface FileRoutesByTo {
   '/dashboard/transact': typeof DashboardTransactRoute
   '/home/about-us': typeof HomeAboutUsRoute
   '/home/contact-us': typeof HomeContactUsRoute
+  '/home/events-gallery': typeof HomeEventsGalleryRoute
   '/home/our-work': typeof HomeOurWorkRoute
   '/home/policies': typeof HomePoliciesRoute
   '/admin': typeof AdminIndexRoute
@@ -318,6 +326,7 @@ export interface FileRoutesById {
   '/dashboard/transact': typeof DashboardTransactRoute
   '/home/about-us': typeof HomeAboutUsRoute
   '/home/contact-us': typeof HomeContactUsRoute
+  '/home/events-gallery': typeof HomeEventsGalleryRoute
   '/home/our-work': typeof HomeOurWorkRoute
   '/home/policies': typeof HomePoliciesRoute
   '/admin/': typeof AdminIndexRoute
@@ -357,6 +366,7 @@ export interface FileRouteTypes {
     | '/dashboard/transact'
     | '/home/about-us'
     | '/home/contact-us'
+    | '/home/events-gallery'
     | '/home/our-work'
     | '/home/policies'
     | '/admin/'
@@ -391,6 +401,7 @@ export interface FileRouteTypes {
     | '/dashboard/transact'
     | '/home/about-us'
     | '/home/contact-us'
+    | '/home/events-gallery'
     | '/home/our-work'
     | '/home/policies'
     | '/admin'
@@ -428,6 +439,7 @@ export interface FileRouteTypes {
     | '/dashboard/transact'
     | '/home/about-us'
     | '/home/contact-us'
+    | '/home/events-gallery'
     | '/home/our-work'
     | '/home/policies'
     | '/admin/'
@@ -638,6 +650,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeContactUsRouteImport
       parentRoute: typeof HomeRouteRoute
     }
+    '/home/events-gallery': {
+      id: '/home/events-gallery'
+      path: '/events-gallery'
+      fullPath: '/home/events-gallery'
+      preLoaderRoute: typeof HomeEventsGalleryRouteImport
+      parentRoute: typeof HomeRouteRoute
+    }
     '/home/our-work': {
       id: '/home/our-work'
       path: '/our-work'
@@ -707,6 +726,7 @@ declare module '@tanstack/react-router' {
 interface HomeRouteRouteChildren {
   HomeAboutUsRoute: typeof HomeAboutUsRoute
   HomeContactUsRoute: typeof HomeContactUsRoute
+  HomeEventsGalleryRoute: typeof HomeEventsGalleryRoute
   HomeOurWorkRoute: typeof HomeOurWorkRoute
   HomePoliciesRoute: typeof HomePoliciesRoute
   HomeIndexRoute: typeof HomeIndexRoute
@@ -715,6 +735,7 @@ interface HomeRouteRouteChildren {
 const HomeRouteRouteChildren: HomeRouteRouteChildren = {
   HomeAboutUsRoute: HomeAboutUsRoute,
   HomeContactUsRoute: HomeContactUsRoute,
+  HomeEventsGalleryRoute: HomeEventsGalleryRoute,
   HomeOurWorkRoute: HomeOurWorkRoute,
   HomePoliciesRoute: HomePoliciesRoute,
   HomeIndexRoute: HomeIndexRoute,
