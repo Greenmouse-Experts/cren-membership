@@ -11,7 +11,7 @@ export default function HomeSections() {
       <AboutIntro />
       <OurWork />
       <Activities />
-      <EventsSection />
+      <EventsSection showExtra />
       <HomeFaq />
       {/*<HomeFooter />*/}
     </>

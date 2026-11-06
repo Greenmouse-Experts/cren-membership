@@ -66,6 +66,8 @@ interface EventsSectionProps {
   events?: EventItem[];
   /** Section heading. */
   title?: string;
+  /** Whether to show the extra gallery link. */
+  showExtra?: boolean;
 }
 
 /**
@@ -76,12 +78,13 @@ interface EventsSectionProps {
 export default function EventsSection({
   events = defaultEvents,
   title = "Events",
+  showExtra = false,
 }: EventsSectionProps) {
   return (
     <section className="bg-[#f1f5ec]">
       <div className="container mx-auto px-5 py-14 sm:px-8 sm:py-16 lg:px-10 lg:py-20">
         <h2 className="text-balance text-[clamp(2rem,3.8vw,2.9rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-[#075b2f]">
-          {title}
+          {title} {showExtra && <>and Gallery</>}
         </h2>
 
         <div className="mt-8 grid gap-6 lg:mt-10 lg:grid-cols-2 lg:gap-7">
