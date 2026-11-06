@@ -42,6 +42,8 @@ export interface BankDetails {
   bank_name?: string;
   account_name?: string;
   account_number?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface DueCategory {
@@ -49,13 +51,17 @@ export interface DueCategory {
   name: string;
   description?: string;
   bank?: BankDetails;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface DueItem {
   id: number | string;
   due_id?: number | string;
   description: string;
-  category: DueCategory;
+  category?: DueCategory | null;
+  /** Some endpoints return the category under this alias. */
+  payment_category?: DueCategory | null;
   start_date: string;
   end_date: string;
   amount: number | string;
@@ -82,6 +88,43 @@ export interface MemberPaymentTransaction {
     status?: string;
   } | null;
   user?: Member | null;
+}
+
+export interface AdminProfile {
+  id?: number | string;
+  first_name?: string | null;
+  last_name?: string | null;
+  username?: string | null;
+  email?: string | null;
+  phone_number?: string | null;
+  avatar?: string | null;
+  address?: string | null;
+  role?: string | null;
+  status?: string | null;
+}
+
+export interface AdminNotification {
+  id: number | string;
+  title?: string | null;
+  body?: string | null;
+  status?: string | null;
+  created_at?: string | null;
+}
+
+/** Shape returned by `GET /admin/dashboard`. */
+export interface AdminDashboardData {
+  totalPartnerMembers?: number;
+  totalPartner?: number;
+  totalDuesPaid?: number | string;
+  totalSubscriptionPaid?: number | string;
+  latestFiveMember?: Member[];
+  usersPayments?: MonthlyPaymentPoint[];
+  monthly_members_joined?: Record<string, number>;
+}
+
+export interface MonthlyPaymentPoint {
+  month: string;
+  total_amount: number | string;
 }
 
 export type MembersResponse = ApiResponse<Member[]>;

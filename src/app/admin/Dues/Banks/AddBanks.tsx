@@ -1,66 +1,107 @@
-// @ts-nocheck
-import React from "react";
-import { useState } from "react";
-import usePostHook from "../../../hook/usePost";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { toast } from "react-toastify";
 
-const AddBanksModal = ({ close, refetch }) => {
-  const [loading, setLoading] = useState(false);
-  const [accName, setAccName] = useState("");
-  const [accNo, setAccNo] = useState("");
-  const [bankName, setBankName] = useState("");
+import usePostHook from "@/app/hook/usePost";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+const bankFormSchema = z.object({
+  bank_name: z.string().min(1, "Bank name is required."),
+  account_name: z.string().min(1, "Account name is required."),
+  account_number: z
+    .string()
+    .min(1, "Account number is required.")
+    .regex(/^\d+$/, "Account number must contain digits only."),
+});
+
+type BankFormValues = z.infer<typeof bankFormSchema>;
+
+const AddBanksModal = ({ close, refetch }: { close: () => void; refetch: () => void }) => {
   const { handlePost } = usePostHook();
+
+  const form = useForm<BankFormValues>({
+    resolver: zodResolver(bankFormSchema),
+    defaultValues: {
+      bank_name: "",
+      account_name: "",
+      account_number: "",
+    },
+  });
+
   const onSuccess = () => {
-    setLoading(false);
-    refetch();
     toast.success("Bank account added successfully");
+    refetch();
     close();
   };
-  const handleSubmit = async () => {
-    setLoading(true);
-    const payload = {
-      account_name: accName,
-      account_number: accNo,
-      bank_name: bankName,
-    };
-    handlePost(`admin/bank/post`, payload, `application/json`, onSuccess);
+
+  const onSubmit = (values: BankFormValues) => {
+    handlePost("admin/bank/post", values, "application/json", onSuccess);
   };
+
   return (
-    <>
-      <div>
-        <label className="text-lg font-medium">Bank Name</label>
-        <input
-          type="text"
-          className="border border-gray-400 w-full mt-2 p-2 rounded"
-          onChange={(e) => setBankName(e.target.value)}
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="bank_name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Bank Name</FormLabel>
+              <FormControl>
+                <Input type="text" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-      <div className="mt-4">
-        <label className="text-lg font-medium">Account Name</label>
-        <input
-          type="text"
-          className="border border-gray-400 w-full mt-2 p-2 rounded"
-          onChange={(e) => setAccName(e.target.value)}
+
+        <FormField
+          control={form.control}
+          name="account_name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Account Name</FormLabel>
+              <FormControl>
+                <Input type="text" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-      <div className="mt-4">
-        <label className="text-lg font-medium">Account Number</label>
-        <input
-          type="text"
-          className="border border-gray-400 w-full mt-2 p-2 rounded"
-          onChange={(e) => setAccNo(e.target.value)}
+
+        <FormField
+          control={form.control}
+          name="account_number"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Account Number</FormLabel>
+              <FormControl>
+                <Input type="text" inputMode="numeric" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-      <div className="mt-8">
-        <button
+
+        <Button
           type="submit"
-          onClick={handleSubmit}
-          className="w-full py-3 bg-[#015907] font-semibold text-lg rounded text-white"
+          disabled={form.formState.isSubmitting}
+          className="w-full bg-[#015907] text-white"
         >
-          {loading ? `Submiting...` : `Submit`}
-        </button>
-      </div>
-    </>
+          {form.formState.isSubmitting ? "Submitting..." : "Submit"}
+        </Button>
+      </form>
+    </Form>
   );
 };
 

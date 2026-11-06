@@ -37,10 +37,9 @@ const SettingsPage = () => {
     setIsBusy(true);
     const objectUrl = URL.createObjectURL(file);
     setPreview(objectUrl);
-    const payload = {
-      avatar: file,
-    };
-    handlePost(`admin/profile/upload/profile-picture`, payload, "application/json", () => {
+    const payload = new FormData();
+    payload.append("avatar", file);
+    handlePost(`admin/profile/upload/profile-picture`, payload, undefined, () => {
       toast.success("Profile picture updated successfully");
       setIsBusy(false);
       refetch();
@@ -56,12 +55,7 @@ const SettingsPage = () => {
       phone_number: phone,
       address: user?.data?.address || "",
     };
-    handlePost(
-      `admin/profile/update`,
-      payloadpayload,
-      "applicationapplication/jsonjson",
-      onSuccess,
-    );
+    handlePost(`admin/profile/update`, payload, "application/json", onSuccess);
   };
   return (
     <>

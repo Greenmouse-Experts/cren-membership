@@ -1,176 +1,237 @@
-// @ts-nocheck
-import React from "react";
-import { MdAddCircleOutline } from "react-icons/md";
-import useModal from "../../../hook/useModal";
-import useGetHook from "../../../hook/useGet";
-import { useState } from "react";
-import usePostHook from "../../../hook/usePost";
+import { useMemo, useState } from "react";
+import dayjs from "dayjs";
+import { Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { toast } from "react-toastify";
-import AddDues from "../../../admin/Dues/Dues/AddDues";
-import { formatAsNgnMoney } from "../../../services/helpers";
-import { RiDeleteBin5Line } from "react-icons/ri";
-import { LiaEdit } from "react-icons/lia";
-import EditDues from "../../../admin/Dues/Dues/EditDues";
-import ReusableModal from "../../../components/ReusableModal";
+
+import useModal from "@/app/hook/useModal";
+import useGetHook from "@/app/hook/useGet";
+import usePostHook from "@/app/hook/usePost";
+import ReusableModal from "@/app/components/ReusableModal";
+import AddDues from "@/app/admin/Dues/Dues/AddDues";
+import EditDues from "@/app/admin/Dues/Dues/EditDues";
+import { formatAsNgnMoney } from "@/app/services/helpers";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import type { DueItem } from "@/types/api";
+
+/** Formats "DD/MM/YYYY" (or anything dayjs understands) into a readable date. */
+const formatDate = (value?: string | number | null): string => {
+  if (!value) return "—";
+  const parsed = String(value).includes("/")
+    ? dayjs(String(value).split("/").reverse().join("-"))
+    : dayjs(String(value));
+  return parsed.isValid() ? parsed.format("DD MMM YYYY") : String(value);
+};
+
+const statusBadgeVariant = (status?: string) => {
+  switch (status) {
+    case "Active":
+      return "default";
+    case "Pending":
+      return "secondary";
+    default:
+      return "outline";
+  }
+};
 
 const AdminDues = () => {
-  const { data, isLoading, refetch } = useGetHook(`admin/dues`);
-  const { handlePost } = usePostHook();
-  const [isBusy, setIsBusy] = useState(false);
-  const { Modal: Delete, setShowModal: showDelete } = useModal();
-  const { Modal: Edit, setShowModal: showEdit } = useModal();
+  const query = useGetHook<DueItem[]>("admin/dues");
+  const { handlePost, isLoading: isDeleting } = usePostHook();
+
+  const { Modal: Delete, setShowModal: setShowDelete } = useModal();
+  const { Modal: Edit, setShowModal: setShowEdit } = useModal();
   const { Modal, setShowModal } = useModal();
-  const [selected, setSelected] = useState();
-  const openEdit = (item) => {
+  const [selected, setSelected] = useState<DueItem | null>(null);
+  const [search, setSearch] = useState("");
+
+  const dues = query.data?.data ?? [];
+
+  const filteredDues = useMemo(() => {
+    const term = search.trim().toLowerCase();
+    if (!term) return dues;
+    return dues.filter((item) => {
+      const description = item.description?.toLowerCase() ?? "";
+      const category = (item.category?.name ?? item.payment_category?.name ?? "").toLowerCase();
+      return description.includes(term) || category.includes(term);
+    });
+  }, [dues, search]);
+
+  const openEdit = (item: DueItem) => {
     setSelected(item);
-    showEdit(true);
+    setShowEdit(true);
   };
-  const openDelete = (item) => {
+
+  const openDelete = (item: DueItem) => {
     setSelected(item);
-    showDelete(true);
+    setShowDelete(true);
   };
-  const onSuccess = () => {
-    setIsBusy(false);
-    refetch();
+
+  const onDeleted = () => {
+    query.refetch();
     toast.success("Dues deleted successfully");
-    showDelete(false);
+    setShowDelete(false);
   };
+
   const handleDelete = () => {
-    setIsBusy(true);
-    const payload = {
-      due_id: selected.id,
-    };
-    handlePost(`admin/dues/delete`, payload, `application/json`, onSuccess);
+    if (!selected?.id) return;
+    handlePost("admin/dues/delete", { due_id: selected.id }, "application/json", onDeleted);
   };
+
   return (
     <>
-      <div className="mx-2 p-5 bg-white min-h-[70vh]">
-        <div className="flex justify-between">
-          <div className="lg:w-8/12">
-            <p className="text-xl font-semibold">Dues List</p>
-            <p className="mt-2">Add, edit and delete dues informations for members.</p>
-          </div>
+      <div className="mx-2 min-h-[70vh] rounded-md bg-white p-5 shadow-sm sm:p-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <button
-              className="flex items-center  gap-x-2 p-2 px-4 text-blue-900 font-semibold border border-blue-900 rounded"
-              onClick={() => setShowModal(true)}
-            >
-              <MdAddCircleOutline />
-              Add
-            </button>
+            <h1 className="text-xl font-semibold text-[#075b2f]">Dues</h1>
+            <p className="mt-1 text-sm text-[#62705f]">
+              Add, edit and delete dues information for members.
+            </p>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="relative w-full sm:w-64">
+              <Search
+                aria-hidden="true"
+                className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              />
+              <Input
+                type="search"
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Search dues..."
+                className="pl-9"
+                aria-label="Search dues"
+              />
+            </div>
+            <Button onClick={() => setShowModal(true)} className="gap-2 bg-[#015907] text-white">
+              <Plus aria-hidden="true" />
+              Add Dues
+            </Button>
           </div>
         </div>
-        <div className="mt-8">
-          <div className="flex flex-col">
-            <div className=" overflow-x-auto">
-              <div className="py-2 align-middle inline-block min-w-full ">
-                <table className="items-center w-full bg-transparent border-collapse">
-                  <thead className="thead-light border-y-2 border-[#CECECE]">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
-                      >
-                        S/N
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
-                      >
-                        Description
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
-                      >
-                        Category
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
-                      >
-                        Amount
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
-                      >
-                        Start Date
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
-                      >
-                        End Date
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
-                      >
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data?.data.map((item, i) => (
-                      <tr key={i}>
-                        <td className="align-middle fs-500 whitespace-nowrap px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
-                          {i + 1}
-                        </td>
-                        <td className="align-middle fs-500  px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
-                          <div className="w-48">{item.description}</div>
-                        </td>
-                        <td className="align-middle fs-500 whitespace-nowrap px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
-                          <div>
-                            <p>{item.category.name}</p>
-                          </div>
-                        </td>
-                        <td className="align-middle fs-500 whitespace-nowrap px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
-                          <div>
-                            <p>{formatAsNgnMoney(item.amount)}</p>
-                          </div>
-                        </td>
-                        <td className="align-middle fs-500 whitespace-nowrap px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
-                          {item.start_date}
-                        </td>
-                        <td className="align-middle fs-500 whitespace-nowrap px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
-                          {item.end_date}
-                        </td>
-                        <td className="align-middle fs-500 whitespace-nowrap px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
-                          <div className="flex gap-x-3">
-                            <LiaEdit
-                              onClick={() => openEdit(item)}
-                              className="text-xl text-blue-900"
-                            />
-                            <RiDeleteBin5Line
-                              onClick={() => openDelete(item)}
-                              className="text-lg text-red-600"
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+
+        <div className="mt-6">
+          {query.isLoading ? (
+            <div className="space-y-3">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <Skeleton key={index} className="h-12 w-full" />
+              ))}
             </div>
-          </div>
+          ) : query.isError ? (
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <p className="font-semibold text-[#075b2f]">Something went wrong</p>
+              <p className="mt-1 text-sm text-[#62705f]">
+                {query.error instanceof Error ? query.error.message : ""} Failed to load dues.
+                Please try again.
+              </p>
+              <Button
+                variant="outline"
+                onClick={() => query.refetch()}
+                className="mt-4 border-[#015907] text-[#015907] hover:bg-[#015907]/5"
+              >
+                Try Again
+              </Button>
+            </div>
+          ) : filteredDues.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <p className="font-semibold text-[#075b2f]">
+                {search ? "No dues match your search" : "No dues yet"}
+              </p>
+              <p className="mt-1 text-sm text-[#62705f]">
+                {search
+                  ? "Try a different search term."
+                  : "Click “Add Dues” to create the first dues entry."}
+              </p>
+            </div>
+          ) : (
+            <div className="overflow-hidden rounded-md border border-black/10">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-[#f7faf6] hover:bg-[#f7faf6]">
+                    <TableHead className="whitespace-nowrap px-4 py-3">S/N</TableHead>
+                    <TableHead className="whitespace-nowrap px-4 py-3">Description</TableHead>
+                    <TableHead className="whitespace-nowrap px-4 py-3">Category</TableHead>
+                    <TableHead className="whitespace-nowrap px-4 py-3">Amount</TableHead>
+                    <TableHead className="whitespace-nowrap px-4 py-3">Start Date</TableHead>
+                    <TableHead className="whitespace-nowrap px-4 py-3">End Date</TableHead>
+                    <TableHead className="whitespace-nowrap px-4 py-3">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredDues.map((item, index) => (
+                    <TableRow key={item.id ?? index}>
+                      <TableCell className="whitespace-nowrap px-4 py-4">{index + 1}</TableCell>
+                      <TableCell className="max-w-[280px] px-4 py-4">{item.description}</TableCell>
+                      <TableCell className="whitespace-nowrap px-4 py-4">
+                        <Badge variant="outline" className="border-[#015907]/20 text-[#015907]">
+                          {item.category?.name ?? item.payment_category?.name ?? "—"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="whitespace-nowrap px-4 py-4">
+                        {formatAsNgnMoney(Number(item.amount))}
+                      </TableCell>
+                      <TableCell className="whitespace-nowrap px-4 py-4">
+                        {formatDate(item.start_date)}
+                      </TableCell>
+                      <TableCell className="whitespace-nowrap px-4 py-4">
+                        {formatDate(item.end_date)}
+                      </TableCell>
+                      <TableCell className="whitespace-nowrap px-4 py-4">
+                        <div className="flex items-center gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            aria-label={`Edit ${item.description}`}
+                            onClick={() => openEdit(item)}
+                            className="h-8 w-8 text-[#015907] hover:bg-[#015907]/10"
+                          >
+                            <Pencil className="!size-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            aria-label={`Delete ${item.description}`}
+                            onClick={() => openDelete(item)}
+                            className="h-8 w-8 text-red-600 hover:bg-red-600/10"
+                          >
+                            <Trash2 className="!size-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
         </div>
       </div>
-      <Modal title={"Add Dues"}>
-        <AddDues close={() => setShowModal(false)} refetch={refetch} />
+
+      <Modal title="Add Dues" noHead={false}>
+        <AddDues close={() => setShowModal(false)} refetch={query.refetch} />
       </Modal>
-      <Edit title={selected?.name}>
-        <EditDues item={selected} close={() => showEdit(false)} refetch={refetch} />
+
+      <Edit title={selected?.description} noHead={false}>
+        <EditDues item={selected} close={() => setShowEdit(false)} refetch={query.refetch} />
       </Edit>
+
       <Delete title="" noHead>
         <ReusableModal
           title="Are you sure you want to delete this due?"
           cancelTitle="No, cancel"
           actionTitle="Yes, delete"
-          closeModal={() => showDelete(false)}
+          closeModal={() => setShowDelete(false)}
           action={handleDelete}
-          isBusy={isBusy}
+          isBusy={isDeleting}
         />
       </Delete>
     </>

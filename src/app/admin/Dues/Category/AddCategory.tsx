@@ -1,63 +1,114 @@
-// @ts-nocheck
-import React from "react";
-import { useState } from "react";
-import usePostHook from "../../../hook/usePost";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { toast } from "react-toastify";
-import useGetHook from "../../../hook/useGet";
 
-const AddDuesCategory = ({ close, refetch }) => {
-  const { data } = useGetHook(`admin/banks`);
-  const [loading, setLoading] = useState(false);
-  const [name, setName] = useState("");
-  const [accNo, setAccNo] = useState("");
+import useGetHook from "@/app/hook/useGet";
+import usePostHook from "@/app/hook/usePost";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import type { BankDetails } from "@/types/api";
+
+const categoryFormSchema = z.object({
+  name: z.string().min(1, "Category name is required."),
+  bank_id: z.string().min(1, "Please select a bank account."),
+});
+
+type CategoryFormValues = z.infer<typeof categoryFormSchema>;
+
+const AddDuesCategory = ({ close, refetch }: { close: () => void; refetch: () => void }) => {
   const { handlePost } = usePostHook();
+  const bankQuery = useGetHook<BankDetails[]>("admin/banks");
+  const banks = bankQuery.data?.data ?? [];
+
+  const form = useForm<CategoryFormValues>({
+    resolver: zodResolver(categoryFormSchema),
+    defaultValues: {
+      name: "",
+      bank_id: "",
+    },
+  });
+
   const onSuccess = () => {
-    setLoading(false);
+    toast.success("Dues category added successfully");
     refetch();
-    toast.success("Dues Category added successfully");
     close();
   };
-  const handleSubmit = async () => {
-    setLoading(true);
+
+  const onSubmit = (values: CategoryFormValues) => {
     const payload = {
-      name,
-      bank_id: accNo,
+      name: values.name,
+      bank_id: Number(values.bank_id),
     };
-    handlePost(`admin/category/post`, payload, `application/json`, onSuccess);
+    handlePost("admin/category/post", payload, "application/json", onSuccess);
   };
+
   return (
-    <>
-      <div>
-        <label className="text-lg font-medium">Category Name</label>
-        <input
-          type="text"
-          className="border border-gray-400 w-full mt-2 p-2 rounded"
-          onChange={(e) => setName(e.target.value)}
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Category Name</FormLabel>
+              <FormControl>
+                <Input type="text" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-      <div className="mt-4">
-        <label className="text-lg font-medium">Selected Bank</label>
-        <div className="border border-gray-400 rounded mt-2">
-          <select className="w-full py-3 p-2 rounded" onChange={(e) => setAccNo(e.target.value)}>
-            <option value={""}></option>
-            {data?.data.map((item, i) => (
-              <option value={item.id} key={i}>
-                {item.bank_name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-      <div className="mt-8">
-        <button
+
+        <FormField
+          control={form.control}
+          name="bank_id"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Selected Bank</FormLabel>
+              <Select onValueChange={field.onChange} value={field.value}>
+                <FormControl>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a bank account" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {banks.map((bank) => (
+                    <SelectItem key={String(bank.id)} value={String(bank.id)}>
+                      {bank.bank_name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button
           type="submit"
-          onClick={handleSubmit}
-          className="w-full py-3 bg-[#015907] font-semibold text-lg rounded text-white"
+          disabled={form.formState.isSubmitting}
+          className="w-full bg-[#015907] text-white"
         >
-          {loading ? `Submiting...` : `Submit`}
-        </button>
-      </div>
-    </>
+          {form.formState.isSubmitting ? "Submitting..." : "Submit"}
+        </Button>
+      </form>
+    </Form>
   );
 };
 

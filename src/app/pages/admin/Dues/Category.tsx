@@ -1,164 +1,221 @@
-// @ts-nocheck
-import React from "react";
-import useGetHook from "../../../hook/useGet";
-import useModal from "../../../hook/useModal";
-import { MdAddCircleOutline } from "react-icons/md";
+import { useMemo, useState } from "react";
 import dayjs from "dayjs";
-import { RiDeleteBin5Line } from "react-icons/ri";
-import { LiaEdit } from "react-icons/lia";
-import ReusableModal from "../../../components/ReusableModal";
-import { useState } from "react";
+import { Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { toast } from "react-toastify";
-import usePostHook from "../../../hook/usePost";
-import AddDuesCategory from "../../../admin/Dues/Category/AddCategory";
-import EditDuesCategory from "../../../admin/Dues/Category/EditCategory";
+
+import useModal from "@/app/hook/useModal";
+import useGetHook from "@/app/hook/useGet";
+import usePostHook from "@/app/hook/usePost";
+import ReusableModal from "@/app/components/ReusableModal";
+import AddDuesCategory from "@/app/admin/Dues/Category/AddCategory";
+import EditDuesCategory from "@/app/admin/Dues/Category/EditCategory";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import type { DueCategory } from "@/types/api";
+
+const formatDate = (value?: string | number | null): string => {
+  if (!value) return "—";
+  const parsed = dayjs(String(value));
+  return parsed.isValid() ? parsed.format("DD/MM/YYYY") : "—";
+};
 
 const AdminDuesCategory = () => {
-  const { data, isLoading, refetch } = useGetHook(`admin/category`);
-  const { handlePost } = usePostHook();
-  const [isBusy, setIsBusy] = useState(false);
-  const { Modal: Delete, setShowModal: showDelete } = useModal();
-  const { Modal: Edit, setShowModal: showEdit } = useModal();
+  const query = useGetHook<DueCategory[]>("admin/category");
+  const { handlePost, isLoading: isDeleting } = usePostHook();
+
+  const { Modal: Delete, setShowModal: setShowDelete } = useModal();
+  const { Modal: Edit, setShowModal: setShowEdit } = useModal();
   const { Modal, setShowModal } = useModal();
-  const [selected, setSelected] = useState();
-  const openEdit = (item) => {
+  const [selected, setSelected] = useState<DueCategory | null>(null);
+  const [search, setSearch] = useState("");
+
+  const categories = query.data?.data ?? [];
+
+  const filteredCategories = useMemo(() => {
+    const term = search.trim().toLowerCase();
+    if (!term) return categories;
+    return categories.filter((item) => {
+      const name = item.name?.toLowerCase() ?? "";
+      const bankName = item.bank?.bank_name?.toLowerCase() ?? "";
+      return name.includes(term) || bankName.includes(term);
+    });
+  }, [categories, search]);
+
+  const openEdit = (item: DueCategory) => {
     setSelected(item);
-    showEdit(true);
+    setShowEdit(true);
   };
-  const openDelete = (item) => {
+
+  const openDelete = (item: DueCategory) => {
     setSelected(item);
-    showDelete(true);
+    setShowDelete(true);
   };
-  const onSuccess = () => {
-    setIsBusy(false);
-    refetch();
-    toast.success("Bank Account deleted successfully");
-    showDelete(false);
+
+  const onDeleted = () => {
+    query.refetch();
+    toast.success("Category deleted successfully");
+    setShowDelete(false);
   };
+
   const handleDelete = () => {
-    setIsBusy(true);
-    const payload = {
-        category_id: selected.id,
-    };
-    handlePost(
-      `admin/category/delete`,
-      payload,
-      `application/json`,
-      onSuccess
-    );
+    if (selected?.id === undefined || selected?.id === null || selected?.id === "") return;
+    handlePost("admin/category/delete", { category_id: selected.id }, "application/json", onDeleted);
   };
+
   return (
     <>
-      <div className="mx-3 bg-white p-5 min-h-[80vh]">
-        <div className="flex justify-between">
-          <div className="lg:w-8/12">
-            <p className="text-xl font-semibold">Dues Category</p>
-            <p>
-              Add, edit and delete dues informations for members.
+      <div className="mx-2 min-h-[70vh] rounded-md bg-white p-5 shadow-sm sm:p-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <h1 className="text-xl font-semibold text-[#075b2f]">Dues Category</h1>
+            <p className="mt-1 text-sm text-[#62705f]">
+              Add, edit and delete dues categories used by members for their payments.
             </p>
           </div>
-          <div>
-            <button
-              className="flex items-center  gap-x-2 p-2 px-4 text-blue-900 font-semibold border border-blue-900 rounded"
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="relative w-full sm:w-64">
+              <Search
+                aria-hidden="true"
+                className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              />
+              <Input
+                type="search"
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Search categories..."
+                className="pl-9"
+                aria-label="Search dues categories"
+              />
+            </div>
+            <Button
               onClick={() => setShowModal(true)}
+              className="gap-2 bg-[#015907] text-white"
             >
-              <MdAddCircleOutline />
-              Add
-            </button>
+              <Plus aria-hidden="true" />
+              Add Category
+            </Button>
           </div>
         </div>
-        <div className="mt-8">
-          <div className="flex flex-col">
-            <div className=" overflow-x-auto">
-              <div className="py-2 align-middle inline-block min-w-full ">
-                <table className="items-center w-full bg-transparent border-collapse">
-                  <thead className="thead-light border-y-2 border-[#CECECE]">
-                    <tr>
-                    <th
-                        scope="col"
-                        className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
-                      >
-                       S/N
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
-                      >
-                        Category Name
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
-                      >
-                        Bank Account
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
-                      >
-                        Created at
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 lg:px-10 align-middle py-3 fs-500 whitespace-nowrap text-left"
-                      >
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data?.data.map((item, i) => (
-                      <tr key={i}>
-                        <td className="align-middle fs-500 whitespace-nowrap px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
-                          {i + 1}
-                        </td>
-                        <td className="align-middle fs-500 whitespace-nowrap px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
-                          {item.name}
-                        </td>
-                        <td className="align-middle fs-500 whitespace-nowrap px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
-                          <div>
-                            <p>{item.bank.account_name}</p>
-                            <p>{item.bank.account_number}</p>
-                          </div>
-                        </td>
-                        <td className="align-middle fs-500 whitespace-nowrap px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
-                          {dayjs(item.created_at).format('DD/MM/YYYY')}
-                        </td>
-                        <td className="align-middle fs-500 whitespace-nowrap px-6 lg:px-10 py-4 text-left border-b border-[#CECECE]">
-                          <div className="flex gap-x-3">
-                            <LiaEdit
-                              onClick={() => openEdit(item)}
-                              className="text-xl text-blue-900"
-                            />
-                            <RiDeleteBin5Line
-                              onClick={() => openDelete(item)}
-                              className="text-lg text-red-600"
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+
+        <div className="mt-6">
+          {query.isLoading ? (
+            <div className="space-y-3">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <Skeleton key={index} className="h-12 w-full" />
+              ))}
             </div>
-          </div>
+          ) : query.isError ? (
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <p className="font-semibold text-[#075b2f]">Something went wrong</p>
+              <p className="mt-1 text-sm text-[#62705f]">
+                {query.error instanceof Error ? query.error.message : ""} Failed to load
+                categories. Please try again.
+              </p>
+              <Button
+                variant="outline"
+                onClick={() => query.refetch()}
+                className="mt-4 border-[#015907] text-[#015907] hover:bg-[#015907]/5"
+              >
+                Try Again
+              </Button>
+            </div>
+          ) : filteredCategories.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <p className="text-[#075b2f] font-semibold">
+                {search ? "No categories match your search" : "No categories yet"}
+              </p>
+              <p className="mt-1 text-sm text-[#62705f]">
+                {search
+                  ? "Try a different search term."
+                  : "Click “Add Category” to create the first one."}
+              </p>
+            </div>
+          ) : (
+            <div className="overflow-hidden rounded-md border border-black/10">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-[#f7faf6] hover:bg-[#f7faf6]">
+                    <TableHead className="whitespace-nowrap px-4 py-3">S/N</TableHead>
+                    <TableHead className="whitespace-nowrap px-4 py-3">Category Name</TableHead>
+                    <TableHead className="whitespace-nowrap px-4 py-3">Bank Account</TableHead>
+                    <TableHead className="whitespace-nowrap px-4 py-3">Created At</TableHead>
+                    <TableHead className="whitespace-nowrap px-4 py-3">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredCategories.map((item, index) => (
+                    <TableRow key={item.id ?? index}>
+                      <TableCell className="whitespace-nowrap px-4 py-4">{index + 1}</TableCell>
+                      <TableCell className="whitespace-nowrap px-4 py-4">{item.name}</TableCell>
+                      <TableCell className="whitespace-nowrap px-4 py-4">
+                        <div className="flex flex-col">
+                          <span>{item.bank?.bank_name ?? "No bank linked"}</span>
+                          {(item.bank?.account_number || item.bank?.account_name) && (
+                            <span className="text-sm text-muted-foreground">
+                              {item.bank?.account_number} · {item.bank?.account_name}
+                            </span>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell className="whitespace-nowrap px-4 py-4">
+                        {formatDate(item.created_at)}
+                      </TableCell>
+                      <TableCell className="whitespace-nowrap px-4 py-4">
+                        <div className="flex items-center gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            aria-label={`Edit ${item.name}`}
+                            onClick={() => openEdit(item)}
+                            className="text-[#015907] hover:bg-[#015907]/10 h-8 w-8"
+                          >
+                            <Pencil className="!size-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            aria-label={`Delete ${item.name}`}
+                            onClick={() => openDelete(item)}
+                            className="h-8 w-8 text-red-600 hover:bg-red-600/10"
+                          >
+                            <Trash2 className="!size-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
         </div>
       </div>
-      <Modal title={"Add Bank Account"}>
-        <AddDuesCategory close={() => setShowModal(false)} refetch={refetch} />
+
+      <Modal title="Add Category" noHead={false}>
+        <AddDuesCategory close={() => setShowModal(false)} refetch={query.refetch} />
       </Modal>
-      <Edit title={selected?.name}>
-        <EditDuesCategory item={selected} close={() => showEdit(false)} refetch={refetch} />
+
+      <Edit title={selected?.name} noHead={false}>
+        <EditDuesCategory item={selected} close={() => setShowEdit(false)} refetch={query.refetch} />
       </Edit>
+
       <Delete title="" noHead>
         <ReusableModal
           title="Are you sure you want to delete this category?"
           cancelTitle="No, cancel"
           actionTitle="Yes, delete"
-          closeModal={() => showDelete(false)}
+          closeModal={() => setShowDelete(false)}
           action={handleDelete}
-          isBusy={isBusy}
+          isBusy={isDeleting}
         />
       </Delete>
     </>
