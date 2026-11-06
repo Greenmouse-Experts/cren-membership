@@ -42,8 +42,21 @@ export interface BankDetails {
   bank_name?: string;
   account_name?: string;
   account_number?: string;
-  created_at?: string;
-  updated_at?: string;
+  bank_code?: string | null;
+  status?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+export interface BankAccount extends BankDetails {
+  id: number | string;
+  bank_name: string;
+  account_name: string;
+  account_number: string;
+  bank_code?: string | null;
+  status?: "Active" | "Inactive" | string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
 }
 
 export interface DueCategory {
@@ -70,14 +83,29 @@ export interface DueItem {
   updated_at?: string;
 }
 
+export interface SubscriptionItem {
+  id: number | string;
+  type?: string | null;
+  amount: number | string;
+  bank?: string | null;
+  description?: string | null;
+  status?: "Active" | "Inactive" | string | null;
+  start_date?: string | null;
+  end_date?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
 export interface MemberPaymentTransaction {
   id?: number | string;
+  user_id?: number | string;
   ref_id: string;
   amount: number | string;
   channel?: string | null;
-  status: "success" | "pending" | "failed" | string;
+  status: "success" | "pending" | "failed" | "confirmed" | string;
   created_at?: string;
   updated_at?: string;
+  paid_at?: string | null;
   receipt?: string | null;
   due?: {
     id?: number | string;
@@ -130,4 +158,6 @@ export interface MonthlyPaymentPoint {
 export type MembersResponse = ApiResponse<Member[]>;
 export type MemberResponse = ApiResponse<Member>;
 export type DuesResponse = ApiResponse<DueItem[]>;
+export type BanksResponse = ApiResponse<BankAccount[]>;
+export type SubscriptionResponse = ApiResponse<SubscriptionItem[] | SubscriptionItem>;
 export type PaymentTransactionsResponse = ApiResponse<MemberPaymentTransaction[]>;
