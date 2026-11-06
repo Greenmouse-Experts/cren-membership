@@ -33,14 +33,14 @@ export default function HomeFooter() {
             >
               <img src={"/footer_logo.png"} alt="" className="h-20 object-contain " />
             </a>
-            <p className="mt-8 max-w-[220px] text-sm font-medium leading-[1.65] text-white/75">
+            <p className="mt-8 max-w-[220px] text-base font-medium leading-[1.65] text-white/75">
               Powering Nigeria&apos;s Green Growth, Today and Tomorrow.
             </p>
           </div>
 
           <div>
-            <h2 className="text-[0.82rem] font-semibold text-[#97d64c]">Quick Links</h2>
-            <ul className="mt-4 grid gap-2.5 text-sm text-white/85">
+            <h2 className="text-base font-semibold text-[#97d64c]">Quick Links</h2>
+            <ul className="mt-4 grid gap-2.5 text-base text-white/85">
               {quickLinks.map((link) => (
                 <li key={link.label}>
                   <a
@@ -55,8 +55,8 @@ export default function HomeFooter() {
           </div>
 
           <div>
-            <h2 className="text-[0.82rem] font-semibold text-[#97d64c]">Get in Touch</h2>
-            <address className="mt-4 flex flex-col gap-3.5 text-sm not-italic leading-[1.65] text-white/85">
+            <h2 className="text-base font-semibold text-[#97d64c]">Get in Touch</h2>
+            <address className="mt-4 flex flex-col gap-3.5 text-base not-italic leading-[1.65] text-white/85">
               <p className="flex items-start gap-3">
                 <MapPin
                   aria-hidden="true"
@@ -98,7 +98,10 @@ export default function HomeFooter() {
         <div className="mt-12 flex flex-col gap-2 border-t border-white/15 pt-5 text-[0.68rem] text-white/60 sm:mt-16 sm:flex-row sm:items-center sm:justify-between">
           <p>© {year} Council for Renewable Energy Nigeria. All rights reserved.</p>
           <p>
-            Design by: <span className="text-[#97d64c]">greenmouse</span>
+            Design by:{" "}
+            <a href="www.greenmousetech.com" className="text-[#97d64c]">
+              greenmouse
+            </a>
           </p>
         </div>
       </div>
