@@ -19,7 +19,7 @@ export default function HomeHero() {
           subtitle="Bringing government, industry and communities together to advance clean energy policy and a sustainable energy future for Nigeria."
           action={
             <a
-              href="#our-work"
+              href="/home/our-work"
               className="group inline-flex h-12 items-center justify-center gap-3 bg-[#97d64c] px-7 text-[0.82rem] font-semibold text-[#182b1b] transition-colors duration-200 hover:bg-[#a9e65a] focus-visible:bg-[#a9e65a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white"
               style={{
                 clipPath:

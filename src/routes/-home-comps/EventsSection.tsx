@@ -35,7 +35,7 @@ interface EventCardProps {
 function EventCard({ event }: EventCardProps) {
   return (
     <article className="group relative isolate flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-[0_22px_48px_-36px_rgba(7,91,47,0.55)]">
-      <div className="relative h-[210px] overflow-hidden sm:h-[230px]">
+      <div className="relative h-fit overflow-hidden w-full">
         <img
           src={event.image}
           alt={event.imageAlt ?? event.title}
@@ -73,7 +73,10 @@ interface EventsSectionProps {
  * Pass `events` to render a custom list; `EventCard` is also exported
  * so cards can be reused in other layouts.
  */
-export default function EventsSection({ events = defaultEvents, title = "Events" }: EventsSectionProps) {
+export default function EventsSection({
+  events = defaultEvents,
+  title = "Events",
+}: EventsSectionProps) {
   return (
     <section className="bg-[#f1f5ec]">
       <div className="container mx-auto px-5 py-14 sm:px-8 sm:py-16 lg:px-10 lg:py-20">
