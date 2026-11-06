@@ -37,7 +37,14 @@
   - `src/types/api.ts` defines standard response contracts:
     - `ApiResponse<T>`: `{ code: number, message: string, data: T }`
     - `Member`: Strongly typed member interface matching backend schema.
+    - `BankAccount`: Bank account details (`id`, `bank_name`, `account_name`, `account_number`, `status`).
+    - `SubscriptionItem`: Membership subscription plan model (`id`, `type`, `amount`, `bank`, `description`, `status`).
+    - `DueItem` & `DueCategory`: Dues definitions and categories.
   - Re-exported via `@/api/simpleApi` and `@/client/api` for convenience.
+  - **Standard Subscription & Bank Endpoints**:
+    - Bank accounts: `GET admin/banks`, `POST admin/bank/post`, `POST admin/bank/update`, `POST admin/bank/delete`.
+    - Subscription plans: `GET admin/subscription`, `POST admin/subscription`.
+    - Subscription transactions: `GET admin/get/subscription/transactions`.
 
 - **UI Components & Layout**:
   - **shadcn/ui**: Preconfigured in `components.json` with 40+ components located in `src/components/ui/` (`Table`, `Button`, `Input`, `Badge`, `AlertDialog`, `Dialog`, `Card`, `Skeleton`, etc.).

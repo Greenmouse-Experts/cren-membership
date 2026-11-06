@@ -1,31 +1,60 @@
-// @ts-nocheck
-import React from "react";
-import { FaTimes } from "react-icons/fa";
+import { useState } from "react";
+import { Download, X } from "lucide-react";
 
-const ReceiptModal = ({ item, close }) => {
-  //  const { data, loading } = useGetHook(`member/view/member?member_id=${item.id}`);
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+
+const ReceiptModal = ({
+  item,
+  close,
+}: {
+  /** URL of the receipt image, or null when no receipt exists. */
+  item: string | null;
+  close: () => void;
+}) => {
+  const [imageFailed, setImageFailed] = useState(false);
 
   return (
-    <div
-      className="fixed flex justify-center items-center h-screen w-full top-0 left-0 bg-[#00000066]"
-      onClick={close}
-    >
-      <div
-        className="w-11/12 lg:w-7/12 bg-white"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="p-5">
-          <div className="flex justify-between border-b items-center mb-3">
-            <FaTimes onClick={close} className="" />
-          </div>
+    <Dialog open onOpenChange={(open) => !open && close()}>
+      <DialogContent className="max-w-[40rem] p-5">
+        <DialogHeader>
+          <DialogTitle className="text-[#075b2f]">Payment Receipt</DialogTitle>
+          <DialogDescription>The uploaded receipt for this transaction.</DialogDescription>
+        </DialogHeader>
 
-        {item ?  <div className="oveflow-y-auto px-3">
-            <img src={item} alt="receipt" className="" />
-          </div> : <div> <h4>No Receipt found for this transaction</h4></div>}
-          <div className="py-3"></div>
-        </div>
-      </div>
-    </div>
+        {item && !imageFailed ? (
+          <div className="max-h-[60vh] overflow-y-auto">
+            <img
+              src={item}
+              alt="Payment receipt"
+              className="w-full object-contain"
+              onError={() => setImageFailed(true)}
+            />
+            <div className="mt-3 flex justify-end">
+              <Button variant="outline" size="sm" asChild>
+                <a href={item} target="_blank" rel="noopener noreferrer">
+                  <Download aria-hidden="true" />
+                  Open full size
+                </a>
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="py-10 text-center">
+            <p className="font-semibold text-[#075b2f]">No receipt found</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              No receipt was uploaded for this transaction.
+            </p>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 };
 

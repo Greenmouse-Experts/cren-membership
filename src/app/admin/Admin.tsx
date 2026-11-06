@@ -26,7 +26,7 @@ const formatMoney = (value?: number | string | null) => {
   if (value === null || value === undefined || value === "") return "—";
   const amount = Number(value);
   if (!Number.isFinite(amount)) return "—";
-  return formatAsNgnMoney(amount) || "€0";
+  return formatAsNgnMoney(amount) || "N0";
 };
 
 const formatDate = (value?: string | null) => {
@@ -74,14 +74,14 @@ const Admin = () => {
   const stats = [
     {
       label: "Total members",
-      value: dashboard?.totalPartnerMembers ?? 0,
+      value: dashboard?.totalPartnerMembers ?? "—",
       hint: "Registered on the portal",
       icon: Users,
       accent: "bg-blue-500/10 text-blue-600",
     },
     {
       label: "Partner members",
-      value: dashboard?.totalPartner ?? 0,
+      value: dashboard?.totalPartner ?? "—",
       hint: "Organisations and partners",
       icon: Handshake,
       accent: "bg-violet-500/10 text-violet-600",
@@ -250,7 +250,11 @@ const Admin = () => {
             <CardDescription>Payment totals recorded this year.</CardDescription>
           </CardHeader>
           <CardContent>
-            <DuesPayment data={dashboard?.usersPayments} />
+            {query.isLoading ? (
+              <Skeleton className="h-[260px] w-full rounded-lg" />
+            ) : (
+              <DuesPayment data={dashboard?.usersPayments} />
+            )}
           </CardContent>
         </Card>
 
@@ -260,7 +264,11 @@ const Admin = () => {
             <CardDescription>New registrations per month.</CardDescription>
           </CardHeader>
           <CardContent>
-            <MembersJoined data={dashboard?.monthly_members_joined} />
+            {query.isLoading ? (
+              <Skeleton className="h-[260px] w-full rounded-lg" />
+            ) : (
+              <MembersJoined data={dashboard?.monthly_members_joined} />
+            )}
           </CardContent>
         </Card>
       </div>

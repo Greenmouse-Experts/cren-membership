@@ -277,7 +277,7 @@ function CollapsibleNav({
             </span>
             <ChevronRight
               className={cn(
-                "h-4 w-4 shrink-0 text-muted-foreground transition-transform",
+                "h-4 w-4 shrink-0 text-muted-foreground transition-transform group-data-[collapsible=icon]:hidden",
                 open && "rotate-90",
               )}
             />
