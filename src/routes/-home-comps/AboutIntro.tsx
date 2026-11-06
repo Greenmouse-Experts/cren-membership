@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 
 export default function AboutIntro() {
@@ -21,8 +22,8 @@ export default function AboutIntro() {
             that brings together government, academia, industry, finance, civil society and
             end-users to advance renewable energy development in Nigeria.
           </p>
-          <a
-            href="#our-work"
+          <Link
+            to="/home/our-work"
             className="group mt-8 inline-flex h-11 items-center justify-center gap-3 bg-[#084c2a] px-5 text-[0.76rem] font-medium text-white transition-colors duration-200 hover:bg-[#063a20] focus-visible:bg-[#063a20] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white"
             style={{
               clipPath:
@@ -35,7 +36,7 @@ export default function AboutIntro() {
               className="size-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
               strokeWidth={2.2}
             />
-          </a>
+          </Link>
         </div>
 
         <div className="relative">
