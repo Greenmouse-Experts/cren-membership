@@ -24,7 +24,7 @@ export default function PolicyCta({
   subtitle = "Get in touch with the Council for Renewable Energy Nigeria.",
 }: PolicyCtaProps) {
   return (
-    <section className="relative isolate bg-white">
+    <section className="relative isolate container mx-auto mb-12 bg-white">
       <div
         className="relative isolate flex min-h-[220px] flex-col justify-center gap-7 bg-[#0b4b2b] px-6 py-12 sm:flex-row sm:items-center sm:justify-between sm:gap-10 sm:px-14 sm:py-14 lg:px-20"
         style={chamfer}
