@@ -1,37 +1,37 @@
-// @ts-nocheck
 import React, { useEffect, useState } from "react";
 import { FaUserShield } from "react-icons/fa";
 import { MdMarkEmailRead } from "react-icons/md";
-import useGetHook from "../../hook/useGet";
 import { BsFillCameraFill, BsTelephonePlusFill } from "react-icons/bs";
+import useGetHook from "../../hook/useGet";
 import usePostHook from "../../hook/usePost";
 import { toast } from "react-toastify";
 import useModal from "../../hook/useModal";
 import ChangePassword from "../../admin/Settings/ChangePassword";
+import type { Member } from "@/types/api";
 
 const SettingsPage = () => {
-  const { data: user, refetch } = useGetHook("admin/profile");
+  const { data: user, refetch } = useGetHook<Member>("admin/profile");
   const [loading, setLoading] = useState(false);
-  const [preview, setPreview] = useState();
+  const [preview, setPreview] = useState<string | null | undefined>();
   const [isBusy, setIsBusy] = useState(false);
-  const [fname, setFname] = useState("");
-  const [lname, setLname] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [fname, setFname] = useState(user?.data?.first_name ?? "");
+  const [lname, setLname] = useState(user?.data?.last_name ?? "");
+  const [email, setEmail] = useState(user?.data?.email ?? "");
+  const [phone, setPhone] = useState(user?.data?.phone_number ?? "");
   const { handlePost } = usePostHook();
   const { Modal, setShowModal } = useModal();
   useEffect(() => {
-    setFname(user?.data?.first_name);
-    setLname(user?.data?.last_name);
-    setEmail(user?.data?.email);
-    setPhone(user?.data?.phone_number);
+    setFname(user?.data?.first_name ?? "");
+    setLname(user?.data?.last_name ?? "");
+    setEmail(user?.data?.email ?? "");
+    setPhone(user?.data?.phone_number ?? "");
   }, [user]);
   const onSuccess = () => {
     toast.success("Profile updated successfully");
     setLoading(false);
     refetch();
   };
-  const changeProfileImage = async (e) => {
+  const changeProfileImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setIsBusy(true);
@@ -39,21 +39,24 @@ const SettingsPage = () => {
     setPreview(objectUrl);
     const payload = new FormData();
     payload.append("avatar", file);
-    handlePost(`admin/profile/upload/profile-picture`, payload, undefined, () => {
-      toast.success("Profile picture updated successfully");
-      setIsBusy(false);
-      refetch();
-    });
+    handlePost(
+      `admin/profile/upload/profile-picture`,
+      payload,
+      undefined,
+      () => {
+        toast.success("Profile picture updated successfully");
+        setIsBusy(false);
+        refetch();
+      }
+    );
   };
-  const handleUpateProfile = () => {
+  const handleUpdateProfile = () => {
     setLoading(true);
     const payload = {
-      name_of_member_organization: fname,
-      name_of_representative: lname,
-      username: user?.data?.username || email,
+      first_name: fname,
+      last_name: lname,
       email: email,
       phone_number: phone,
-      address: user?.data?.address || "",
     };
     handlePost(`admin/profile/update`, payload, "application/json", onSuccess);
   };
@@ -68,7 +71,7 @@ const SettingsPage = () => {
             <div>
               <div className="relative z-0 w-[160px] h-[160px]">
                 <img
-                  src={preview ? preview : user?.data?.avatar}
+                  src={preview ?? user?.data?.avatar ?? undefined}
                   alt="profile"
                   width={160}
                   height={160}
@@ -154,16 +157,16 @@ const SettingsPage = () => {
               Change Password
             </button>
             <button
-              className="px-6 py-2 border border-green-600 bg-blue-800 text-white font-semibold rounded-lg"
-              onClick={handleUpateProfile}
+              className="px-6 py-2 border border-green-600 bg-green-600 text-white font-semibold rounded-lg"
+              onClick={handleUpdateProfile}
             >
               {loading ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </div>
       </div>
-      <Modal title={"Change Password"}>
-        <ChangePassword />
+      <Modal noHead={false} title="Change Password">
+        <ChangePassword close={() => setShowModal(false)} refetch={refetch} />
       </Modal>
     </>
   );
