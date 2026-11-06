@@ -32,7 +32,7 @@ export default function PageBanner({ title, description }: PageBannerProps) {
         }}
       />
 
-      <div className="container mx-auto px-5 sm:px-8 sm:pb-16 pt-28 lg:px-10 lg:pb-[4.5rem] ">
+      <div className="container mx-auto px-5 sm:px-8 sm:pb-16 pt-28 lg:px-10 lg:pb-[4.5rem] pb-24 ">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
           <h1 className="text-balance text-[clamp(2.6rem,5.4vw,4.6rem)] font-semibold leading-[1.04] tracking-[-0.04em] text-white">
             {title}
