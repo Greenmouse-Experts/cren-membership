@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "@/lib/router-compat";
 import logo from "../image/logo.png";
 import axios from "axios";
+import RenderLogo from "../components/RenderLogo";
 
 const AdminLogin = () => {
   const {
@@ -50,9 +51,7 @@ const AdminLogin = () => {
   return (
     <div className="main_login">
       <form onSubmit={handleSubmit(submitLogin, onInvalid)} noValidate className="login">
-        <a href="http://ndiigbogermany.org/">
-          <img src={logo} alt="" />
-        </a>
+        <RenderLogo />
         <div className="log_head">
           <h3>Admin Login</h3>
           <p>Fill in your credentials to login to the dashboard</p>
