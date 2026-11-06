@@ -150,6 +150,15 @@ export interface AdminDashboardData {
   monthly_members_joined?: Record<string, number>;
 }
 
+export interface GalleryItem {
+  id: number | string;
+  title?: string | null;
+  image?: string | null;
+  content?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
 export interface MonthlyPaymentPoint {
   month: string;
   total_amount: number | string;
@@ -161,3 +170,4 @@ export type DuesResponse = ApiResponse<DueItem[]>;
 export type BanksResponse = ApiResponse<BankAccount[]>;
 export type SubscriptionResponse = ApiResponse<SubscriptionItem[] | SubscriptionItem>;
 export type PaymentTransactionsResponse = ApiResponse<MemberPaymentTransaction[]>;
+export type GalleryResponse = ApiResponse<GalleryItem[]>;
