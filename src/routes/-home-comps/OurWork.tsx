@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+import { Link } from "@tanstack/react-router";
 import { ShieldCheck } from "lucide-react";
 
 const features = [
@@ -37,7 +39,6 @@ export default function OurWork() {
         loading="lazy"
         className="absolute inset-0 -z-10 h-full w-full object-cover"
       />
-
       <div className="mx-auto container px-5 py-16 sm:px-8 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-[790px] text-center">
           <h2 className="text-balance text-[clamp(2rem,4.4vw,3.35rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-[#96d64c]">
@@ -77,6 +78,11 @@ export default function OurWork() {
               </p>
             </article>
           ))}
+        </div>
+        <div className="mx-auto w-fit grid place-items-center w-full mt-12">
+          <Link to="/home/our-work" className="p-2 rounded-xl bg-accent  px-6 text-lg text-black">
+            Explore Our Work
+          </Link>
         </div>
       </div>
     </section>
