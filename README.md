@@ -43,6 +43,45 @@ bun run build
 bun run preview
 ```
 
+### Static Build (cPanel / shared hosting)
+
+cPanel can only serve static files, so a dedicated static SPA build mode is
+available. It disables the Nitro server and emits a client-only build
+(`dist/client/index.html`) with Apache rewrite rules from `public/.htaccess`:
+
+```bash
+STATIC_BUILD=1 bun run build
+```
+
+The default `bun run build` (Netlify/Nitro server output) is unaffected.
+
+---
+
+## cPanel Deployment
+
+Pushing to `main` (or running the **Deploy frontend to cPanel** workflow
+manually) triggers `.github/workflows/deploy-cpanel.yml`, which installs
+dependencies with Bun, typechecks, runs tests, builds the static SPA, tars
+`dist/client/`, and SCPs it over SSH for remote extraction into
+`CPANEL_APP_PATH`.
+
+### Required GitHub Secrets
+
+| Secret              | Description                                                        |
+| ------------------- | ------------------------------------------------------------------ |
+| `CPANEL_SSH_KEY`    | Private key used for SSH/SCP access (format: `-----BEGIN ... KEY-----`) |
+| `CPANEL_HOST`       | cPanel hostname or server IP                                       |
+| `CPANEL_USER`       | cPanel SSH username                                                |
+| `CPANEL_APP_PATH`   | Absolute path to the app directory on the server (e.g. `/home/user/app`) |
+| `VITE_API_URL`      | Backend API base URL injected at build time                        |
+
+### Optional GitHub Secrets
+
+| Secret                | Description                                                       |
+| --------------------- | ----------------------------------------------------------------- |
+| `CPANEL_PORT`         | SSH port (defaults to `22`)                                        |
+| `CPANEL_KNOWN_HOSTS`   | Pre-populated `known_hosts` entries; when omitted, `ssh-keyscan` is run automatically |
+
 ---
 
 ## Data Fetching & Hooks
