@@ -149,7 +149,7 @@ const GalleryPage = () => {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-[repeat(auto-fill,_minmax(22.5rem,_1fr))] gap-8">
+            <div className="grid grid-cols-4 gap-8">
               {galleryItems.map((item, index) => (
                 <article
                   key={item.id ?? index}
@@ -167,7 +167,7 @@ const GalleryPage = () => {
                       className="w-full object-cover"
                     />
                     <div
-                      className="absolute right-3 top-3 flex items-center gap-1 rounded-md bg-white/95 p-1.5 shadow-sm"
+                      className="absolute right-3  flex items-center gap-1 rounded-md bg-white/95 p-1.5 shadow-sm bottom-0"
                       onClick={(event) => event.stopPropagation()}
                     >
                       <Badge
