@@ -51,7 +51,9 @@ const GalleryPage = () => {
     if (!selected?.id) return;
     handlePost(
       `admin/frontend/delete/gallery?gallery_id=${selected.id}`,
-      {},
+      {
+        gallery_id: selected.id,
+      },
       "application/json",
       () => {
         query.refetch();
