@@ -63,6 +63,7 @@ export interface DueCategory {
   id?: number | string;
   name: string;
   description?: string;
+  status?: "Active" | "Inactive" | string | null;
   bank?: BankDetails;
   created_at?: string;
   updated_at?: string;

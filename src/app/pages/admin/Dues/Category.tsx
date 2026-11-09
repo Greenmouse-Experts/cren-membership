@@ -11,6 +11,7 @@ import AddDuesCategory from "@/app/admin/Dues/Category/AddCategory";
 import EditDuesCategory from "@/app/admin/Dues/Category/EditCategory";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -26,6 +27,17 @@ const formatDate = (value?: string | number | null): string => {
   if (!value) return "—";
   const parsed = dayjs(String(value));
   return parsed.isValid() ? parsed.format("DD/MM/YYYY") : "—";
+};
+
+const statusBadgeVariant = (status?: string) => {
+  switch (status) {
+    case "Active":
+      return "default";
+    case "Pending":
+      return "secondary";
+    default:
+      return "outline";
+  }
 };
 
 const AdminDuesCategory = () => {
@@ -45,8 +57,8 @@ const AdminDuesCategory = () => {
     if (!term) return categories;
     return categories.filter((item) => {
       const name = item.name?.toLowerCase() ?? "";
-      const bankName = item.bank?.bank_name?.toLowerCase() ?? "";
-      return name.includes(term) || bankName.includes(term);
+      const status = item.status?.toLowerCase() ?? "";
+      return name.includes(term) || status.includes(term);
     });
   }, [categories, search]);
 
@@ -68,7 +80,12 @@ const AdminDuesCategory = () => {
 
   const handleDelete = () => {
     if (selected?.id === undefined || selected?.id === null || selected?.id === "") return;
-    handlePost("admin/category/delete", { category_id: selected.id }, "application/json", onDeleted);
+    handlePost(
+      "admin/category/delete",
+      { category_id: selected.id },
+      "application/json",
+      onDeleted,
+    );
   };
 
   return (
@@ -96,10 +113,7 @@ const AdminDuesCategory = () => {
                 aria-label="Search dues categories"
               />
             </div>
-            <Button
-              onClick={() => setShowModal(true)}
-              className="gap-2 bg-[#015907] text-white"
-            >
+            <Button onClick={() => setShowModal(true)} className="gap-2 bg-[#015907] text-white">
               <Plus aria-hidden="true" />
               Add Category
             </Button>
@@ -117,8 +131,8 @@ const AdminDuesCategory = () => {
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <p className="font-semibold text-[#075b2f]">Something went wrong</p>
               <p className="mt-1 text-sm text-[#62705f]">
-                {query.error instanceof Error ? query.error.message : ""} Failed to load
-                categories. Please try again.
+                {query.error instanceof Error ? query.error.message : ""} Failed to load categories.
+                Please try again.
               </p>
               <Button
                 variant="outline"
@@ -146,7 +160,7 @@ const AdminDuesCategory = () => {
                   <TableRow className="bg-[#f7faf6] hover:bg-[#f7faf6]">
                     <TableHead className="whitespace-nowrap px-4 py-3">S/N</TableHead>
                     <TableHead className="whitespace-nowrap px-4 py-3">Category Name</TableHead>
-                    <TableHead className="whitespace-nowrap px-4 py-3">Bank Account</TableHead>
+                    <TableHead className="whitespace-nowrap px-4 py-3">Status</TableHead>
                     <TableHead className="whitespace-nowrap px-4 py-3">Created At</TableHead>
                     <TableHead className="whitespace-nowrap px-4 py-3">Actions</TableHead>
                   </TableRow>
@@ -157,14 +171,9 @@ const AdminDuesCategory = () => {
                       <TableCell className="whitespace-nowrap px-4 py-4">{index + 1}</TableCell>
                       <TableCell className="whitespace-nowrap px-4 py-4">{item.name}</TableCell>
                       <TableCell className="whitespace-nowrap px-4 py-4">
-                        <div className="flex flex-col">
-                          <span>{item.bank?.bank_name ?? "No bank linked"}</span>
-                          {(item.bank?.account_number || item.bank?.account_name) && (
-                            <span className="text-sm text-muted-foreground">
-                              {item.bank?.account_number} · {item.bank?.account_name}
-                            </span>
-                          )}
-                        </div>
+                        <Badge variant={statusBadgeVariant(item.status)}>
+                          {item.status ?? "—"}
+                        </Badge>
                       </TableCell>
                       <TableCell className="whitespace-nowrap px-4 py-4">
                         {formatDate(item.created_at)}
@@ -205,7 +214,11 @@ const AdminDuesCategory = () => {
       </Modal>
 
       <Edit title={selected?.name} noHead={false}>
-        <EditDuesCategory item={selected} close={() => setShowEdit(false)} refetch={query.refetch} />
+        <EditDuesCategory
+          item={selected}
+          close={() => setShowEdit(false)}
+          refetch={query.refetch}
+        />
       </Edit>
 
       <Delete title="" noHead>

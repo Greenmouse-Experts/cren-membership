@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { ArrowUpRight, LayoutDashboard, Menu, X } from "lucide-react";
 
 import logoMark from "@/app/image/logo-mark.png";
 import { Link } from "@tanstack/react-router";
@@ -7,6 +7,15 @@ import { Link } from "@tanstack/react-router";
 type HomeNavProps = {
   activeHref?: string;
   className?: string;
+};
+
+/** Resolves the destination portal for an authenticated session.
+ *  Members log in (`auth/login`) and persist `igbo_email`; admins (`auth/admin/login`) do not. */
+const resolveDashboardLink = (): string | null => {
+  if (typeof window === "undefined") return null;
+  const token = localStorage.getItem("igbo_token");
+  if (!token) return null;
+  return localStorage.getItem("igbo_email") ? "/dashboard/" : "/admin/";
 };
 
 const navigation = [
@@ -22,20 +31,37 @@ const navShape = {
     "polygon(14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px), 0 14px)",
 };
 
-function EnquiriesLink({ className = "" }: { className?: string }) {
+function AuthActionLink({ href, className = "" }: { href: string | null; className?: string }) {
+  const shapeStyle = {
+    clipPath:
+      "polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px)",
+  };
+  const iconClass =
+    "size-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5";
+
+  if (href) {
+    return (
+      <Link
+        to={href}
+        className={`group h-12 lg:text-sm text-xs items-center justify-center gap-3 bg-[#084c2a] px-6 text-[15px] font-semibold text-white transition-colors duration-200 hover:bg-[#063a20] focus-visible:bg-[#063a20] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white ${className}`}
+        style={shapeStyle}
+      >
+        <span>Dashboard</span>
+        <LayoutDashboard aria-hidden="true" className={iconClass} strokeWidth={2.2} />
+      </Link>
+    );
+  }
+
   return (
     <Link
       to="/auth/register"
       className={`group h-12 lg:text-sm text-xs items-center justify-center gap-3 bg-[#084c2a] px-6 text-[15px] font-semibold text-white transition-colors duration-200 hover:bg-[#063a20] focus-visible:bg-[#063a20] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white ${className}`}
-      style={{
-        clipPath:
-          "polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px)",
-      }}
+      style={shapeStyle}
     >
       <span>Become a member</span>
       <ArrowUpRight
         aria-hidden="true"
-        className="size-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+        className={iconClass}
         strokeWidth={2.2}
       />
     </Link>
@@ -44,6 +70,16 @@ function EnquiriesLink({ className = "" }: { className?: string }) {
 
 export default function HomeNav({ activeHref = "#home", className = "" }: HomeNavProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [dashboardHref, setDashboardHref] = useState<string | null>(() =>
+    resolveDashboardLink(),
+  );
+
+  useEffect(() => {
+    // Keep the CTA in sync with logins/logouts happening in other tabs.
+    const syncAuthState = () => setDashboardHref(resolveDashboardLink());
+    window.addEventListener("storage", syncAuthState);
+    return () => window.removeEventListener("storage", syncAuthState);
+  }, []);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -92,7 +128,7 @@ export default function HomeNav({ activeHref = "#home", className = "" }: HomeNa
               ))}
             </nav>
 
-            <EnquiriesLink className="hidden lg:flex" />
+            <AuthActionLink href={dashboardHref} className="hidden lg:flex" />
 
             <button
               type="button"
@@ -134,7 +170,7 @@ export default function HomeNav({ activeHref = "#home", className = "" }: HomeNa
                   </li>
                 ))}
               </ul>
-              <EnquiriesLink className="mt-3 flex w-full" />
+              <AuthActionLink href={dashboardHref} className="mt-3 flex w-full" />
             </nav>
           )}
         </div>
