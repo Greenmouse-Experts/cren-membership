@@ -2,6 +2,7 @@ import { useEffect, useState, type ComponentType } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import {
   Bell,
+  CalendarRange,
   ChevronRight,
   GalleryHorizontalEnd,
   LayoutDashboard,
@@ -112,6 +113,7 @@ const sections: NavSection[] = [
     label: "Engagement",
     items: [
       { label: "Announcements", to: "/admin/announcements", icon: Megaphone },
+      { label: "Events", to: "/admin/events", icon: CalendarRange },
       { label: "Notifications", to: "/admin/notify", icon: Bell },
       { label: "Messages", to: "/admin/messages", icon: MessagesSquare },
       { label: "Gallery", to: "/admin/gallery", icon: GalleryHorizontalEnd },

@@ -41,10 +41,13 @@ import { Route as HomePoliciesRouteImport } from './routes/home/policies'
 import { Route as AdminDuesBankRouteImport } from './routes/admin.dues.bank'
 import { Route as AdminDuesCategoryRouteImport } from './routes/admin.dues.category'
 import { Route as AdminDuesListRouteImport } from './routes/admin.dues.list'
+import { Route as AdminEventsIndexRouteImport } from './routes/admin/events.index'
+import { Route as AdminEventsCreateRouteImport } from './routes/admin/events.create'
 import { Route as AdminPaymentsDuesRouteImport } from './routes/admin.payments.dues'
 import { Route as AdminPaymentsSubscritionRouteImport } from './routes/admin.payments.subscrition'
 import { Route as AdminSubscriptionBankRouteImport } from './routes/admin.subscription.bank'
 import { Route as AdminSubscriptionListRouteImport } from './routes/admin.subscription.list'
+import { Route as AdminEventsIdIndexRouteImport } from './routes/admin/events.$id.index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -206,6 +209,16 @@ const AdminDuesListRoute = AdminDuesListRouteImport.update({
   path: '/dues/list',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminEventsIndexRoute = AdminEventsIndexRouteImport.update({
+  id: '/events/',
+  path: '/events/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminEventsCreateRoute = AdminEventsCreateRouteImport.update({
+  id: '/events/create',
+  path: '/events/create',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPaymentsDuesRoute = AdminPaymentsDuesRouteImport.update({
   id: '/payments/dues',
   path: '/payments/dues',
@@ -225,6 +238,11 @@ const AdminSubscriptionBankRoute = AdminSubscriptionBankRouteImport.update({
 const AdminSubscriptionListRoute = AdminSubscriptionListRouteImport.update({
   id: '/subscription/list',
   path: '/subscription/list',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminEventsIdIndexRoute = AdminEventsIdIndexRouteImport.update({
+  id: '/events/$id/',
+  path: '/events/$id/',
   getParentRoute: () => AdminRoute,
 } as any)
 
@@ -261,10 +279,13 @@ export interface FileRoutesByFullPath {
   '/admin/dues/bank': typeof AdminDuesBankRoute
   '/admin/dues/category': typeof AdminDuesCategoryRoute
   '/admin/dues/list': typeof AdminDuesListRoute
+  '/admin/events/create': typeof AdminEventsCreateRoute
   '/admin/payments/dues': typeof AdminPaymentsDuesRoute
   '/admin/payments/subscrition': typeof AdminPaymentsSubscritionRoute
   '/admin/subscription/bank': typeof AdminSubscriptionBankRoute
   '/admin/subscription/list': typeof AdminSubscriptionListRoute
+  '/admin/events/': typeof AdminEventsIndexRoute
+  '/admin/events/$id/': typeof AdminEventsIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -296,10 +317,13 @@ export interface FileRoutesByTo {
   '/admin/dues/bank': typeof AdminDuesBankRoute
   '/admin/dues/category': typeof AdminDuesCategoryRoute
   '/admin/dues/list': typeof AdminDuesListRoute
+  '/admin/events/create': typeof AdminEventsCreateRoute
   '/admin/payments/dues': typeof AdminPaymentsDuesRoute
   '/admin/payments/subscrition': typeof AdminPaymentsSubscritionRoute
   '/admin/subscription/bank': typeof AdminSubscriptionBankRoute
   '/admin/subscription/list': typeof AdminSubscriptionListRoute
+  '/admin/events': typeof AdminEventsIndexRoute
+  '/admin/events/$id': typeof AdminEventsIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -335,10 +359,13 @@ export interface FileRoutesById {
   '/admin/dues/bank': typeof AdminDuesBankRoute
   '/admin/dues/category': typeof AdminDuesCategoryRoute
   '/admin/dues/list': typeof AdminDuesListRoute
+  '/admin/events/create': typeof AdminEventsCreateRoute
   '/admin/payments/dues': typeof AdminPaymentsDuesRoute
   '/admin/payments/subscrition': typeof AdminPaymentsSubscritionRoute
   '/admin/subscription/bank': typeof AdminSubscriptionBankRoute
   '/admin/subscription/list': typeof AdminSubscriptionListRoute
+  '/admin/events/': typeof AdminEventsIndexRoute
+  '/admin/events/$id/': typeof AdminEventsIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -375,10 +402,13 @@ export interface FileRouteTypes {
     | '/admin/dues/bank'
     | '/admin/dues/category'
     | '/admin/dues/list'
+    | '/admin/events/create'
     | '/admin/payments/dues'
     | '/admin/payments/subscrition'
     | '/admin/subscription/bank'
     | '/admin/subscription/list'
+    | '/admin/events/'
+    | '/admin/events/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -410,10 +440,13 @@ export interface FileRouteTypes {
     | '/admin/dues/bank'
     | '/admin/dues/category'
     | '/admin/dues/list'
+    | '/admin/events/create'
     | '/admin/payments/dues'
     | '/admin/payments/subscrition'
     | '/admin/subscription/bank'
     | '/admin/subscription/list'
+    | '/admin/events'
+    | '/admin/events/$id'
   id:
     | '__root__'
     | '/'
@@ -448,10 +481,13 @@ export interface FileRouteTypes {
     | '/admin/dues/bank'
     | '/admin/dues/category'
     | '/admin/dues/list'
+    | '/admin/events/create'
     | '/admin/payments/dues'
     | '/admin/payments/subscrition'
     | '/admin/subscription/bank'
     | '/admin/subscription/list'
+    | '/admin/events/'
+    | '/admin/events/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -692,6 +728,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDuesListRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/events/': {
+      id: '/admin/events/'
+      path: '/events'
+      fullPath: '/admin/events/'
+      preLoaderRoute: typeof AdminEventsIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/events/create': {
+      id: '/admin/events/create'
+      path: '/events/create'
+      fullPath: '/admin/events/create'
+      preLoaderRoute: typeof AdminEventsCreateRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/payments/dues': {
       id: '/admin/payments/dues'
       path: '/payments/dues'
@@ -718,6 +768,13 @@ declare module '@tanstack/react-router' {
       path: '/subscription/list'
       fullPath: '/admin/subscription/list'
       preLoaderRoute: typeof AdminSubscriptionListRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/events/$id/': {
+      id: '/admin/events/$id/'
+      path: '/events/$id'
+      fullPath: '/admin/events/$id/'
+      preLoaderRoute: typeof AdminEventsIdIndexRouteImport
       parentRoute: typeof AdminRoute
     }
   }
@@ -756,10 +813,13 @@ interface AdminRouteChildren {
   AdminDuesBankRoute: typeof AdminDuesBankRoute
   AdminDuesCategoryRoute: typeof AdminDuesCategoryRoute
   AdminDuesListRoute: typeof AdminDuesListRoute
+  AdminEventsCreateRoute: typeof AdminEventsCreateRoute
   AdminPaymentsDuesRoute: typeof AdminPaymentsDuesRoute
   AdminPaymentsSubscritionRoute: typeof AdminPaymentsSubscritionRoute
   AdminSubscriptionBankRoute: typeof AdminSubscriptionBankRoute
   AdminSubscriptionListRoute: typeof AdminSubscriptionListRoute
+  AdminEventsIndexRoute: typeof AdminEventsIndexRoute
+  AdminEventsIdIndexRoute: typeof AdminEventsIdIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
@@ -773,10 +833,13 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminDuesBankRoute: AdminDuesBankRoute,
   AdminDuesCategoryRoute: AdminDuesCategoryRoute,
   AdminDuesListRoute: AdminDuesListRoute,
+  AdminEventsCreateRoute: AdminEventsCreateRoute,
   AdminPaymentsDuesRoute: AdminPaymentsDuesRoute,
   AdminPaymentsSubscritionRoute: AdminPaymentsSubscritionRoute,
   AdminSubscriptionBankRoute: AdminSubscriptionBankRoute,
   AdminSubscriptionListRoute: AdminSubscriptionListRoute,
+  AdminEventsIndexRoute: AdminEventsIndexRoute,
+  AdminEventsIdIndexRoute: AdminEventsIdIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)

@@ -173,3 +173,19 @@ export type BanksResponse = ApiResponse<BankAccount[]>;
 export type SubscriptionResponse = ApiResponse<SubscriptionItem[] | SubscriptionItem>;
 export type PaymentTransactionsResponse = ApiResponse<MemberPaymentTransaction[]>;
 export type GalleryResponse = ApiResponse<GalleryItem[]>;
+
+export interface AdminEventItem {
+  id: number | string;
+  title?: string | null;
+  description?: string | null;
+  image?: string | null;
+  start_date?: string | null;
+  end_date?: string | null;
+  location?: string | null;
+  organizer?: string | null;
+  status?: string | number | boolean | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+export type EventsResponse = ApiResponse<AdminEventItem[]>;
