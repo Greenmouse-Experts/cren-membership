@@ -156,6 +156,7 @@ export interface GalleryItem {
   title?: string | null;
   image?: string | null;
   content?: string | null;
+  status?: string | number | boolean | null;
   created_at?: string | null;
   updated_at?: string | null;
 }

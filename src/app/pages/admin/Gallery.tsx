@@ -1,6 +1,6 @@
 import { useState } from "react";
 import dayjs from "dayjs";
-import { Pencil, Plus, Trash2 } from "lucide-react";
+import { Eye, EyeOff, Pencil, Plus, Trash2 } from "lucide-react";
 import { toast } from "react-toastify";
 
 import useModal from "@/app/hook/useModal";
@@ -11,19 +11,33 @@ import AddGallery from "@/app/admin/Gallery/AddDGallery";
 import EditGallery from "@/app/admin/Gallery/EditGallery";
 import ViewGallery from "@/app/admin/Gallery/ViewGallery";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { GalleryItem } from "@/types/api";
 
+/** The API returns gallery status in inconsistent shapes (1/0, "true", "published"). */
+const isPublished = (item: GalleryItem) => {
+  const { status } = item;
+  if (typeof status === "boolean") return status;
+  if (typeof status === "number") return status === 1;
+  if (typeof status === "string") {
+    return ["1", "true", "published", "active"].includes(status.trim().toLowerCase());
+  }
+  return false;
+};
+
 const GalleryPage = () => {
   const query = useGetHook<GalleryItem[]>("admin/frontend/gallery");
-  const { handlePost, isLoading: isDeleting } = usePostHook();
+  const { handlePost, isLoading: isBusy } = usePostHook();
 
   const { Modal: Delete, setShowModal: setShowDelete } = useModal();
   const { Modal: Edit, setShowModal: setShowEdit } = useModal();
   const { Modal: View, setShowModal: setShowView } = useModal();
+  const { Modal: Publish, setShowModal: setShowPublish } = useModal();
   const { Modal, setShowModal } = useModal();
 
   const [selected, setSelected] = useState<GalleryItem | null>(null);
+  const [publishAction, setPublishAction] = useState<"publish" | "unpublish">("publish");
 
   const galleryItems = query.data?.data ?? [];
 
@@ -47,10 +61,16 @@ const GalleryPage = () => {
     setShowDelete(true);
   };
 
+  const openPublishToggle = (item: GalleryItem) => {
+    setSelected(item);
+    setPublishAction(isPublished(item) ? "unpublish" : "publish");
+    setShowPublish(true);
+  };
+
   const handleDelete = () => {
     if (!selected?.id) return;
     handlePost(
-      `admin/frontend/delete/gallery?gallery_id=${selected.id}`,
+      "admin/frontend/delete/gallery",
       {
         gallery_id: selected.id,
       },
@@ -59,6 +79,26 @@ const GalleryPage = () => {
         query.refetch();
         toast.success("Gallery deleted successfully");
         setShowDelete(false);
+      },
+    );
+  };
+
+  const handlePublishToggle = () => {
+    if (!selected?.id) return;
+    handlePost(
+      `admin/frontend/${publishAction}/gallery`,
+      {
+        gallery_id: selected.id,
+      },
+      "application/json",
+      () => {
+        query.refetch();
+        toast.success(
+          publishAction === "publish"
+            ? "Gallery image published successfully"
+            : "Gallery image unpublished successfully",
+        );
+        setShowPublish(false);
       },
     );
   };
@@ -130,9 +170,36 @@ const GalleryPage = () => {
                       className="absolute right-3 top-3 flex items-center gap-1 rounded-md bg-white/95 p-1.5 shadow-sm"
                       onClick={(event) => event.stopPropagation()}
                     >
+                      <Badge
+                        className={
+                          isPublished(item)
+                            ? "border border-transparent bg-[#075b2f]/10 text-[#075b2f]"
+                            : "border border-transparent bg-amber-500/15 text-amber-700"
+                        }
+                      >
+                        {isPublished(item) ? "Published" : "Draft"}
+                      </Badge>
                       <span className="px-1 text-[0.72rem] text-[#5f6a62]">
                         {dayjs(item.created_at).format("DD MMM YYYY")}
                       </span>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        aria-label={
+                          isPublished(item)
+                            ? `Unpublish ${item.title ?? "gallery image"}`
+                            : `Publish ${item.title ?? "gallery image"}`
+                        }
+                        title={isPublished(item) ? "Unpublish" : "Publish"}
+                        onClick={() => openPublishToggle(item)}
+                        className="hidden h-7 w-7 text-[#015907] hover:bg-[#015907]/10 group-hover:inline-flex"
+                      >
+                        {isPublished(item) ? (
+                          <EyeOff className="!size-3.5" />
+                        ) : (
+                          <Eye className="!size-3.5" />
+                        )}
+                      </Button>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -184,9 +251,20 @@ const GalleryPage = () => {
           actionTitle="Yes, delete"
           closeModal={() => setShowDelete(false)}
           action={handleDelete}
-          isBusy={isDeleting}
+          isBusy={isBusy}
         />
       </Delete>
+
+      <Publish title="" noHead>
+        <ReusableModal
+          title={`Are you sure you want to ${publishAction}${selected?.title ? ` "${selected.title}"` : " this gallery image"}?`}
+          cancelTitle="No, cancel"
+          actionTitle={publishAction === "publish" ? "Yes, publish" : "Yes, unpublish"}
+          closeModal={() => setShowPublish(false)}
+          action={handlePublishToggle}
+          isBusy={isBusy}
+        />
+      </Publish>
     </>
   );
 };

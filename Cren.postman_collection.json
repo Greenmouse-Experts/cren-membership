@@ -1,7 +1,7 @@
 {
   "info": {
-    "_postman_id": "3ebe4f90-7fb4-4d01-8713-009e16ca676d",
-    "name": "Cren",
+    "_postman_id": "f5d0834f-ef10-4155-8070-24bd24823037",
+    "name": "Cren API",
     "description": "Cren Backend API. All application routes are served below /api.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "34010808"
@@ -78,7 +78,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"email\": \"<email>\",\n  \"password\": \"<string>\"\n}",
+                          "raw": "{\n  \"email\": \"3NPjZ7J7cHp@dcRpDusciITNZocvHUpZzVdqxpdup.pi\",\n  \"password\": \"string\"\n}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -112,7 +112,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"email\": \"<email>\",\n  \"password\": \"<string>\"\n}",
+                              "raw": "{\n  \"email\": \"3NPjZ7J7cHp@dcRpDusciITNZocvHUpZzVdqxpdup.pi\",\n  \"password\": \"string\"\n}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -161,7 +161,7 @@
                     ],
                     "body": {
                       "mode": "raw",
-                      "raw": "{\n  \"name_of_member_organization\": \"<string>\",\n  \"name_of_representative\": \"<string>\",\n  \"email\": \"<email>\",\n  \"password\": \"<string>\",\n  \"username\": \"<string>\",\n  \"phone_number\": \"<string>\",\n  \"address\": \"<string>\"\n}",
+                      "raw": "{}",
                       "options": {
                         "raw": {
                           "headerFamily": "json",
@@ -183,7 +183,7 @@
                   },
                   "response": [
                     {
-                      "name": "201",
+                      "name": "200",
                       "originalRequest": {
                         "method": "POST",
                         "header": [
@@ -194,7 +194,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"name_of_member_organization\": \"<string>\",\n  \"name_of_representative\": \"<string>\",\n  \"email\": \"<email>\",\n  \"password\": \"<string>\",\n  \"username\": \"<string>\",\n  \"phone_number\": \"<string>\",\n  \"address\": \"<string>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -214,8 +214,8 @@
                           ]
                         }
                       },
-                      "status": "Created",
-                      "code": 201,
+                      "status": "OK",
+                      "code": 200,
                       "_postman_previewlanguage": "text",
                       "header": [],
                       "cookie": [],
@@ -240,7 +240,7 @@
                     ],
                     "body": {
                       "mode": "raw",
-                      "raw": "{\n  \"login_details\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                      "raw": "{\n  \"login_details\": \"string\",\n  \"password\": \"string\"\n}",
                       "options": {
                         "raw": {
                           "headerFamily": "json",
@@ -273,7 +273,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"login_details\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                          "raw": "{\n  \"login_details\": \"string\",\n  \"password\": \"string\"\n}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -322,7 +322,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"email\": \"<email>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -356,7 +356,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"email\": \"<email>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -403,7 +403,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"code\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -437,7 +437,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"code\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -493,7 +493,6 @@
                       "mode": "formdata",
                       "formdata": [
                         {
-                          "description": "(Required) ",
                           "key": "file",
                           "type": "file",
                           "value": null
@@ -527,7 +526,6 @@
                           "mode": "formdata",
                           "formdata": [
                             {
-                              "description": "(Required) ",
                               "key": "file",
                               "type": "file"
                             }
@@ -620,7 +618,7 @@
                     ],
                     "body": {
                       "mode": "raw",
-                      "raw": "{\n  \"membershipType\": \"<string>\",\n  \"name\": \"<string>\",\n  \"membershipCategory\": \"<string>\",\n  \"search\": \"<string>\"\n}",
+                      "raw": "{}",
                       "options": {
                         "raw": {
                           "headerFamily": "json",
@@ -653,7 +651,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"membershipType\": \"<string>\",\n  \"name\": \"<string>\",\n  \"membershipCategory\": \"<string>\",\n  \"search\": \"<string>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -851,7 +849,7 @@
                     ],
                     "body": {
                       "mode": "raw",
-                      "raw": "{\n  \"full_name\": \"<string>\",\n  \"email\": \"<email>\",\n  \"message\": \"<string>\",\n  \"phone_number\": \"<string>\",\n  \"subject\": \"<string>\"\n}",
+                      "raw": "{}",
                       "options": {
                         "raw": {
                           "headerFamily": "json",
@@ -884,7 +882,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"full_name\": \"<string>\",\n  \"email\": \"<email>\",\n  \"message\": \"<string>\",\n  \"phone_number\": \"<string>\",\n  \"subject\": \"<string>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -1074,7 +1072,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"subscription_id\": \"<long>\",\n  \"ref_id\": \"<string>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -1113,7 +1111,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"subscription_id\": \"<long>\",\n  \"ref_id\": \"<string>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -1178,15 +1176,13 @@
                                   "mode": "formdata",
                                   "formdata": [
                                     {
-                                      "description": "(Required) ",
                                       "key": "receipt",
                                       "type": "file",
                                       "value": null
                                     },
                                     {
-                                      "description": "(Required) ",
                                       "key": "subscription_id",
-                                      "value": "<string>",
+                                      "value": "string",
                                       "type": "text"
                                     }
                                   ]
@@ -1226,14 +1222,12 @@
                                       "mode": "formdata",
                                       "formdata": [
                                         {
-                                          "description": "(Required) ",
                                           "key": "receipt",
                                           "type": "file"
                                         },
                                         {
-                                          "description": "(Required) ",
                                           "key": "subscription_id",
-                                          "value": "<string>",
+                                          "value": "string",
                                           "type": "text"
                                         }
                                       ]
@@ -1361,7 +1355,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"old_password\": \"<string>\",\n  \"new_password\": \"<string>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -1401,7 +1395,7 @@
                                 ],
                                 "body": {
                                   "mode": "raw",
-                                  "raw": "{\n  \"old_password\": \"<string>\",\n  \"new_password\": \"<string>\"\n}",
+                                  "raw": "{}",
                                   "options": {
                                     "raw": {
                                       "headerFamily": "json",
@@ -1456,7 +1450,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"name_of_member_organization\": \"<string>\",\n  \"name_of_representative\": \"<string>\",\n  \"username\": \"<string>\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"address\": \"<string>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -1495,7 +1489,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"name_of_member_organization\": \"<string>\",\n  \"name_of_representative\": \"<string>\",\n  \"username\": \"<string>\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"address\": \"<string>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -1557,7 +1551,6 @@
                               "mode": "formdata",
                               "formdata": [
                                 {
-                                  "description": "(Required) ",
                                   "key": "avatar",
                                   "type": "file",
                                   "value": null
@@ -1598,7 +1591,6 @@
                                   "mode": "formdata",
                                   "formdata": [
                                     {
-                                      "description": "(Required) ",
                                       "key": "avatar",
                                       "type": "file"
                                     }
@@ -1955,7 +1947,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"notification_id\": \"<long>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -1994,7 +1986,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"notification_id\": \"<long>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -2056,7 +2048,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"notification_id\": \"<long>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -2095,7 +2087,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"notification_id\": \"<long>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -2152,7 +2144,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"member_id\": \"<long>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -2191,7 +2183,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"member_id\": \"<long>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -2452,7 +2444,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"due_id\": \"<long>\",\n  \"ref_id\": \"<string>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -2491,7 +2483,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"due_id\": \"<long>\",\n  \"ref_id\": \"<string>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -2558,15 +2550,13 @@
                               "mode": "formdata",
                               "formdata": [
                                 {
-                                  "description": "(Required) ",
                                   "key": "receipt",
                                   "type": "file",
                                   "value": null
                                 },
                                 {
-                                  "description": "(Required) ",
                                   "key": "due_id",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 }
                               ]
@@ -2605,14 +2595,12 @@
                                   "mode": "formdata",
                                   "formdata": [
                                     {
-                                      "description": "(Required) ",
                                       "key": "receipt",
                                       "type": "file"
                                     },
                                     {
-                                      "description": "(Required) ",
                                       "key": "due_id",
-                                      "value": "<string>",
+                                      "value": "string",
                                       "type": "text"
                                     }
                                   ]
@@ -2885,57 +2873,53 @@
                           "mode": "formdata",
                           "formdata": [
                             {
-                              "description": "(Required) ",
                               "key": "passport",
                               "type": "file",
                               "value": null
                             },
                             {
-                              "description": "(Required) ",
                               "key": "first_name",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
-                              "description": "(Required) ",
                               "key": "last_name",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
-                              "description": "(Required) ",
                               "key": "email",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
                               "key": "member_id",
-                              "value": "<long>",
+                              "value": "6279",
                               "type": "text"
                             },
                             {
                               "key": "phone_number",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
                               "key": "gender",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
                               "key": "marital_status",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
                               "key": "occupation",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
                               "key": "address",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             }
                           ]
@@ -2973,56 +2957,52 @@
                               "mode": "formdata",
                               "formdata": [
                                 {
-                                  "description": "(Required) ",
                                   "key": "passport",
                                   "type": "file"
                                 },
                                 {
-                                  "description": "(Required) ",
                                   "key": "first_name",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
-                                  "description": "(Required) ",
                                   "key": "last_name",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
-                                  "description": "(Required) ",
                                   "key": "email",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "member_id",
-                                  "value": "<long>",
+                                  "value": "6279",
                                   "type": "text"
                                 },
                                 {
                                   "key": "phone_number",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "gender",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "marital_status",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "occupation",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "address",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 }
                               ]
@@ -3083,9 +3063,8 @@
                           "mode": "formdata",
                           "formdata": [
                             {
-                              "description": "(Required) ",
                               "key": "member_id",
-                              "value": "<long>",
+                              "value": "4011",
                               "type": "text"
                             },
                             {
@@ -3095,42 +3074,42 @@
                             },
                             {
                               "key": "first_name",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
                               "key": "last_name",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
                               "key": "email",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
                               "key": "phone_number",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
                               "key": "gender",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
                               "key": "marital_status",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
                               "key": "occupation",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
                               "key": "address",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             }
                           ]
@@ -3168,9 +3147,8 @@
                               "mode": "formdata",
                               "formdata": [
                                 {
-                                  "description": "(Required) ",
                                   "key": "member_id",
-                                  "value": "<long>",
+                                  "value": "4011",
                                   "type": "text"
                                 },
                                 {
@@ -3179,42 +3157,42 @@
                                 },
                                 {
                                   "key": "first_name",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "last_name",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "email",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "phone_number",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "gender",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "marital_status",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "occupation",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "address",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 }
                               ]
@@ -3418,7 +3396,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"old_password\": \"<string>\",\n  \"new_password\": \"<string>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -3458,7 +3436,7 @@
                                 ],
                                 "body": {
                                   "mode": "raw",
-                                  "raw": "{\n  \"old_password\": \"<string>\",\n  \"new_password\": \"<string>\"\n}",
+                                  "raw": "{}",
                                   "options": {
                                     "raw": {
                                       "headerFamily": "json",
@@ -3513,7 +3491,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"name_of_member_organization\": \"<string>\",\n  \"name_of_representative\": \"<string>\",\n  \"username\": \"<string>\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"address\": \"<string>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -3552,7 +3530,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"name_of_member_organization\": \"<string>\",\n  \"name_of_representative\": \"<string>\",\n  \"username\": \"<string>\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"address\": \"<string>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -3614,7 +3592,6 @@
                               "mode": "formdata",
                               "formdata": [
                                 {
-                                  "description": "(Required) ",
                                   "key": "avatar",
                                   "type": "file",
                                   "value": null
@@ -3655,7 +3632,6 @@
                                   "mode": "formdata",
                                   "formdata": [
                                     {
-                                      "description": "(Required) ",
                                       "key": "avatar",
                                       "type": "file"
                                     }
@@ -3778,7 +3754,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"user_id\": \"<long>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -3817,7 +3793,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"user_id\": \"<long>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -4177,7 +4153,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"user_id\": \"<long>\",\n  \"action\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -4216,7 +4192,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"user_id\": \"<long>\",\n  \"action\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -4357,7 +4333,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"notification_id\": \"<long>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -4396,7 +4372,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"notification_id\": \"<long>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -4458,7 +4434,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"notification_id\": \"<long>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -4497,7 +4473,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"notification_id\": \"<long>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -4633,7 +4609,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"name_of_member_organization\": \"<string>\",\n  \"name_of_representative\": \"<string>\",\n  \"username\": \"<string>\",\n  \"email\": \"<email>\",\n  \"password\": \"<string>\",\n  \"phone_number\": \"<string>\",\n  \"address\": \"<string>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -4672,7 +4648,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"name_of_member_organization\": \"<string>\",\n  \"name_of_representative\": \"<string>\",\n  \"username\": \"<string>\",\n  \"email\": \"<email>\",\n  \"password\": \"<string>\",\n  \"phone_number\": \"<string>\",\n  \"address\": \"<string>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -4868,9 +4844,8 @@
                               "mode": "formdata",
                               "formdata": [
                                 {
-                                  "description": "(Required) ",
                                   "key": "user_id",
-                                  "value": "<long>",
+                                  "value": "4394",
                                   "type": "text"
                                 },
                                 {
@@ -4880,72 +4855,72 @@
                                 },
                                 {
                                   "key": "account_type",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "first_name",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "last_name",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "email",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "phone_number",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "gender",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "marital_status",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "state",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "address",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "place_business_employment",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "nature_business_employment",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "membership_professional_bodies",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "previous_insolvency_work_experience",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "referee_email_address",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 }
                               ]
@@ -4984,9 +4959,8 @@
                                   "mode": "formdata",
                                   "formdata": [
                                     {
-                                      "description": "(Required) ",
                                       "key": "user_id",
-                                      "value": "<long>",
+                                      "value": "4394",
                                       "type": "text"
                                     },
                                     {
@@ -4995,72 +4969,72 @@
                                     },
                                     {
                                       "key": "account_type",
-                                      "value": "<string>",
+                                      "value": "string",
                                       "type": "text"
                                     },
                                     {
                                       "key": "first_name",
-                                      "value": "<string>",
+                                      "value": "string",
                                       "type": "text"
                                     },
                                     {
                                       "key": "last_name",
-                                      "value": "<string>",
+                                      "value": "string",
                                       "type": "text"
                                     },
                                     {
                                       "key": "email",
-                                      "value": "<string>",
+                                      "value": "string",
                                       "type": "text"
                                     },
                                     {
                                       "key": "phone_number",
-                                      "value": "<string>",
+                                      "value": "string",
                                       "type": "text"
                                     },
                                     {
                                       "key": "gender",
-                                      "value": "<string>",
+                                      "value": "string",
                                       "type": "text"
                                     },
                                     {
                                       "key": "marital_status",
-                                      "value": "<string>",
+                                      "value": "string",
                                       "type": "text"
                                     },
                                     {
                                       "key": "state",
-                                      "value": "<string>",
+                                      "value": "string",
                                       "type": "text"
                                     },
                                     {
                                       "key": "address",
-                                      "value": "<string>",
+                                      "value": "string",
                                       "type": "text"
                                     },
                                     {
                                       "key": "place_business_employment",
-                                      "value": "<string>",
+                                      "value": "string",
                                       "type": "text"
                                     },
                                     {
                                       "key": "nature_business_employment",
-                                      "value": "<string>",
+                                      "value": "string",
                                       "type": "text"
                                     },
                                     {
                                       "key": "membership_professional_bodies",
-                                      "value": "<string>",
+                                      "value": "string",
                                       "type": "text"
                                     },
                                     {
                                       "key": "previous_insolvency_work_experience",
-                                      "value": "<string>",
+                                      "value": "string",
                                       "type": "text"
                                     },
                                     {
                                       "key": "referee_email_address",
-                                      "value": "<string>",
+                                      "value": "string",
                                       "type": "text"
                                     }
                                   ]
@@ -5115,7 +5089,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"user_id\": \"<long>\",\n  \"new_password\": \"<string>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -5155,7 +5129,7 @@
                                 ],
                                 "body": {
                                   "mode": "raw",
-                                  "raw": "{\n  \"user_id\": \"<long>\",\n  \"new_password\": \"<string>\"\n}",
+                                  "raw": "{}",
                                   "options": {
                                     "raw": {
                                       "headerFamily": "json",
@@ -5313,7 +5287,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"user_id\": \"<long>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -5352,7 +5326,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"user_id\": \"<long>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -5415,7 +5389,7 @@
                                 ],
                                 "body": {
                                   "mode": "raw",
-                                  "raw": "{\n  \"user_id\": \"<long>\"\n}",
+                                  "raw": "{}",
                                   "options": {
                                     "raw": {
                                       "headerFamily": "json",
@@ -5456,7 +5430,7 @@
                                     ],
                                     "body": {
                                       "mode": "raw",
-                                      "raw": "{\n  \"user_id\": \"<long>\"\n}",
+                                      "raw": "{}",
                                       "options": {
                                         "raw": {
                                           "headerFamily": "json",
@@ -5724,7 +5698,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"user_id\": \"<long>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -5763,7 +5737,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"user_id\": \"<long>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -5890,7 +5864,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"account_name\": \"<string>\",\n  \"account_number\": \"<string>\",\n  \"bank_name\": \"<string>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -5929,7 +5903,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"account_name\": \"<string>\",\n  \"account_number\": \"<string>\",\n  \"bank_name\": \"<string>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -5986,7 +5960,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"bank_id\": \"<long>\",\n  \"account_name\": \"<string>\",\n  \"account_number\": \"<string>\",\n  \"bank_name\": \"<string>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -6025,7 +5999,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"bank_id\": \"<long>\",\n  \"account_name\": \"<string>\",\n  \"account_number\": \"<string>\",\n  \"bank_name\": \"<string>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -6082,7 +6056,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"bank_id\": \"<long>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -6121,7 +6095,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"bank_id\": \"<long>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -6183,7 +6157,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"name\": \"<string>\",\n  \"bank_id\": \"<long>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -6222,7 +6196,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"name\": \"<string>\",\n  \"bank_id\": \"<long>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -6279,7 +6253,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"category_id\": \"<long>\",\n  \"name\": \"<string>\",\n  \"bank_id\": \"<long>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -6318,7 +6292,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"category_id\": \"<long>\",\n  \"name\": \"<string>\",\n  \"bank_id\": \"<long>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -6375,7 +6349,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"category_id\": \"<long>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -6414,7 +6388,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"category_id\": \"<long>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -6536,7 +6510,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"payment_category_id\": \"<long>\",\n  \"amount\": \"<double>\",\n  \"start_date\": \"<string>\",\n  \"end_date\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -6575,7 +6549,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"payment_category_id\": \"<long>\",\n  \"amount\": \"<double>\",\n  \"start_date\": \"<string>\",\n  \"end_date\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -6635,7 +6609,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"transaction_id\": \"<long>\",\n  \"status\": \"<string>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -6675,7 +6649,7 @@
                                 ],
                                 "body": {
                                   "mode": "raw",
-                                  "raw": "{\n  \"transaction_id\": \"<long>\",\n  \"status\": \"<string>\"\n}",
+                                  "raw": "{}",
                                   "options": {
                                     "raw": {
                                       "headerFamily": "json",
@@ -6730,7 +6704,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"due_id\": \"<long>\",\n  \"payment_category_id\": \"<long>\",\n  \"description\": \"<string>\",\n  \"amount\": \"<double>\",\n  \"start_date\": \"<string>\",\n  \"end_date\": \"<string>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -6769,7 +6743,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"due_id\": \"<long>\",\n  \"payment_category_id\": \"<long>\",\n  \"description\": \"<string>\",\n  \"amount\": \"<double>\",\n  \"start_date\": \"<string>\",\n  \"end_date\": \"<string>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -6826,7 +6800,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"due_id\": \"<long>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -6865,7 +6839,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"due_id\": \"<long>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -7202,15 +7176,13 @@
                           "mode": "formdata",
                           "formdata": [
                             {
-                              "description": "(Required) ",
                               "key": "title",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
-                              "description": "(Required) ",
                               "key": "description",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
@@ -7220,27 +7192,27 @@
                             },
                             {
                               "key": "event_id",
-                              "value": "<long>",
+                              "value": "9884",
                               "type": "text"
                             },
                             {
                               "key": "start_date",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
                               "key": "end_date",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
                               "key": "location",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
                               "key": "organizer",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             }
                           ]
@@ -7278,15 +7250,13 @@
                               "mode": "formdata",
                               "formdata": [
                                 {
-                                  "description": "(Required) ",
                                   "key": "title",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
-                                  "description": "(Required) ",
                                   "key": "description",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
@@ -7295,27 +7265,27 @@
                                 },
                                 {
                                   "key": "event_id",
-                                  "value": "<long>",
+                                  "value": "9884",
                                   "type": "text"
                                 },
                                 {
                                   "key": "start_date",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "end_date",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "location",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "organizer",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 }
                               ]
@@ -7371,9 +7341,8 @@
                           "mode": "formdata",
                           "formdata": [
                             {
-                              "description": "(Required) ",
                               "key": "event_id",
-                              "value": "<long>",
+                              "value": "1504",
                               "type": "text"
                             },
                             {
@@ -7383,32 +7352,32 @@
                             },
                             {
                               "key": "title",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
                               "key": "description",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
                               "key": "start_date",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
                               "key": "end_date",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
                               "key": "location",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             },
                             {
                               "key": "organizer",
-                              "value": "<string>",
+                              "value": "string",
                               "type": "text"
                             }
                           ]
@@ -7446,9 +7415,8 @@
                               "mode": "formdata",
                               "formdata": [
                                 {
-                                  "description": "(Required) ",
                                   "key": "event_id",
-                                  "value": "<long>",
+                                  "value": "1504",
                                   "type": "text"
                                 },
                                 {
@@ -7457,32 +7425,32 @@
                                 },
                                 {
                                   "key": "title",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "description",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "start_date",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "end_date",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "location",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 },
                                 {
                                   "key": "organizer",
-                                  "value": "<string>",
+                                  "value": "string",
                                   "type": "text"
                                 }
                               ]
@@ -7536,7 +7504,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"event_id\": \"<long>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -7575,7 +7543,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"event_id\": \"<long>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -7637,7 +7605,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"announcement_id\": \"<long>\",\n  \"title\": \"<string>\",\n  \"content\": \"<string>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -7676,7 +7644,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"announcement_id\": \"<long>\",\n  \"title\": \"<string>\",\n  \"content\": \"<string>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -7733,7 +7701,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"announcement_id\": \"<long>\",\n  \"title\": \"<string>\",\n  \"content\": \"<string>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -7772,7 +7740,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"announcement_id\": \"<long>\",\n  \"title\": \"<string>\",\n  \"content\": \"<string>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -7829,7 +7797,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"announcement_id\": \"<long>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -7868,7 +7836,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"announcement_id\": \"<long>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -7966,6 +7934,102 @@
               "name": "subscription",
               "item": [
                 {
+                  "name": "update",
+                  "item": [
+                    {
+                      "name": "Admin Controller subscription Update",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/admin/subscription/update",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "admin",
+                            "subscription",
+                            "update"
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "201",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/admin/subscription/update",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "admin",
+                                "subscription",
+                                "update"
+                              ]
+                            }
+                          },
+                          "status": "Created",
+                          "code": 201,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": null
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
                   "name": "Admin Controller subscription Get",
                   "request": {
                     "auth": {
@@ -8026,7 +8090,7 @@
                   ]
                 },
                 {
-                  "name": "Admin Controller subscription Update",
+                  "name": "Admin Controller subscription Post",
                   "request": {
                     "auth": {
                       "type": "bearer",
@@ -8047,7 +8111,7 @@
                     ],
                     "body": {
                       "mode": "raw",
-                      "raw": "{\n  \"amount\": \"<double>\",\n  \"bank\": \"<string>\"\n}",
+                      "raw": "{}",
                       "options": {
                         "raw": {
                           "headerFamily": "json",
@@ -8085,7 +8149,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"amount\": \"<double>\",\n  \"bank\": \"<string>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -8209,7 +8273,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"title\": \"<string>\",\n  \"description\": \"<string>\",\n  \"image\": \"<string>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -8248,7 +8312,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"title\": \"<string>\",\n  \"description\": \"<string>\",\n  \"image\": \"<string>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -8305,7 +8369,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"post_id\": \"<long>\",\n  \"title\": \"<string>\",\n  \"description\": \"<string>\",\n  \"image\": \"<string>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -8344,7 +8408,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"post_id\": \"<long>\",\n  \"title\": \"<string>\",\n  \"description\": \"<string>\",\n  \"image\": \"<string>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -8401,7 +8465,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"post_id\": \"<long>\"\n}",
+                          "raw": "{}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -8440,7 +8504,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"post_id\": \"<long>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -8572,7 +8636,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"contact_id\": \"<long>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -8612,7 +8676,7 @@
                                 ],
                                 "body": {
                                   "mode": "raw",
-                                  "raw": "{\n  \"contact_id\": \"<long>\"\n}",
+                                  "raw": "{}",
                                   "options": {
                                     "raw": {
                                       "headerFamily": "json",
@@ -8670,7 +8734,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"partner_id\": \"<long>\",\n  \"logo\": \"<string>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -8710,7 +8774,7 @@
                                 ],
                                 "body": {
                                   "mode": "raw",
-                                  "raw": "{\n  \"partner_id\": \"<long>\",\n  \"logo\": \"<string>\"\n}",
+                                  "raw": "{}",
                                   "options": {
                                     "raw": {
                                       "headerFamily": "json",
@@ -8768,7 +8832,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"gallery_id\": \"<long>\",\n  \"title\": \"<string>\",\n  \"image\": \"<string>\"\n}",
+                              "raw": "{\n  \"gallery_id\": 2159\n}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -8808,7 +8872,7 @@
                                 ],
                                 "body": {
                                   "mode": "raw",
-                                  "raw": "{\n  \"gallery_id\": \"<long>\",\n  \"title\": \"<string>\",\n  \"image\": \"<string>\"\n}",
+                                  "raw": "{\n  \"gallery_id\": 2159\n}",
                                   "options": {
                                     "raw": {
                                       "headerFamily": "json",
@@ -8938,7 +9002,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"partner_id\": \"<long>\",\n  \"logo\": \"<string>\"\n}",
+                              "raw": "{}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
@@ -8978,7 +9042,7 @@
                                 ],
                                 "body": {
                                   "mode": "raw",
-                                  "raw": "{\n  \"partner_id\": \"<long>\",\n  \"logo\": \"<string>\"\n}",
+                                  "raw": "{}",
                                   "options": {
                                     "raw": {
                                       "headerFamily": "json",
@@ -9031,18 +9095,28 @@
                             "header": [
                               {
                                 "key": "Content-Type",
-                                "value": "application/json"
+                                "value": "multipart/form-data"
                               }
                             ],
                             "body": {
-                              "mode": "raw",
-                              "raw": "{\n  \"gallery_id\": \"<long>\",\n  \"title\": \"<string>\",\n  \"image\": \"<string>\"\n}",
-                              "options": {
-                                "raw": {
-                                  "headerFamily": "json",
-                                  "language": "json"
+                              "mode": "formdata",
+                              "formdata": [
+                                {
+                                  "key": "image",
+                                  "type": "file",
+                                  "value": null
+                                },
+                                {
+                                  "key": "title",
+                                  "value": "string",
+                                  "type": "text"
+                                },
+                                {
+                                  "key": "gallery_id",
+                                  "value": "8530",
+                                  "type": "text"
                                 }
-                              }
+                              ]
                             },
                             "url": {
                               "raw": "{{baseUrl}}/api/admin/frontend/add/gallery",
@@ -9066,7 +9140,7 @@
                                 "header": [
                                   {
                                     "key": "Content-Type",
-                                    "value": "application/json"
+                                    "value": "multipart/form-data"
                                   },
                                   {
                                     "description": "Added as a part of security scheme: bearer",
@@ -9075,14 +9149,23 @@
                                   }
                                 ],
                                 "body": {
-                                  "mode": "raw",
-                                  "raw": "{\n  \"gallery_id\": \"<long>\",\n  \"title\": \"<string>\",\n  \"image\": \"<string>\"\n}",
-                                  "options": {
-                                    "raw": {
-                                      "headerFamily": "json",
-                                      "language": "json"
+                                  "mode": "formdata",
+                                  "formdata": [
+                                    {
+                                      "key": "image",
+                                      "type": "file"
+                                    },
+                                    {
+                                      "key": "title",
+                                      "value": "string",
+                                      "type": "text"
+                                    },
+                                    {
+                                      "key": "gallery_id",
+                                      "value": "8530",
+                                      "type": "text"
                                     }
-                                  }
+                                  ]
                                 },
                                 "url": {
                                   "raw": "{{baseUrl}}/api/admin/frontend/add/gallery",
@@ -9201,18 +9284,28 @@
                             "header": [
                               {
                                 "key": "Content-Type",
-                                "value": "application/json"
+                                "value": "multipart/form-data"
                               }
                             ],
                             "body": {
-                              "mode": "raw",
-                              "raw": "{\n  \"gallery_id\": \"<long>\",\n  \"title\": \"<string>\",\n  \"image\": \"<string>\"\n}",
-                              "options": {
-                                "raw": {
-                                  "headerFamily": "json",
-                                  "language": "json"
+                              "mode": "formdata",
+                              "formdata": [
+                                {
+                                  "key": "gallery_id",
+                                  "value": "8987",
+                                  "type": "text"
+                                },
+                                {
+                                  "key": "image",
+                                  "type": "file",
+                                  "value": null
+                                },
+                                {
+                                  "key": "title",
+                                  "value": "string",
+                                  "type": "text"
                                 }
-                              }
+                              ]
                             },
                             "url": {
                               "raw": "{{baseUrl}}/api/admin/frontend/update/gallery",
@@ -9236,7 +9329,7 @@
                                 "header": [
                                   {
                                     "key": "Content-Type",
-                                    "value": "application/json"
+                                    "value": "multipart/form-data"
                                   },
                                   {
                                     "description": "Added as a part of security scheme: bearer",
@@ -9245,14 +9338,23 @@
                                   }
                                 ],
                                 "body": {
-                                  "mode": "raw",
-                                  "raw": "{\n  \"gallery_id\": \"<long>\",\n  \"title\": \"<string>\",\n  \"image\": \"<string>\"\n}",
-                                  "options": {
-                                    "raw": {
-                                      "headerFamily": "json",
-                                      "language": "json"
+                                  "mode": "formdata",
+                                  "formdata": [
+                                    {
+                                      "key": "gallery_id",
+                                      "value": "8987",
+                                      "type": "text"
+                                    },
+                                    {
+                                      "key": "image",
+                                      "type": "file"
+                                    },
+                                    {
+                                      "key": "title",
+                                      "value": "string",
+                                      "type": "text"
                                     }
-                                  }
+                                  ]
                                 },
                                 "url": {
                                   "raw": "{{baseUrl}}/api/admin/frontend/update/gallery",
@@ -9264,6 +9366,212 @@
                                     "admin",
                                     "frontend",
                                     "update",
+                                    "gallery"
+                                  ]
+                                }
+                              },
+                              "status": "Created",
+                              "code": 201,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "body": null
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "publish",
+                  "item": [
+                    {
+                      "name": "gallery",
+                      "item": [
+                        {
+                          "name": "Admin Controller publish Gallery",
+                          "request": {
+                            "auth": {
+                              "type": "bearer",
+                              "bearer": [
+                                {
+                                  "key": "token",
+                                  "value": "{{bearerToken}}",
+                                  "type": "string"
+                                }
+                              ]
+                            },
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"gallery_id\": 2159\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/admin/frontend/publish/gallery",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "admin",
+                                "frontend",
+                                "publish",
+                                "gallery"
+                              ]
+                            }
+                          },
+                          "response": [
+                            {
+                              "name": "201",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"gallery_id\": 2159\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/admin/frontend/publish/gallery",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "admin",
+                                    "frontend",
+                                    "publish",
+                                    "gallery"
+                                  ]
+                                }
+                              },
+                              "status": "Created",
+                              "code": 201,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "body": null
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "unpublish",
+                  "item": [
+                    {
+                      "name": "gallery",
+                      "item": [
+                        {
+                          "name": "Admin Controller unpublish Gallery",
+                          "request": {
+                            "auth": {
+                              "type": "bearer",
+                              "bearer": [
+                                {
+                                  "key": "token",
+                                  "value": "{{bearerToken}}",
+                                  "type": "string"
+                                }
+                              ]
+                            },
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"gallery_id\": 2159\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/admin/frontend/unpublish/gallery",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "admin",
+                                "frontend",
+                                "unpublish",
+                                "gallery"
+                              ]
+                            }
+                          },
+                          "response": [
+                            {
+                              "name": "201",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"gallery_id\": 2159\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/admin/frontend/unpublish/gallery",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "admin",
+                                    "frontend",
+                                    "unpublish",
                                     "gallery"
                                   ]
                                 }
@@ -9300,9 +9608,8 @@
                         "method": "POST",
                         "header": [
                           {
-                            "description": "(Required) ",
                             "key": "x-paystack-signature",
-                            "value": "<string>"
+                            "value": "string"
                           },
                           {
                             "key": "Content-Type",
@@ -9311,7 +9618,7 @@
                         ],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"event\": \"<string>\",\n  \"data\": {\n    \"key_0\": true,\n    \"key_1\": \"string\",\n    \"key_2\": \"string\"\n  }\n}",
+                          "raw": "{\n  \"event\": \"string\",\n  \"data\": {\n    \"key_0\": 8688\n  }\n}",
                           "options": {
                             "raw": {
                               "headerFamily": "json",
@@ -9339,9 +9646,8 @@
                             "method": "POST",
                             "header": [
                               {
-                                "description": "(Required) ",
                                 "key": "x-paystack-signature",
-                                "value": "<string>"
+                                "value": "string"
                               },
                               {
                                 "key": "Content-Type",
@@ -9350,7 +9656,7 @@
                             ],
                             "body": {
                               "mode": "raw",
-                              "raw": "{\n  \"event\": \"<string>\",\n  \"data\": {\n    \"key_0\": true,\n    \"key_1\": \"string\",\n    \"key_2\": \"string\"\n  }\n}",
+                              "raw": "{\n  \"event\": \"string\",\n  \"data\": {\n    \"key_0\": 8688\n  }\n}",
                               "options": {
                                 "raw": {
                                   "headerFamily": "json",
