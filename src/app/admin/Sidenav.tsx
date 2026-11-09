@@ -160,7 +160,7 @@ export const Sidenav = ({ profile }: { profile?: AdminProfile | undefined }) => 
   const displayEmail = profile?.email || "Administrator";
 
   return (
-    <Sidebar collapsible="icon" className="border-r">
+    <Sidebar collapsible="icon" className="border-r z-0">
       <SidebarHeader className="border-b">
         <NavLink to="/admin" onClick={closeMobile} className="flex items-center gap-2 px-1 py-1">
           {state === "collapsed" ? (

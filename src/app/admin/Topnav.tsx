@@ -107,7 +107,7 @@ export const Topnav = ({ profile }: { profile?: AdminProfile | undefined }) => {
   };
 
   return (
-    <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b bg-background/85 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/70 md:px-6">
+    <header className="sticky top-0  flex h-16 items-center gap-3 border-b bg-background/85 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/70 md:px-6 z-0">
       <SidebarTrigger className="h-8 w-8" />
       <Separator orientation="vertical" className="h-6" />
 
