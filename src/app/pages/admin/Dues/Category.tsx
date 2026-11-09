@@ -29,7 +29,7 @@ const formatDate = (value?: string | number | null): string => {
   return parsed.isValid() ? parsed.format("DD/MM/YYYY") : "—";
 };
 
-const statusBadgeVariant = (status?: string) => {
+const statusBadgeVariant = (status?: DueCategory["status"]) => {
   switch (status) {
     case "Active":
       return "default";
