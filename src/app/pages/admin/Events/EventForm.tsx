@@ -24,15 +24,31 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-const eventFormSchema = z.object({
-  title: z.string().min(1, "Title is required."),
-  description: z.string().min(1, "Description is required."),
-  start_date: z.string().min(1, "Start date is required."),
-  end_date: z.string().min(1, "End date is required."),
-  location: z.string().min(1, "Location is required."),
-  organizer: z.string().min(1, "Organizer is required."),
-  image: z.instanceof(File).optional(),
-});
+const eventFormSchema = z
+  .object({
+    title: z.string().min(1, "Title is required."),
+    description: z.string().min(1, "Description is required."),
+    start_date: z.string().min(1, "Start date is required."),
+    end_date: z.string().min(1, "End date is required."),
+    location: z.string().min(1, "Location is required."),
+    organizer: z.string().min(1, "Organizer is required."),
+    image: z.instanceof(File).optional(),
+  })
+  .superRefine((values, ctx) => {
+    const start = Date.parse(values.start_date);
+    const end = Date.parse(values.end_date);
+    if (Number.isNaN(start) || Number.isNaN(end) || start <= end) return;
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["end_date"],
+      message: "End date cannot be before the start date.",
+    });
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["start_date"],
+      message: "Start date cannot be after the end date.",
+    });
+  });
 
 type EventFormValues = z.infer<typeof eventFormSchema>;
 
