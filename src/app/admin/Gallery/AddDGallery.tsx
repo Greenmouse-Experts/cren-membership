@@ -54,11 +54,7 @@ export default function AddGallery({ close, refetch }: AddGalleryProps) {
     const payload = new FormData();
     payload.append("title", values.title);
     payload.append("image", values.image);
-    const data = {
-      title: values.title,
-      image: values.image,
-    };
-    handlePost("admin/frontend/add/gallery", data, () => {
+    handlePost("admin/frontend/add/gallery", payload, undefined, () => {
       toast.success("Gallery added successfully");
       refetch();
       close();
