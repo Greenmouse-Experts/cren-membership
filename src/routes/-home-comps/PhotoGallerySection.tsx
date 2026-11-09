@@ -9,13 +9,7 @@ export interface GalleryImage {
   alt: string;
 }
 
-const galleryAlt = "Moment from the National Solar Energy Conference & Exhibition 2026";
-
-/** Bundled fallback while the public gallery endpoint is loading or empty. */
-const fallbackImages: GalleryImage[] = Array.from({ length: 14 }, (_, index) => ({
-  src: `/events/photo_gallery_img_${index + 1}.png`,
-  alt: galleryAlt,
-}));
+const galleryAlt = "CREN gallery moment";
 
 const toGalleryImages = (items: GalleryItem[]): GalleryImage[] =>
   items
@@ -45,8 +39,7 @@ export default function PhotoGallerySection({
   description,
 }: PhotoGallerySectionProps) {
   const galleryQuery = useGetHook<GalleryItem[]>("get/galleries");
-  const apiImages = toGalleryImages(galleryQuery.data?.data ?? []);
-  const galleryImages = images ?? (apiImages.length > 0 ? apiImages : fallbackImages);
+  const galleryImages = images ?? toGalleryImages(galleryQuery.data?.data ?? []);
 
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
@@ -98,8 +91,23 @@ export default function PhotoGallerySection({
           )}
         </div>
 
-        <div className="mt-8 grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 md:gap-3 xl:grid-cols-5 lg:mt-10">
-          {galleryImages.map((image, index) => (
+        {galleryQuery.isLoading ? (
+          <div className="mt-8 grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 md:gap-3 xl:grid-cols-5 lg:mt-10">
+            {Array.from({ length: 10 }).map((_, index) => (
+              <div
+                key={index}
+                aria-hidden="true"
+                className="aspect-square animate-pulse rounded-xl bg-[#f1f5ec]"
+              />
+            ))}
+          </div>
+        ) : galleryImages.length === 0 ? (
+          <p className="mt-8 text-pretty text-[0.9rem] text-[#5f6a62] lg:mt-10">
+            Gallery images will appear here soon.
+          </p>
+        ) : (
+          <div className="mt-8 grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 md:gap-3 xl:grid-cols-5 lg:mt-10">
+            {galleryImages.map((image, index) => (
             <button
               key={`${image.src}-${index}`}
               type="button"
@@ -115,7 +123,8 @@ export default function PhotoGallerySection({
               />
             </button>
           ))}
-        </div>
+          </div>
+        )}
       </div>
 
       {lightboxImage && (

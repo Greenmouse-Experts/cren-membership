@@ -21,10 +21,10 @@ function RouteComponent() {
             <span className="block">Gallery.</span>
           </>
         }
-        description="Highlights from CREN's leadership inauguration and a renewable energy industry conference in Nigeria."
+        description="Updates on CREN programmes and highlights from our events and activities."
       />
       <EventsSection />
-      <PhotoGallerySection description="Moments from the National Solar Energy Conference & Exhibition 2026." />
+      <PhotoGallerySection description="Moments from CREN's recent events and activities." />
       {/*<CollaborationCta />*/}
     </>
   );
