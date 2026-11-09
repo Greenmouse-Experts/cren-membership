@@ -168,6 +168,19 @@ export interface MonthlyPaymentPoint {
 
 export type MembersResponse = ApiResponse<Member[]>;
 export type MemberResponse = ApiResponse<Member>;
+
+export interface ContactMessage {
+  id: number | string;
+  name?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  subject?: string | null;
+  description?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+export type ContactMessagesResponse = ApiResponse<ContactMessage[]>;
 export type DuesResponse = ApiResponse<DueItem[]>;
 export type BanksResponse = ApiResponse<BankAccount[]>;
 export type SubscriptionResponse = ApiResponse<SubscriptionItem[] | SubscriptionItem>;
