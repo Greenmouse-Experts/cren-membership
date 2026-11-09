@@ -41,11 +41,13 @@ const PaystackPayButton: React.FC<PaystackPayButtonProps> = ({ item, onVerify })
 
   const amountInKobo = Math.round(Number(item.amount || 0) * 100);
 
+  const new_key = "pk_test_fe7139f1b8c79eb8d80205804553a52a55bcf8f5";
+  const old_key = "pk_test_49f890a833251838e552b28276e8e42006444ce7";
   const config = {
     reference: new Date().getTime().toString(),
     email: email || "member@example.com",
     amount: amountInKobo,
-    publicKey: "pk_test_49f890a833251838e552b28276e8e42006444ce7",
+    publicKey: new_key,
   };
 
   const initializePayment = usePaystackPayment(config);
