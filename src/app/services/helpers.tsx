@@ -17,6 +17,11 @@ export const formatString = (string, number) => {
 };
 
 export const formatAsNgnMoney = (value) => {
-  if (!value) return "";
-  return `€${value.toLocaleString("en-US").replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+  if (value === null || value === undefined || value === "") return "";
+  const amount = Number(value);
+  if (!Number.isFinite(amount)) return "";
+  return `₦${amount.toLocaleString("en-NG", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
 };

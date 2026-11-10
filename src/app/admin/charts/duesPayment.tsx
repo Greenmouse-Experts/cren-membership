@@ -57,7 +57,7 @@ const DuesPayment = ({ data }: DuesPaymentProps) => {
           axisLine={false}
           width={72}
           tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
-          tickFormatter={(value) => formatAsNgnMoney(Number(value)) || "€0"}
+          tickFormatter={(value) => formatAsNgnMoney(Number(value)) || "₦0"}
         />
         <Tooltip
           contentStyle={{
@@ -67,7 +67,7 @@ const DuesPayment = ({ data }: DuesPaymentProps) => {
             fontSize: 12,
             color: "var(--popover-foreground)",
           }}
-          formatter={(value) => [formatAsNgnMoney(Number(value)) || "€0", "Collected"]}
+          formatter={(value) => [formatAsNgnMoney(Number(value)) || "₦0", "Collected"]}
           labelFormatter={(label) => String(label)}
         />
         <Area
