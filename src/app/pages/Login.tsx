@@ -1,71 +1,101 @@
-// @ts-nocheck
-import { API_URL } from "@/app/services/env";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { toast } from "react-toastify";
+import { useNavigate } from "@/lib/router-compat";
 import { HiOutlineMail } from "react-icons/hi";
 import { GoLock } from "react-icons/go";
-import "../stylesheet/login.css";
-import { toast } from "react-toastify";
-import { useNavigate, Link } from "@/lib/router-compat";
-import logo from "../image/logo.png";
-import loginImg from "../image/login-img.svg";
-import axios from "axios";
-import { AiFillEye } from "react-icons/ai";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
-import RenderLogo from "../components/RenderLogo";
+import { fetchApi } from "@/app/hook/useGet";
+import usePostHook from "@/app/hook/usePost";
+import useAuthStore, { normalizeSubscribed } from "@/store/auth-store";
+import type { ApiResponse, LoginResponse, MemberSubscription } from "@/types/api";
+import RenderLogo from "@/app/components/RenderLogo";
+import "../stylesheet/login.css";
+
+const loginSchema = z.object({
+  login_details: z.string().min(1, "Please enter Email"),
+  password: z.string().min(1, "Please enter Password"),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
+
+/** Fetch and persist the logged-in member's subscription into the auth store. */
+const loadUserSubscription = async (onLoaded: (sub: MemberSubscription | null) => void) => {
+  try {
+    const response = await fetchApi<MemberSubscription>("member/subscription");
+    onLoaded(response?.data ?? null);
+  } catch {
+    // Non-fatal: the dashboard/subscription page will refetch this on its own.
+  }
+};
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePassword = () => {
-    setShowPassword(!showPassword); // Toggle the showPassword state
+    setShowPassword(!showPassword);
   };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = useForm({
+  const setAuth = useAuthStore((s) => s.setAuth);
+  const setSubscription = useAuthStore((s) => s.setSubscription);
+
+  const { handlePost, isPending } = usePostHook();
+  const usenavigate = useNavigate();
+
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
     defaultValues: { login_details: "", password: "" },
   });
 
-  const usenavigate = useNavigate();
+  const submitLogin = (data: LoginFormValues) => {
+    handlePost(
+      "auth/login",
+      data,
+      undefined,
+      (res: ApiResponse<LoginResponse["data"]> & { token?: string }) => {
+        if (res.code !== 200 || !res.token) {
+          toast.error(res.message || "Email or Password is Incorrect");
+          return;
+        }
+        const apiData = res.data;
+        const token = res.token;
 
-  const submitLogin = async (data) => {
-    try {
-      const res = await axios.post(`${API_URL}/auth/login`, data, {
-        headers: { "Content-Type": "application/json" },
-      });
-      if (res.data.code === 200) {
-        localStorage.setItem("igbo_token", res.data.token);
-        toast.success(res.data.message);
-        localStorage.setItem("fName", res.data.data.name_of_member_organization);
-        localStorage.setItem("igbo_sub", res.data.data.isSubscribed);
-        localStorage.setItem("igbo_email", res.data.data.email);
-        usenavigate("/dashboard/");
-      } else {
-        toast.error("Email or Passward is Incorrect");
-      }
-    } catch (err) {
-      if (err?.response?.data?.message) {
-        toast.error(err.response.data.message);
-      }
-      if (err?.response?.data?.errors) {
-        Object.values(err.response.data.errors).forEach((value) => {
-          toast.error(value[0]);
+        // Keep legacy inline-storage keys (other pages/Hooks still read them).
+        localStorage.setItem("igbo_token", token);
+        localStorage.setItem("fName", apiData.name_of_member_organization ?? "");
+        localStorage.setItem("igbo_sub", String(normalizeSubscribed(apiData.isSubscribed) ? 1 : 0));
+        localStorage.setItem("igbo_email", apiData.email ?? "");
+
+        // Initialize the persistent user store.
+        setAuth({
+          token,
+          user: {
+            email: apiData.email ?? "",
+            name: apiData.name_of_member_organization ?? "",
+            isSubscribed: apiData.isSubscribed ?? false,
+          },
         });
-      }
-    }
+
+        // Fetch + store the current user's subscription, then continue to the dashboard.
+        loadUserSubscription(setSubscription).finally(() => {
+          toast.success(res.message);
+          usenavigate("/dashboard/");
+        });
+      },
+    );
   };
 
-  const onInvalid = (formErrors) => {
+  const onInvalid = (formErrors: Record<string, { message?: string }>) => {
     toast.error(Object.values(formErrors)[0]?.message);
   };
+
   return (
     <section className="px-0 py-0 grid xl:grid-cols-2 grid-cols-1 items-center">
       <div className="">
         <form
-          onSubmit={handleSubmit(submitLogin, onInvalid)}
+          onSubmit={form.handleSubmit(submitLogin, onInvalid)}
           noValidate
           className="login md:w-[32rem] w-full mx-auto"
         >
@@ -84,7 +114,7 @@ const Login = () => {
               <input
                 type="text"
                 placeholder="Enter Email or Username"
-                {...register("login_details", { required: "Please enter Email" })}
+                {...form.register("login_details")}
               />
             </div>
           </div>
@@ -96,7 +126,7 @@ const Login = () => {
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
-                {...register("password", { required: "Please enter Password" })}
+                {...form.register("password")}
               />{" "}
               <span className="toggle-password" onClick={togglePassword}>
                 <span className="eye-icon">
@@ -112,22 +142,22 @@ const Login = () => {
 
           <p className="text-grey-800 font-normal mt-2 ">
             Forgot Password?{" "}
-            <Link
-              to="/forgot-password"
+            <a
+              href="/forgot-password"
               className="text-[#015907] font-medium underline pb-1 cursor-pointer"
             >
               Click here
-            </Link>
+            </a>
           </p>
 
-          <button type="submit" className="login_btn" disabled={isSubmitting}>
-            {isSubmitting ? "Verifying..." : "Login"}
+          <button type="submit" className="login_btn" disabled={isPending}>
+            {isPending ? "Verifying..." : "Login"}
           </button>
           <p>
             Don't have an account?{" "}
-            <Link to="/auth/register">
+            <a href="/auth/register" className="text-[#015907] font-medium">
               <span className="text-[#015907] font-medium">Create Account</span>
-            </Link>
+            </a>
           </p>
         </form>
       </div>

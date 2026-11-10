@@ -47,6 +47,7 @@ import { Route as AdminPaymentsDuesRouteImport } from './routes/admin.payments.d
 import { Route as AdminPaymentsSubscritionRouteImport } from './routes/admin.payments.subscrition'
 import { Route as AdminSubscriptionBankRouteImport } from './routes/admin.subscription.bank'
 import { Route as AdminSubscriptionListRouteImport } from './routes/admin.subscription.list'
+import { Route as DashboardSubscriptionIndexRouteImport } from './routes/dashboard/subscription.index'
 import { Route as AdminEventsIdIndexRouteImport } from './routes/admin/events.$id.index'
 
 const IndexRoute = IndexRouteImport.update({
@@ -240,6 +241,12 @@ const AdminSubscriptionListRoute = AdminSubscriptionListRouteImport.update({
   path: '/subscription/list',
   getParentRoute: () => AdminRoute,
 } as any)
+const DashboardSubscriptionIndexRoute =
+  DashboardSubscriptionIndexRouteImport.update({
+    id: '/subscription/',
+    path: '/subscription/',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 const AdminEventsIdIndexRoute = AdminEventsIdIndexRouteImport.update({
   id: '/events/$id/',
   path: '/events/$id/',
@@ -285,6 +292,7 @@ export interface FileRoutesByFullPath {
   '/admin/subscription/bank': typeof AdminSubscriptionBankRoute
   '/admin/subscription/list': typeof AdminSubscriptionListRoute
   '/admin/events/': typeof AdminEventsIndexRoute
+  '/dashboard/subscription/': typeof DashboardSubscriptionIndexRoute
   '/admin/events/$id/': typeof AdminEventsIdIndexRoute
 }
 export interface FileRoutesByTo {
@@ -323,6 +331,7 @@ export interface FileRoutesByTo {
   '/admin/subscription/bank': typeof AdminSubscriptionBankRoute
   '/admin/subscription/list': typeof AdminSubscriptionListRoute
   '/admin/events': typeof AdminEventsIndexRoute
+  '/dashboard/subscription': typeof DashboardSubscriptionIndexRoute
   '/admin/events/$id': typeof AdminEventsIdIndexRoute
 }
 export interface FileRoutesById {
@@ -365,6 +374,7 @@ export interface FileRoutesById {
   '/admin/subscription/bank': typeof AdminSubscriptionBankRoute
   '/admin/subscription/list': typeof AdminSubscriptionListRoute
   '/admin/events/': typeof AdminEventsIndexRoute
+  '/dashboard/subscription/': typeof DashboardSubscriptionIndexRoute
   '/admin/events/$id/': typeof AdminEventsIdIndexRoute
 }
 export interface FileRouteTypes {
@@ -408,6 +418,7 @@ export interface FileRouteTypes {
     | '/admin/subscription/bank'
     | '/admin/subscription/list'
     | '/admin/events/'
+    | '/dashboard/subscription/'
     | '/admin/events/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -446,6 +457,7 @@ export interface FileRouteTypes {
     | '/admin/subscription/bank'
     | '/admin/subscription/list'
     | '/admin/events'
+    | '/dashboard/subscription'
     | '/admin/events/$id'
   id:
     | '__root__'
@@ -487,6 +499,7 @@ export interface FileRouteTypes {
     | '/admin/subscription/bank'
     | '/admin/subscription/list'
     | '/admin/events/'
+    | '/dashboard/subscription/'
     | '/admin/events/$id/'
   fileRoutesById: FileRoutesById
 }
@@ -770,6 +783,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSubscriptionListRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/dashboard/subscription/': {
+      id: '/dashboard/subscription/'
+      path: '/subscription'
+      fullPath: '/dashboard/subscription/'
+      preLoaderRoute: typeof DashboardSubscriptionIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/admin/events/$id/': {
       id: '/admin/events/$id/'
       path: '/events/$id'
@@ -852,6 +872,7 @@ interface DashboardRouteChildren {
   DashboardSettingsRoute: typeof DashboardSettingsRoute
   DashboardTransactRoute: typeof DashboardTransactRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardSubscriptionIndexRoute: typeof DashboardSubscriptionIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
@@ -862,6 +883,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardTransactRoute: DashboardTransactRoute,
   DashboardIndexRoute: DashboardIndexRoute,
+  DashboardSubscriptionIndexRoute: DashboardSubscriptionIndexRoute,
 }
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(

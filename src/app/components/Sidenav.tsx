@@ -13,6 +13,7 @@ import {
   LogOut,
   X,
   Menu,
+  BadgeCheck,
 } from "lucide-react";
 import { Custom } from "../services/config";
 import { toast } from "react-toastify";
@@ -92,6 +93,11 @@ const Sidenav = ({ showSidebar, toggleSidebar }) => {
       to: "dues",
       label: "Dues",
       icon: CreditCard,
+    },
+    {
+      to: "subscription",
+      label: "Subscription",
+      icon: BadgeCheck,
     },
     {
       to: "transact",

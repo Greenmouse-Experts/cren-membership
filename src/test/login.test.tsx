@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import Login from "@/app/pages/Login";
 import { API_URL } from "@/app/services/env";
@@ -13,7 +14,7 @@ const storage = vi.hoisted(() => ({
   clear: vi.fn(),
 }));
 
-vi.mock("axios", () => ({ default: { post: vi.fn() } }));
+vi.mock("axios", () => ({ default: { post: vi.fn(), get: vi.fn() } }));
 vi.mock("react-toastify", () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
 vi.mock("@/lib/router-compat", () => ({
   useNavigate: () => navigate,
@@ -23,6 +24,17 @@ vi.mock("@/lib/router-compat", () => ({
 }));
 
 vi.stubGlobal("localStorage", storage);
+
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: false } },
+});
+
+const renderLogin = () =>
+  render(
+    <QueryClientProvider client={queryClient}>
+      <Login />
+    </QueryClientProvider>,
+  );
 
 describe("Login", () => {
   beforeEach(() => {
@@ -43,7 +55,7 @@ describe("Login", () => {
         },
       },
     });
-    render(<Login />);
+    renderLogin();
     fireEvent.change(screen.getByPlaceholderText("Enter Email or Username"), {
       target: { value: "person@example.com" },
     });
@@ -62,7 +74,7 @@ describe("Login", () => {
   });
 
   it("shows a validation message and does not post when fields are empty", async () => {
-    render(<Login />);
+    renderLogin();
     fireEvent.submit(screen.getByRole("button", { name: "Login" }).closest("form")!);
 
     await waitFor(() => expect(toast.error).toHaveBeenCalledWith("Please enter Email"));

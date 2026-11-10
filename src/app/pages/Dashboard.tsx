@@ -4,12 +4,18 @@ import Sidenav from "../components/Sidenav";
 import { Topnav } from "../components/Topnav";
 import { Outlet } from "@tanstack/react-router";
 import { NotifyDataContext } from "@/app/services/notify-context";
+import { normalizeSubscribed, useAuthStore } from "@/store/auth-store";
 import "../stylesheet/layout.css";
 import useGetHook from "../hook/useGet";
 import SubscribeModal from "../users/SubscribeModal";
 
 const Dashboard = () => {
-  const sub = localStorage.getItem("igbo_sub");
+  const storeSub = useAuthStore((state) => state.user?.isSubscribed);
+  // Prefer the persistent store, falling back to the legacy localStorage flag.
+  const sub =
+    storeSub !== undefined && storeSub !== null
+      ? String(normalizeSubscribed(storeSub) ? 1 : 0)
+      : localStorage.getItem("igbo_sub");
   const [subModal, setSubModal] = useState(false);
 
   const [showSidebar, setShowSidebar] = useState(

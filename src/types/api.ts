@@ -86,6 +86,9 @@ export interface DueItem {
 
 export interface SubscriptionItem {
   id: number | string;
+  /** Plan / membership tier name — sent as `plan_name` to create/update endpoints. */
+  plan_name?: string | null;
+  /** Legacy field name; `GET admin/subscription` now returns `plan_name`. */
   type?: string | null;
   amount: number | string;
   bank?: string | null;
@@ -95,6 +98,35 @@ export interface SubscriptionItem {
   end_date?: string | null;
   created_at?: string | null;
   updated_at?: string | null;
+}
+
+/** Shape returned by `GET /member/subscription` (the member's current/required subscription plan). */
+export interface MemberSubscription {
+  id: number | string;
+  plan_name?: string | null;
+  type?: string | null;
+  amount: number | string;
+  bank?: string | null;
+  description?: string | null;
+  status?: "Active" | "Inactive" | string | null;
+  start_date?: string | null;
+  end_date?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+/** Values posted to `POST /member/subscription/payment`. */
+export interface SubscriptionPaymentPayload {
+  subscription_id: number | string;
+  ref_id: string;
+}
+
+/** Login (`POST /auth/login`) response contract — token lives at the top level. */
+export interface LoginResponse {
+  code: number;
+  message: string;
+  token: string;
+  data: Member;
 }
 
 export interface MemberPaymentTransaction {
@@ -168,6 +200,8 @@ export interface MonthlyPaymentPoint {
 
 export type MembersResponse = ApiResponse<Member[]>;
 export type MemberResponse = ApiResponse<Member>;
+export type SubscriptionPlansResponse = ApiResponse<SubscriptionItem[]>;
+export type MemberSubscriptionResponse = ApiResponse<MemberSubscription>;
 
 export interface ContactMessage {
   id: number | string;
