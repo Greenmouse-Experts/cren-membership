@@ -28,7 +28,7 @@ import {
 import type { BankAccount, SubscriptionItem } from "@/types/api";
 
 const subscriptionFormSchema = z.object({
-  type: z.string().min(1, "Plan / Membership Tier is required."),
+  plan_name: z.string().min(1, "Plan / Membership Tier is required."),
   amount: z.coerce
     .number({ invalid_type_error: "Amount is required." })
     .positive("Amount must be greater than zero."),
@@ -44,6 +44,14 @@ interface SubscriptionModalProps {
   refetch: () => void;
 }
 
+/** Values posted to `POST /admin/subscription` (create) and `POST /admin/subscription/update` (edit). */
+interface SubscriptionPayload {
+  amount: number;
+  bank: string;
+  plan_name: string;
+  description?: string;
+  subscription_id?: number | string;
+}
 const COMMON_MEMBERSHIP_TIERS = [
   "Annual Subscription",
   "Individual Member",
@@ -64,7 +72,7 @@ export default function SubscriptionModal({ item, close, refetch }: Subscription
   const form = useForm<SubscriptionFormValues>({
     resolver: zodResolver(subscriptionFormSchema),
     defaultValues: {
-      type: item?.type ?? "",
+      plan_name: item?.plan_name ?? item?.type ?? "",
       amount: item?.amount ? Number(item.amount) : ("" as unknown as number),
       bank: item?.bank ?? "",
       description: item?.description ?? "",
@@ -74,14 +82,14 @@ export default function SubscriptionModal({ item, close, refetch }: Subscription
   useEffect(() => {
     if (item) {
       form.reset({
-        type: item.type ?? "",
+        plan_name: item.plan_name ?? item.type ?? "",
         amount: item.amount ? Number(item.amount) : ("" as unknown as number),
         bank: item.bank ?? "",
         description: item.description ?? "",
       });
     } else {
       form.reset({
-        type: "",
+        plan_name: "",
         amount: "" as unknown as number,
         bank: "",
         description: "",
@@ -98,21 +106,20 @@ export default function SubscriptionModal({ item, close, refetch }: Subscription
   };
 
   const onSubmit = (values: SubscriptionFormValues) => {
-    const payload: {
-      amount: number;
-      bank: string;
-      type: string;
-      description?: string;
-      subscription_id?: number | string;
-    } = {
+    const payload: SubscriptionPayload = {
       amount: values.amount,
       bank: values.bank,
-      type: values.type,
+      plan_name: values.plan_name,
       ...(values.description ? { description: values.description } : {}),
-      ...(item?.id ? { subscription_id: item.id } : {}),
     };
 
-    handlePost("admin/subscription", payload, "application/json", onSuccess);
+    // Edits go to the dedicated update endpoint; creates go to the base endpoint.
+    handlePost(
+      isEditing ? "admin/subscription/update" : "admin/subscription",
+      isEditing ? { ...payload, subscription_id: item?.id } : payload,
+      "application/json",
+      onSuccess,
+    );
   };
 
   const handleBankSelect = (bankId: string) => {
@@ -128,7 +135,7 @@ export default function SubscriptionModal({ item, close, refetch }: Subscription
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
-          name="type"
+          name="plan_name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Plan / Membership Tier</FormLabel>

@@ -7,17 +7,37 @@ type MembersJoinedProps = {
   className?: string;
 };
 
+/** Abbreviated month labels — full names are too wide to render all 12 X ticks in narrow cards. */
+const SHORT_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 const MembersJoined = ({ data }: MembersJoinedProps) => {
   const chartData = useMemo(
     () =>
-      Object.entries(data ?? {}).map(([month, total]) => ({
+      MONTHS.map((month) => ({
         month,
-        total: Number(total) || 0,
+        total: Number(data?.[month]) || 0,
       })),
     [data],
   );
 
-  if (chartData.length === 0) {
+  const hasData = useMemo(() => chartData.some((entry) => entry.total > 0), [chartData]);
+
+  if (!hasData) {
     return (
       <div className="flex h-[260px] flex-col items-center justify-center gap-2 text-center">
         <BarChart3 className="h-8 w-8 text-muted-foreground/40" />
@@ -28,13 +48,15 @@ const MembersJoined = ({ data }: MembersJoinedProps) => {
 
   return (
     <ResponsiveContainer width="100%" height={260}>
-      <BarChart data={chartData} margin={{ top: 8, right: 8, left: -18, bottom: 0 }}>
+      <BarChart data={chartData} margin={{ top: 8, right: 8, left: -18, bottom: 40 }}>
         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
         <XAxis
           dataKey="month"
+          interval={0}
+          tickFormatter={(_, index: number) => SHORT_MONTHS[index] ?? ""}
           tickLine={false}
           axisLine={false}
-          tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
+          tick={{ fill: "var(--muted-foreground)", fontSize: 10 }}
         />
         <YAxis
           tickLine={false}

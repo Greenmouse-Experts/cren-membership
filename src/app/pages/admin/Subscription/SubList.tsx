@@ -94,7 +94,7 @@ const AdminSubList = () => {
                     <TableRow key={item.id ?? index}>
                       <TableCell className="whitespace-nowrap px-4 py-4">{index + 1}</TableCell>
                       <TableCell className="whitespace-nowrap px-4 py-4">
-                        {item.type ?? "—"}
+                        {item.plan_name ?? item.type ?? "—"}
                       </TableCell>
                       <TableCell className="max-w-[320px] px-4 py-4">{item.bank ?? "—"}</TableCell>
                       <TableCell className="whitespace-nowrap px-4 py-4">
@@ -104,7 +104,7 @@ const AdminSubList = () => {
                         <Button
                           variant="ghost"
                           size="icon"
-                          aria-label={`Edit ${item.type ?? "subscription plan"}`}
+                          aria-label={`Edit ${item.plan_name ?? item.type ?? "subscription plan"}`}
                           onClick={() => openEdit(item)}
                           className="h-8 w-8 text-[#015907] hover:bg-[#015907]/10"
                         >
@@ -124,7 +124,7 @@ const AdminSubList = () => {
         <AddSubscription close={() => setShowModal(false)} refetch={query.refetch} />
       </Modal>
 
-      <Edit noHead={false} title={`Edit ${selected?.type ?? "Subscription"}`}>
+      <Edit noHead={false} title={`Edit ${selected?.plan_name ?? selected?.type ?? "Subscription"}`}>
         <EditSubModal
           item={selected}
           close={() => setShowEdit(false)}
