@@ -6,7 +6,7 @@
   position: relative;
 }
 .layout .cide {
-  height: 120vh;
+  height: 100vh;
   background: white;
   position: fixed;
 }
@@ -286,6 +286,12 @@ td {
     flex-direction: column;
     flex: 1;
     background: #f6f7fb;
+    margin-left: 0;
+  }
+
+  /* The member sidebar is an overlay drawer on small screens: the page content
+     must keep the full width instead of being pushed right by the fixed rail. */
+  .close-side {
     margin-left: 0;
   }
 }

@@ -38,9 +38,29 @@ const Sidenav = ({ showSidebar, toggleSidebar }) => {
   const navigate = useNavigate();
   const [logoutOpen, setLogoutOpen] = useState(false);
   const sidebarRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   const { data: countData } = useGetHook("member/count/unread/notifications");
   const unreadCount = Number(countData?.data) || 0;
+
+  // Below md the sidebar is an overlay drawer; from md up it is the persistent rail.
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  // Lock page scroll while the mobile drawer is open.
+  useEffect(() => {
+    if (!isMobile || !showSidebar) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [isMobile, showSidebar]);
 
   const handleLogOut = async () => {
     try {
@@ -122,18 +142,24 @@ const Sidenav = ({ showSidebar, toggleSidebar }) => {
       {/* Mobile Backdrop */}
       {showSidebar && (
         <div
-          className="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 md:hidden transition-opacity"
+          className="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 md:hidden"
           onClick={() => toggleSidebar(false)}
         />
       )}
 
+      {/* The parent wrapper hides itself on mobile when the drawer is closed, so the
+          aside always renders; widths below apply to the rail (md+) only. */}
       <aside
         ref={sidebarRef}
+        aria-label="Member navigation"
         className={cn(
-          "h-screen bg-white border-r border-border/80 flex flex-col justify-between select-none z-50 transition-all duration-200",
-          showSidebar ? "w-56" : "w-24",
-          // Slide over on mobile when open, hidden when closed
-          showSidebar ? "fixed inset-y-0 left-0 shadow-2xl md:shadow-none" : "hidden md:flex",
+          "relative h-full bg-white border-r border-border/80 flex flex-col justify-between select-none",
+          // Overlay drawer on mobile, full height regardless of zoom level
+          "fixed inset-y-0 left-0 z-50 w-64 shadow-2xl transition-transform duration-200 ease-out",
+          showSidebar ? "translate-x-0" : "-translate-x-full",
+          // Static rail from md up (never translated off-screen)
+          "md:static md:z-40 md:translate-x-0 md:shadow-none md:transition-[width]",
+          showSidebar ? "md:w-56" : "md:w-24",
         )}
       >
         {/* Top: Branding / Logo Header */}
@@ -181,7 +207,7 @@ const Sidenav = ({ showSidebar, toggleSidebar }) => {
           </div>
 
           {/* Navigation Links */}
-          <nav className="p-3 space-y-1.5 overflow-y-auto max-h-[calc(100vh-140px)]">
+          <nav className="p-3 space-y-1.5 overflow-y-auto max-h-[calc(100vh-9rem)]">
             {navItems.map((item) => {
               const Icon = item.icon;
               const linkContent = (
@@ -191,19 +217,21 @@ const Sidenav = ({ showSidebar, toggleSidebar }) => {
                   activeOptions={item.exact ? { exact: true } : undefined}
                   className={cn(
                     "flex items-center rounded-lg text-sm font-medium transition-all group relative cursor-pointer",
-                    showSidebar
+                    showSidebar || isMobile
                       ? "gap-3 px-3 py-2.5 justify-start text-gray-700 hover:text-emerald-900 hover:bg-emerald-50/70 [&.active]:bg-emerald-800 [&.active]:text-white [&.active]:shadow-xs"
                       : "justify-center p-2.5 text-gray-700 hover:text-emerald-900 hover:bg-emerald-50/70 [&.active]:bg-emerald-800 [&.active]:text-white [&.active]:shadow-xs",
                   )}
                   onClick={() => {
-                    if (window.innerWidth < 768) {
+                    if (isMobile) {
                       toggleSidebar(false);
                     }
                   }}
                 >
                   <Icon className="h-5 w-5 shrink-0 transition-colors" />
 
-                  {showSidebar && <span className="truncate flex-1 text-left">{item.label}</span>}
+                  {(showSidebar || isMobile) && (
+                    <span className="truncate flex-1 text-left">{item.label}</span>
+                  )}
 
                   {/* Badge for notifications */}
                   {Boolean(item.badge && item.badge > 0) && (
@@ -211,7 +239,7 @@ const Sidenav = ({ showSidebar, toggleSidebar }) => {
                       variant="destructive"
                       className={cn(
                         "rounded-full text-[10px] font-bold shrink-0",
-                        showSidebar
+                        showSidebar || isMobile
                           ? "ml-auto px-1.5 py-0 h-4 min-w-4 flex items-center justify-center bg-red-600 text-white"
                           : "absolute -top-1 -right-1 px-1 py-0 h-4 min-w-4 flex items-center justify-center bg-red-600 text-white",
                       )}
@@ -222,7 +250,7 @@ const Sidenav = ({ showSidebar, toggleSidebar }) => {
                 </NavLink>
               );
 
-              if (!showSidebar) {
+              if (!showSidebar && !isMobile) {
                 return (
                   <Tooltip key={item.to}>
                     <TooltipTrigger asChild>{linkContent}</TooltipTrigger>
@@ -240,7 +268,7 @@ const Sidenav = ({ showSidebar, toggleSidebar }) => {
 
         {/* Bottom Section: Logout Action */}
         <div className="p-3 border-t border-border/70 bg-gray-50/50">
-          {showSidebar ? (
+          {showSidebar || isMobile ? (
             <button
               type="button"
               onClick={() => setLogoutOpen(true)}

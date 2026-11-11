@@ -103,7 +103,7 @@ export const Topnav = ({ toggleSidebar, data }) => {
             variant="ghost"
             size="icon"
             onClick={toggleSidebar}
-            className="h-9 w-9 text-gray-700 hover:text-emerald-800 hover:bg-emerald-50 rounded-lg shrink-0 transition-colors"
+            className="h-9 w-9 px-0 shrink-0 text-gray-700 hover:text-emerald-800 hover:bg-emerald-50 rounded-lg transition-colors"
             title="Toggle sidebar"
             aria-label="Toggle navigation menu"
           >
