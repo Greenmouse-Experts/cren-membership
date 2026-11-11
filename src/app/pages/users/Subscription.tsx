@@ -4,14 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "react-toastify";
 import { usePaystackPayment } from "react-paystack";
-import {
-  BadgeCheck,
-  Calendar,
-  Landmark,
-  Loader2,
-  RefreshCcw,
-  Wallet,
-} from "lucide-react";
+import { BadgeCheck, Calendar, Landmark, Loader2, RefreshCcw, Wallet } from "lucide-react";
 import { FiUploadCloud } from "react-icons/fi";
 import { RiSecurePaymentFill } from "react-icons/ri";
 
@@ -19,11 +12,7 @@ import useGetHook from "@/app/hook/useGet";
 import usePostHook from "@/app/hook/usePost";
 import useAuthStore, { normalizeSubscribed } from "@/store/auth-store";
 import { formatAsNgnMoney } from "@/app/services/helpers";
-import type {
-  ApiResponse,
-  SubscriptionItem,
-  MemberSubscription,
-} from "@/types/api";
+import type { ApiResponse, MemberSubscription, SubscriptionItem } from "@/types/api";
 
 import PageLoader from "@/components/layout/PageLoader";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -59,8 +48,7 @@ interface PaystackPlanPayProps {
 }
 
 const PaystackPlanPay: React.FC<PaystackPlanPayProps> = ({ plan, onVerify }) => {
-  const email =
-    typeof window !== "undefined" ? localStorage.getItem("igbo_email") || "" : "";
+  const email = typeof window !== "undefined" ? localStorage.getItem("igbo_email") || "" : "";
 
   const config = {
     reference: new Date().getTime().toString(),
@@ -135,16 +123,11 @@ const ManualReceiptForm: React.FC<{
     formData.append("subscription_id", String(plan.id));
     formData.append("receipt", file);
 
-    await handlePost(
-      "member/subscription/upload/manual/receipt",
-      formData,
-      undefined,
-      () => {
-        toast.success("Receipt uploaded successfully — pending admin confirmation");
-        refetch();
-        close();
-      }
-    );
+    await handlePost("member/subscription/upload/manual/receipt", formData, undefined, () => {
+      toast.success("Receipt uploaded successfully — pending admin confirmation");
+      refetch();
+      close();
+    });
   };
 
   return (
@@ -198,24 +181,55 @@ const ManualReceiptForm: React.FC<{
 };
 
 /* ------------------------------------------------------------------ */
+/* Formatting helpers                                                  */
+/* ------------------------------------------------------------------ */
+
+const formatDate = (value?: string | null) => {
+  if (!value) return "—";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString();
+};
+
+const formatDateTime = (value?: string | null) => {
+  if (!value) return "—";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? value : date.toLocaleString();
+};
+
+const planTitle = (plan: SubscriptionItem | null) =>
+  plan?.plan_name || plan?.type || "Membership Subscription";
+
+/* ------------------------------------------------------------------ */
 /* Page                                                                */
 /* ------------------------------------------------------------------ */
 
 const SubscriptionPage: React.FC = () => {
-  const { data: plansResp, isLoading, refetch, query } = useGetHook<ApiResponse<SubscriptionItem[]>>("member/subscription");
+  const {
+    data: plansResp,
+    isLoading,
+    refetch,
+    query,
+  } = useGetHook<ApiResponse<SubscriptionItem[]>>("member/subscription");
 
-  const { data: currentResp } = useGetHook<MemberSubscription>("member/subscription");
+  const { data: currentResp, refetch: refetchCurrent } = useGetHook<MemberSubscription>(
+    "member/subscription/current",
+  );
 
   const subscription = useAuthStore((s) => s.subscription);
   const setSubscription = useAuthStore((s) => s.setSubscription);
-  const isSubscribed = useAuthStore((s) => normalizeSubscribed(s.user?.isSubscribed));
+  const setSubscribed = useAuthStore((s) => s.setSubscribed);
 
   // Keep the persistent store in sync with the freshest API data.
   useEffect(() => {
-    if (currentResp?.data && currentResp.data.id) {
-      setSubscription(currentResp.data);
-    }
-  }, [currentResp, setSubscription]);
+    const data = currentResp?.data;
+    if (!data || data.isSubscribed === undefined) return;
+    setSubscription({
+      isSubscribed: data.isSubscribed,
+      transaction: data.transaction ?? null,
+      plan: data.plan ?? null,
+    });
+    setSubscribed(normalizeSubscribed(data.isSubscribed));
+  }, [currentResp, setSubscription, setSubscribed]);
 
   const [selectedPlan, setSelectedPlan] = useState<SubscriptionItem | null>(null);
   const [receiptOpen, setReceiptOpen] = useState(false);
@@ -228,14 +242,23 @@ const SubscriptionPage: React.FC = () => {
     return plansResp.data;
   }, [plansResp]);
 
-  // Determine current plan from API data or the persisted store.
-  const current: MemberSubscription | null = useMemo(() => {
-    // Try the latest API response first; fall back to the persisted store.
-    if (currentResp?.data && (currentResp.data as MemberSubscription).id) {
-      return currentResp.data;
-    }
-    return subscription;
-  }, [currentResp, subscription]);
+  // Prefer the latest API response; fall back to the persisted store.
+  const current: MemberSubscription = useMemo(
+    () =>
+      currentResp?.data?.isSubscribed !== undefined
+        ? currentResp.data
+        : (subscription ?? { isSubscribed: false, transaction: null, plan: null }),
+    [currentResp, subscription],
+  );
+
+  const isSubscribed = normalizeSubscribed(current.isSubscribed);
+  const activePlan = current.plan ?? null;
+  const transaction = current.transaction ?? null;
+
+  const refreshAll = () => {
+    refetch();
+    refetchCurrent();
+  };
 
   const handleVerifyPayment = (reference: string, subscriptionId: string | number) => {
     setVerifiedId(subscriptionId);
@@ -244,7 +267,7 @@ const SubscriptionPage: React.FC = () => {
       ref_id: reference,
     };
     handlePost("member/subscription/payment", payload, "application/json", () => {
-      refetch();
+      refreshAll();
       toast.success("Subscription payment verified successfully!");
     });
   };
@@ -264,7 +287,7 @@ const SubscriptionPage: React.FC = () => {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => refetch()}
+            onClick={refreshAll}
             className="gap-2 self-start sm:self-auto cursor-pointer"
           >
             <RefreshCcw className="h-4 w-4" />
@@ -272,48 +295,67 @@ const SubscriptionPage: React.FC = () => {
           </Button>
         </CardHeader>
         <CardContent className="pt-2">
-          {current ? (
+          {activePlan ? (
             <div className="rounded-lg border bg-white p-5">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
                     <BadgeCheck className="h-5 w-5 text-primary" />
-                    <h3 className="font-semibold text-lg">
-                      {current.plan_name || current.type || "Membership Subscription"}
-                    </h3>
-                    {isSubscribed && (
-                      <Badge className="bg-emerald-100 text-emerald-800 border-transparent">
-                        Subscribed
-                      </Badge>
-                    )}
+                    <h3 className="font-semibold text-lg">{planTitle(activePlan)}</h3>
+                    <Badge
+                      className={
+                        isSubscribed
+                          ? "bg-emerald-100 text-emerald-800 border-transparent"
+                          : "bg-amber-100 text-amber-800 border-transparent"
+                      }
+                    >
+                      {isSubscribed ? "Subscribed" : "Payment pending"}
+                    </Badge>
                   </div>
-                  {current.description && (
+                  {activePlan.description && (
                     <p className="text-sm text-muted-foreground max-w-xl">
-                      {current.description}
+                      {activePlan.description}
                     </p>
                   )}
                   <div className="flex flex-wrap gap-x-6 gap-y-1.5 pt-1 text-sm text-muted-foreground">
-                    {current.start_date && current.end_date && (
+                    {isSubscribed && transaction?.paid_at && (
                       <span className="flex items-center gap-1.5">
                         <Calendar className="h-3.5 w-3.5" />
-                        {current.start_date} → {current.end_date}
+                        Paid {formatDate(transaction.paid_at)}
                       </span>
                     )}
-                    {current.bank && (
+                    {activePlan.bank && (
                       <span className="flex items-center gap-1.5">
                         <Landmark className="h-3.5 w-3.5" />
-                        {current.bank}
+                        {activePlan.bank}
+                      </span>
+                    )}
+                    {transaction?.ref_id && (
+                      <span className="flex items-center gap-1.5">
+                        <Wallet className="h-3.5 w-3.5" />
+                        Ref: {transaction.ref_id}
                       </span>
                     )}
                   </div>
                 </div>
                 <div className="text-right">
                   <p className="text-3xl font-bold text-foreground">
-                    {formatAsNgnMoney(current.amount)}
+                    {formatAsNgnMoney(activePlan.amount)}
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">Subscription amount</p>
+                  {transaction?.status && (
+                    <p className="text-xs capitalize text-muted-foreground mt-1">
+                      Status: {transaction.status}
+                    </p>
+                  )}
                 </div>
               </div>
+              {isSubscribed && transaction && (
+                <p className="mt-4 border-t pt-3 text-xs text-muted-foreground">
+                  Last payment {formatDateTime(transaction.paid_at ?? transaction.created_at)}
+                  {transaction.channel ? ` via ${transaction.channel}` : ""}
+                </p>
+              )}
             </div>
           ) : (
             <div className="rounded-lg border border-dashed bg-muted/30 p-6 text-center">
@@ -352,18 +394,25 @@ const SubscriptionPage: React.FC = () => {
               ) : (
                 <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                   {plans.map((plan, index) => {
-                    const isCurrent = current && String(current.id) === String(plan.id);
+                    // Compare against the current plan regardless of the subscribed flag so the
+                    // active plan never offers a duplicate payment action.
+                    const isCurrent =
+                      activePlan !== null && String(activePlan.id) === String(plan.id);
                     const isVerifyingThis =
                       verifiedId !== null && String(verifiedId) === String(plan.id);
                     return (
                       <div
                         key={plan.id ?? index}
-                        className="rounded-lg border bg-white p-5 flex flex-col justify-between gap-4 hover:shadow-md transition-shadow"
+                        className={
+                          isCurrent
+                            ? "rounded-lg border-2 border-primary/40 bg-primary/[0.02] p-5 flex flex-col justify-between gap-4"
+                            : "rounded-lg border bg-white p-5 flex flex-col justify-between gap-4 hover:shadow-md transition-shadow"
+                        }
                       >
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
                             <Badge variant="secondary" className="font-normal">
-                              {plan.type || "Membership"}
+                              {plan.plan_name || plan.type || "Membership"}
                             </Badge>
                             {isCurrent && (
                               <Badge className="bg-emerald-100 text-emerald-800 border-transparent">
@@ -388,20 +437,29 @@ const SubscriptionPage: React.FC = () => {
                         </div>
 
                         <div className="flex flex-wrap items-center gap-2 pt-2">
-                          <PaystackPlanPay plan={plan} onVerify={handleVerifyPayment} />
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="gap-1.5 cursor-pointer"
-                            disabled={isVerifyingThis}
-                            onClick={() => {
-                              setSelectedPlan(plan);
-                              setReceiptOpen(true);
-                            }}
-                          >
-                            <FiUploadCloud className="h-4 w-4" />
-                            Upload Receipt
-                          </Button>
+                          {isCurrent ? (
+                            <p className="flex items-center gap-1.5 text-sm font-medium text-emerald-700">
+                              <BadgeCheck className="h-4 w-4" />
+                              Your active plan
+                            </p>
+                          ) : (
+                            <>
+                              <PaystackPlanPay plan={plan} onVerify={handleVerifyPayment} />
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="gap-1.5 cursor-pointer"
+                                disabled={isVerifyingThis}
+                                onClick={() => {
+                                  setSelectedPlan(plan);
+                                  setReceiptOpen(true);
+                                }}
+                              >
+                                <FiUploadCloud className="h-4 w-4" />
+                                Upload Receipt
+                              </Button>
+                            </>
+                          )}
                         </div>
                       </div>
                     );
@@ -430,7 +488,7 @@ const SubscriptionPage: React.FC = () => {
           </DialogHeader>
           <ManualReceiptForm
             plan={selectedPlan}
-            refetch={refetch}
+            refetch={refreshAll}
             close={() => {
               setReceiptOpen(false);
               setSelectedPlan(null);

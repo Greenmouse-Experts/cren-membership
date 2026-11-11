@@ -21,13 +21,20 @@ const loginSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-/** Fetch and persist the logged-in member's subscription into the auth store. */
-const loadUserSubscription = async (onLoaded: (sub: MemberSubscription | null) => void) => {
+/** Fetch the logged-in member's current subscription from `GET member/subscription/current`. */
+const loadUserSubscription = async (): Promise<MemberSubscription | null> => {
   try {
-    const response = await fetchApi<MemberSubscription>("member/subscription");
-    onLoaded(response?.data ?? null);
+    const response = await fetchApi<MemberSubscription>("member/subscription/current");
+    const data = response?.data;
+    if (!data) return null;
+    return {
+      isSubscribed: data.isSubscribed ?? false,
+      transaction: data.transaction ?? null,
+      plan: data.plan ?? null,
+    };
   } catch {
     // Non-fatal: the dashboard/subscription page will refetch this on its own.
+    return null;
   }
 };
 
@@ -39,7 +46,6 @@ const Login = () => {
   };
 
   const setAuth = useAuthStore((s) => s.setAuth);
-  const setSubscription = useAuthStore((s) => s.setSubscription);
 
   const { handlePost, isPending } = usePostHook();
   const usenavigate = useNavigate();
@@ -61,11 +67,12 @@ const Login = () => {
         }
         const apiData = res.data;
         const token = res.token;
+        const subscribed = normalizeSubscribed(apiData.isSubscribed);
 
         // Keep legacy inline-storage keys (other pages/Hooks still read them).
         localStorage.setItem("igbo_token", token);
         localStorage.setItem("fName", apiData.name_of_member_organization ?? "");
-        localStorage.setItem("igbo_sub", String(normalizeSubscribed(apiData.isSubscribed) ? 1 : 0));
+        localStorage.setItem("igbo_sub", String(subscribed ? 1 : 0));
         localStorage.setItem("igbo_email", apiData.email ?? "");
 
         // Initialize the persistent user store.
@@ -78,11 +85,26 @@ const Login = () => {
           },
         });
 
-        // Fetch + store the current user's subscription, then continue to the dashboard.
-        loadUserSubscription(setSubscription).finally(() => {
-          toast.success(res.message);
-          usenavigate("/dashboard/");
-        });
+        // Fetch + store the current subscription from `/member/subscription/current`,
+        // then continue to the dashboard.
+        loadUserSubscription()
+          .then((sub) => {
+            if (!sub) return;
+            const subscribedNow = normalizeSubscribed(sub.isSubscribed);
+            setAuth({
+              subscription: sub,
+              user: {
+                email: apiData.email ?? "",
+                name: apiData.name_of_member_organization ?? "",
+                isSubscribed: subscribedNow,
+              },
+            });
+            localStorage.setItem("igbo_sub", String(subscribedNow ? 1 : 0));
+          })
+          .finally(() => {
+            toast.success(res.message);
+            usenavigate("/dashboard/");
+          });
       },
     );
   };

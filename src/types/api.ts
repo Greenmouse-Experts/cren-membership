@@ -100,19 +100,17 @@ export interface SubscriptionItem {
   updated_at?: string | null;
 }
 
-/** Shape returned by `GET /member/subscription` (the member's current/required subscription plan). */
+/**
+ * Shape returned by `GET /member/subscription/current` (the member's current subscription).
+ * When `isSubscribed` is false, both `transaction` and `plan` are `null`.
+ */
 export interface MemberSubscription {
-  id: number | string;
-  plan_name?: string | null;
-  type?: string | null;
-  amount: number | string;
-  bank?: string | null;
-  description?: string | null;
-  status?: "Active" | "Inactive" | string | null;
-  start_date?: string | null;
-  end_date?: string | null;
-  created_at?: string | null;
-  updated_at?: string | null;
+  /** True if the member has an active subscription. */
+  isSubscribed: boolean | string | number;
+  /** The transaction that activated the current subscription, if any. */
+  transaction: MemberPaymentTransaction | null;
+  /** The active plan, if any. */
+  plan: SubscriptionItem | null;
 }
 
 /** Values posted to `POST /member/subscription/payment`. */
@@ -132,6 +130,8 @@ export interface LoginResponse {
 export interface MemberPaymentTransaction {
   id?: number | string;
   user_id?: number | string;
+  due_id?: number | string | null;
+  subscription_id?: number | string | null;
   ref_id: string;
   amount: number | string;
   channel?: string | null;
@@ -140,6 +140,7 @@ export interface MemberPaymentTransaction {
   updated_at?: string;
   paid_at?: string | null;
   receipt?: string | null;
+  ip_address?: string | null;
   due?: {
     id?: number | string;
     description?: string;
