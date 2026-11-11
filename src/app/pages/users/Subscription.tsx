@@ -4,7 +4,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "react-toastify";
 import { usePaystackPayment } from "react-paystack";
-import { BadgeCheck, Calendar, Landmark, Loader2, RefreshCcw, Wallet } from "lucide-react";
+import {
+  BadgeCheck,
+  Calendar,
+  Landmark,
+  Loader2,
+  RefreshCcw,
+  Wallet,
+} from "lucide-react";
 import { FiUploadCloud } from "react-icons/fi";
 import { RiSecurePaymentFill } from "react-icons/ri";
 
@@ -12,7 +19,11 @@ import useGetHook from "@/app/hook/useGet";
 import usePostHook from "@/app/hook/usePost";
 import useAuthStore, { normalizeSubscribed } from "@/store/auth-store";
 import { formatAsNgnMoney } from "@/app/services/helpers";
-import type { ApiResponse, MemberSubscription, SubscriptionItem } from "@/types/api";
+import type {
+  ApiResponse,
+  SubscriptionItem,
+  MemberSubscription,
+} from "@/types/api";
 
 import PageLoader from "@/components/layout/PageLoader";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -48,7 +59,8 @@ interface PaystackPlanPayProps {
 }
 
 const PaystackPlanPay: React.FC<PaystackPlanPayProps> = ({ plan, onVerify }) => {
-  const email = typeof window !== "undefined" ? localStorage.getItem("igbo_email") || "" : "";
+  const email =
+    typeof window !== "undefined" ? localStorage.getItem("igbo_email") || "" : "";
 
   const config = {
     reference: new Date().getTime().toString(),
@@ -102,10 +114,10 @@ interface ReceiptFormValues {
 }
 
 const ManualReceiptForm: React.FC<{
-  subscription: SubscriptionItem | null;
+  plan: SubscriptionItem | null;
   refetch: () => void;
   close: () => void;
-}> = ({ subscription, refetch, close }) => {
+}> = ({ plan, refetch, close }) => {
   const { handlePost, isPending } = usePostHook();
 
   const form = useForm<ReceiptFormValues>({
@@ -114,20 +126,25 @@ const ManualReceiptForm: React.FC<{
 
   const onSubmit = async (values: ReceiptFormValues) => {
     const file = values.receipt?.[0];
-    if (!file || !subscription?.id) {
+    if (!file || !plan?.id) {
       toast.error("Please select a valid receipt file");
       return;
     }
 
     const formData = new FormData();
-    formData.append("subscription_id", String(subscription.id));
+    formData.append("subscription_id", String(plan.id));
     formData.append("receipt", file);
 
-    await handlePost("member/subscription/upload/manual/receipt", formData, undefined, () => {
-      toast.success("Receipt uploaded successfully — pending admin confirmation");
-      refetch();
-      close();
-    });
+    await handlePost(
+      "member/subscription/upload/manual/receipt",
+      formData,
+      undefined,
+      () => {
+        toast.success("Receipt uploaded successfully — pending admin confirmation");
+        refetch();
+        close();
+      }
+    );
   };
 
   return (
@@ -149,7 +166,7 @@ const ManualReceiptForm: React.FC<{
                 />
               </FormControl>
               <FormDescription>
-                Upload bank transfer receipt for &ldquo;{subscription?.type || "Membership"}
+                Upload bank transfer receipt for &ldquo;{plan?.type || "Membership"}
                 Subscription&rdquo;.
               </FormDescription>
               <FormMessage />
@@ -185,9 +202,9 @@ const ManualReceiptForm: React.FC<{
 /* ------------------------------------------------------------------ */
 
 const SubscriptionPage: React.FC = () => {
-  const { data: currentResp, refetch } = useGetHook<MemberSubscription>("member/subscription");
-  const { data: plansResp, query: plansQuery } =
-    useGetHook<SubscriptionItem[]>("member/subscriptions");
+  const { data: plansResp, isLoading, refetch, query } = useGetHook<ApiResponse<SubscriptionItem[]>>("member/subscription");
+
+  const { data: currentResp } = useGetHook<MemberSubscription>("member/subscription");
 
   const subscription = useAuthStore((s) => s.subscription);
   const setSubscription = useAuthStore((s) => s.setSubscription);
@@ -195,7 +212,7 @@ const SubscriptionPage: React.FC = () => {
 
   // Keep the persistent store in sync with the freshest API data.
   useEffect(() => {
-    if (currentResp?.data) {
+    if (currentResp?.data && currentResp.data.id) {
       setSubscription(currentResp.data);
     }
   }, [currentResp, setSubscription]);
@@ -206,18 +223,19 @@ const SubscriptionPage: React.FC = () => {
 
   const { handlePost } = usePostHook();
 
+  const plans: SubscriptionItem[] = useMemo(() => {
+    if (!plansResp?.data || !Array.isArray(plansResp.data)) return [];
+    return plansResp.data;
+  }, [plansResp]);
+
+  // Determine current plan from API data or the persisted store.
   const current: MemberSubscription | null = useMemo(() => {
-    // Latest query result first; fall back to the persisted store while loading.
+    // Try the latest API response first; fall back to the persisted store.
     if (currentResp?.data && (currentResp.data as MemberSubscription).id) {
       return currentResp.data;
     }
     return subscription;
   }, [currentResp, subscription]);
-
-  const plans: SubscriptionItem[] = useMemo(() => {
-    if (!plansResp?.data || !Array.isArray(plansResp.data)) return [];
-    return plansResp.data;
-  }, [plansResp]);
 
   const handleVerifyPayment = (reference: string, subscriptionId: string | number) => {
     setVerifiedId(subscriptionId);
@@ -270,7 +288,9 @@ const SubscriptionPage: React.FC = () => {
                     )}
                   </div>
                   {current.description && (
-                    <p className="text-sm text-muted-foreground max-w-xl">{current.description}</p>
+                    <p className="text-sm text-muted-foreground max-w-xl">
+                      {current.description}
+                    </p>
                   )}
                   <div className="flex flex-wrap gap-x-6 gap-y-1.5 pt-1 text-sm text-muted-foreground">
                     {current.start_date && current.end_date && (
@@ -314,7 +334,7 @@ const SubscriptionPage: React.FC = () => {
         </CardHeader>
         <CardContent className="p-0 sm:p-6">
           <PageLoader
-            query={plansQuery}
+            query={query}
             emptyState={{
               title: "No Plans Available",
               description: "There are no subscription plans configured at this time.",
@@ -409,7 +429,7 @@ const SubscriptionPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
           <ManualReceiptForm
-            subscription={selectedPlan}
+            plan={selectedPlan}
             refetch={refetch}
             close={() => {
               setReceiptOpen(false);
