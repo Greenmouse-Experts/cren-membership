@@ -73,8 +73,8 @@ const DuesPayments = () => {
       const matchesSearch =
         !term ||
         item.ref_id?.toLowerCase().includes(term) ||
-        item.user?.name_of_member_organization?.toLowerCase().includes(term) ||
-        item.user?.name_of_representative?.toLowerCase().includes(term);
+        item.payer?.name_of_member_organization?.toLowerCase().includes(term) ||
+        item.payer?.name_of_representative?.toLowerCase().includes(term);
       return matchesStatus && matchesSearch;
     });
   }, [query.data, statusFilter, search]);
@@ -178,10 +178,10 @@ const DuesPayments = () => {
                       </TableCell>
                       <TableCell className="whitespace-nowrap px-4 py-4">
                         <div className="flex flex-col">
-                          <span>{item.user?.name_of_member_organization ?? "—"}</span>
-                          {item.user?.name_of_representative && (
+                          <span>{item.payer?.name_of_member_organization ?? "—"}</span>
+                          {item.payer?.name_of_representative && (
                             <span className="text-sm text-muted-foreground">
-                              {item.user.name_of_representative}
+                              {item.payer?.name_of_representative}
                             </span>
                           )}
                         </div>

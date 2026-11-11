@@ -149,6 +149,8 @@ export interface MemberPaymentTransaction {
     status?: string;
   } | null;
   user?: Member | null;
+  /** Payer object from the updated API — same shape as Member. */
+  payer?: Member | null;
 }
 
 export interface AdminProfile {
