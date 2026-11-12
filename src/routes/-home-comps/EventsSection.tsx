@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { Calendar } from "lucide-react";
+import { Calendar, MapPin } from "lucide-react";
 
 import useGetHook from "@/app/hook/useGet";
 import type { AdminEventItem } from "@/types/api";
@@ -11,26 +11,35 @@ export interface EventItem {
   description: string;
   /** Formatted date text shown on the card, e.g. "21 October 2026". */
   date: string;
+  /** Event venue, when the API provides one. */
+  location?: string | undefined;
 }
 
 const toEventItems = (items: AdminEventItem[]): EventItem[] =>
   items
-    .filter((item) => !!item.title)
+    .filter((item) => (item.status === "Inactive" ? false : !!item.title))
     .map((item) => {
-      const start = item.start_date ? dayjs(item.start_date) : null;
-      const end = item.end_date ? dayjs(item.end_date) : null;
+      const start =
+        item.start_date && dayjs(item.start_date).isValid() ? dayjs(item.start_date) : null;
+      const end = item.end_date && dayjs(item.end_date).isValid() ? dayjs(item.end_date) : null;
+      // Some records carry an end date before the start date; ignore those rather than
+      // rendering a reversed or nonsensical range.
+      const validEnd = start && end && end.isAfter(start, "day") ? end : null;
       const date =
-        start?.isValid() && end?.isValid()
-          ? start.isSame(end, "day")
+        start && validEnd
+          ? start.isSame(validEnd, "day")
             ? start.format("DD MMMM YYYY")
-            : `${start.format("DD MMM YYYY")} – ${end.format("DD MMM YYYY")}`
-          : (start?.isValid() ? start.format("DD MMMM YYYY") : "");
+            : `${start.format("DD MMM YYYY")} – ${validEnd.format("DD MMM YYYY")}`
+          : start
+            ? start.format("DD MMMM YYYY")
+            : "";
       return {
         image: item.image ?? "",
         imageAlt: item.title ?? "CREN event",
         title: item.title ?? "",
         description: item.description ?? "",
         date,
+        location: item.location ?? undefined,
       };
     });
 
@@ -61,9 +70,17 @@ function EventCard({ event }: EventCardProps) {
         )}
 
         {event.date && (
-          <p className="mt-auto flex items-center gap-2.5 pt-5 text-[0.82rem] font-semibold text-[#084c2a] sm:text-[0.86rem]">
-            <Calendar aria-hidden="true" className="size-[1.15rem]" strokeWidth={1.9} />
-            {event.date}
+          <p className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-5 text-[0.82rem] font-semibold text-[#084c2a] sm:text-[0.86rem]">
+            <span className="flex items-center gap-2.5">
+              <Calendar aria-hidden="true" className="size-[1.15rem]" strokeWidth={1.9} />
+              {event.date}
+            </span>
+            {event.location && (
+              <span className="flex items-center gap-1.5 font-medium text-[#5f6a62]">
+                <MapPin aria-hidden="true" className="size-[1.05rem]" strokeWidth={1.9} />
+                {event.location}
+              </span>
+            )}
           </p>
         )}
       </div>
@@ -81,17 +98,16 @@ interface EventsSectionProps {
 }
 
 /**
- * Reusable events section: a heading plus a grid of event cards backed by
- * the events endpoint (`member/events`, with the member token attached when
- * a visitor is logged in). `EventCard` is also exported so cards can be
- * reused in other layouts.
+ * Reusable events section: a heading plus a grid of event cards backed by the
+ * public events endpoint (`get/events`). `EventCard` is also exported so cards
+ * can be reused in other layouts.
  */
 export default function EventsSection({
   events,
   title = "Events",
   showExtra = false,
 }: EventsSectionProps) {
-  const eventsQuery = useGetHook<AdminEventItem[]>("member/events");
+  const eventsQuery = useGetHook<AdminEventItem[]>("get/events");
   const apiEvents = toEventItems(eventsQuery.data?.data ?? []);
   const visibleEvents = events ?? apiEvents;
 
@@ -124,4 +140,4 @@ export default function EventsSection({
   );
 }
 
-export { EventCard };
+export { EventCard, toEventItems };
