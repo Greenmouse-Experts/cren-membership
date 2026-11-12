@@ -151,7 +151,6 @@ const MembersDues: React.FC = () => {
                         <TableHead>Category</TableHead>
                         <TableHead>Duration</TableHead>
                         <TableHead>Amount</TableHead>
-                        <TableHead>Account Details</TableHead>
                         <TableHead className="text-right">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -195,7 +194,7 @@ const MembersDues: React.FC = () => {
                             <TableCell className="font-semibold text-foreground whitespace-nowrap">
                               {formatAsNgnMoney(item.amount)}
                             </TableCell>
-
+                            {/*
                             <TableCell className="text-xs">
                               {bank?.bank_name || bank?.account_number ? (
                                 <div className="space-y-0.5">
@@ -215,7 +214,7 @@ const MembersDues: React.FC = () => {
                               ) : (
                                 <span className="text-muted-foreground">—</span>
                               )}
-                            </TableCell>
+                            </TableCell>*/}
 
                             <TableCell className="text-right whitespace-nowrap">
                               <div className="flex items-center justify-end gap-2">

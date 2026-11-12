@@ -72,15 +72,15 @@ const Admin = () => {
   const dashboard = query.data?.data;
 
   const stats = [
+    // {
+    //   label: "Total members",
+    //   value: dashboard?.totalPartnerMembers ?? "—",
+    //   hint: "Registered on the portal",
+    //   icon: Users,
+    //   accent: "bg-blue-500/10 text-blue-600",
+    // },
     {
       label: "Total members",
-      value: dashboard?.totalPartnerMembers ?? "—",
-      hint: "Registered on the portal",
-      icon: Users,
-      accent: "bg-blue-500/10 text-blue-600",
-    },
-    {
-      label: "Partner members",
       value: dashboard?.totalPartner ?? "—",
       hint: "Organisations and partners",
       icon: Handshake,
