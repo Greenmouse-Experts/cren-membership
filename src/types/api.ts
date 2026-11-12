@@ -76,6 +76,9 @@ export interface DueItem {
   category?: DueCategory | null;
   /** Some endpoints return the category under this alias. */
   payment_category?: DueCategory | null;
+  /** `GET admin/dues` returns the category as flat fields rather than a nested object. */
+  payment_category_id?: number | string | null;
+  category_name?: string | null;
   start_date: string;
   end_date: string;
   amount: number | string;
@@ -83,6 +86,14 @@ export interface DueItem {
   created_at?: string;
   updated_at?: string;
 }
+
+/** Category label for a due, supporting both the nested and flat API shapes. */
+export const dueCategoryName = (item?: DueItem | null): string | null =>
+  item?.category_name ?? item?.category?.name ?? item?.payment_category?.name ?? null;
+
+/** Category id for a due, supporting both the nested and flat API shapes. */
+export const dueCategoryId = (item?: DueItem | null): number | string | null =>
+  item?.payment_category_id ?? item?.payment_category?.id ?? item?.category?.id ?? null;
 
 export interface SubscriptionItem {
   id: number | string;

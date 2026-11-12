@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { DueItem } from "@/types/api";
+import { dueCategoryName, type DueItem } from "@/types/api";
 
 /** Formats "DD/MM/YYYY" (or anything dayjs understands) into a readable date. */
 const formatDate = (value?: string | number | null): string => {
@@ -61,7 +61,7 @@ const AdminDues = () => {
     if (!term) return dues;
     return dues.filter((item) => {
       const description = item.description?.toLowerCase() ?? "";
-      const category = (item.category?.name ?? item.payment_category?.name ?? "").toLowerCase();
+      const category = (dueCategoryName(item) ?? "").toLowerCase();
       return description.includes(term) || category.includes(term);
     });
   }, [dues, search]);
@@ -173,7 +173,7 @@ const AdminDues = () => {
                       <TableCell className="max-w-[280px] px-4 py-4">{item.description}</TableCell>
                       <TableCell className="whitespace-nowrap px-4 py-4">
                         <Badge variant="outline" className="border-[#015907]/20 text-[#015907]">
-                          {item.category?.name ?? item.payment_category?.name ?? "—"}
+                          {dueCategoryName(item) ?? "—"}
                         </Badge>
                       </TableCell>
                       <TableCell className="whitespace-nowrap px-4 py-4">

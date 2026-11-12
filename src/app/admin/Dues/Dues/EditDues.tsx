@@ -23,13 +23,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import type { DueCategory, DueItem } from "@/types/api";
+import { dueCategoryId, type DueCategory, type DueItem } from "@/types/api";
 
 const duesFormSchema = z
   .object({
     payment_category_id: z.string().min(1, "Please select a dues category."),
     description: z.string().min(1, "Description is required."),
-    amount: z.coerce.number({ invalid_type_error: "Amount is required." }).positive("Amount must be greater than zero."),
+    amount: z.coerce
+      .number({ invalid_type_error: "Amount is required." })
+      .positive("Amount must be greater than zero."),
     start_date: z.string().min(1, "Start date is required."),
     end_date: z.string().min(1, "End date is required."),
   })
@@ -66,9 +68,7 @@ const EditDues = ({
   const form = useForm<DuesFormValues>({
     resolver: zodResolver(duesFormSchema),
     defaultValues: {
-      payment_category_id: String(
-        item?.payment_category?.id ?? item?.category?.id ?? "",
-      ),
+      payment_category_id: String(dueCategoryId(item) ?? ""),
       description: item?.description ?? "",
       amount: item?.amount !== undefined ? Number(item.amount) : 0,
       start_date: toInputDate(item?.start_date),

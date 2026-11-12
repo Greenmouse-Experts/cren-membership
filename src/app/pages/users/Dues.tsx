@@ -8,7 +8,7 @@ import { CreditCard, Landmark, Calendar, RefreshCcw } from "lucide-react";
 import useGetHook from "../../hook/useGet";
 import usePostHook from "../../hook/usePost";
 import { formatAsNgnMoney } from "../../services/helpers";
-import type { DueItem } from "@/types/api";
+import { dueCategoryName, type DueItem } from "@/types/api";
 
 import PageLoader from "@/components/layout/PageLoader";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -170,9 +170,9 @@ const MembersDues: React.FC = () => {
                             </TableCell>
 
                             <TableCell>
-                              {item.category?.name ? (
+                              {dueCategoryName(item) ? (
                                 <Badge variant="secondary" className="font-normal">
-                                  {item.category.name}
+                                  {dueCategoryName(item)}
                                 </Badge>
                               ) : (
                                 "—"
