@@ -13,7 +13,6 @@ import {
   Megaphone,
   User,
 } from "lucide-react";
-import user from "../image/Ellipse 922.png";
 import useGetHook from "../hook/useGet";
 import { formatDistanceToNow } from "date-fns";
 import dayjs from "dayjs";
@@ -32,16 +31,29 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
+const PROFILE_IMAGE_KEY = "igbo_member_avatar";
+
+/**
+ * Read the member's uploaded profile picture, ignoring empty-ish values the API may
+ * store ("", "null", "undefined") so we never render a broken avatar.
+ */
+const readProfileImage = (): string | null => {
+  if (typeof window === "undefined") return null;
+  const raw = window.localStorage.getItem(PROFILE_IMAGE_KEY)?.trim();
+  if (!raw || raw === "null" || raw === "undefined") return null;
+  return raw;
+};
+
 export const Topnav = ({ toggleSidebar, data }) => {
   const navigate = useNavigate();
-  const [avatar, setAvatar] = useState(localStorage.getItem("igbo_member_avatar"));
+  const [avatar, setAvatar] = useState<string | null>(readProfileImage);
 
   const { data: datas } = useGetHook("member/get/all/unread/notifications");
 
   useEffect(() => {
     const handleStorageChange = (event) => {
-      if (event.key === "igbo_member_avatar") {
-        setAvatar(event.newValue);
+      if (event.key === PROFILE_IMAGE_KEY) {
+        setAvatar(readProfileImage());
       }
     };
 
@@ -52,9 +64,14 @@ export const Topnav = ({ toggleSidebar, data }) => {
     };
   }, []);
 
+  // `avatar` is only set once an image is known to load; otherwise the initials fallback shows.
+  const [imageFailed, setImageFailed] = useState(false);
+
   useEffect(() => {
-    setAvatar(localStorage.getItem("igbo_member_avatar"));
+    setImageFailed(false);
   }, [avatar]);
+
+  const profileImage = avatar && !imageFailed ? avatar : null;
 
   const name = localStorage.getItem("fName");
   const email = localStorage.getItem("igbo_email");
@@ -232,11 +249,14 @@ export const Topnav = ({ toggleSidebar, data }) => {
                 aria-label="User profile menu"
               >
                 <Avatar className="h-9 w-9 border-2 border-emerald-600/30">
-                  <AvatarImage
-                    src={avatar || user}
-                    alt={name || "Member Avatar"}
-                    className="object-cover"
-                  />
+                  {profileImage && (
+                    <AvatarImage
+                      src={profileImage}
+                      alt={name || "Member Avatar"}
+                      className="object-cover"
+                      onError={() => setImageFailed(true)}
+                    />
+                  )}
                   <AvatarFallback className="bg-emerald-800 text-white font-medium text-xs">
                     {getInitials(name)}
                   </AvatarFallback>
