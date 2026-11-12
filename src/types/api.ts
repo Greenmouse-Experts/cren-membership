@@ -150,7 +150,7 @@ export interface MemberPaymentTransaction {
     status?: string;
   } | null;
   user?: Member | null;
-  /** Payer object from the updated API — same shape as Member. */
+  /** Member who paid — the shape returned by `GET admin/get/subscription/transactions`. */
   payer?: Member | null;
 }
 

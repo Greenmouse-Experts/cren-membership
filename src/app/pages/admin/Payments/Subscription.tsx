@@ -62,6 +62,25 @@ const formatDate = (value?: string | number | null): string => {
   return parsed.isValid() ? parsed.format("DD/MM/YYYY") : "—";
 };
 
+/**
+ * Subscription transactions return the member under `payer`; older payloads used `user`.
+ * Fall back so both shapes render.
+ */
+const payerOf = (item: MemberPaymentTransaction) => item.payer ?? item.user ?? null;
+
+/** Display name for the payer row. */
+const payerName = (item: MemberPaymentTransaction): string => {
+  const payer = payerOf(item);
+  if (!payer) return "—";
+  return (
+    payer.name_of_member_organization ||
+    payer.name_of_representative ||
+    `${payer.first_name ?? ""} ${payer.last_name ?? ""}`.trim() ||
+    payer.email ||
+    "—"
+  );
+};
+
 const SubscriptionPayments = () => {
   const query = useGetHook<MemberPaymentTransaction[]>("admin/get/subscription/transactions");
   const { handlePost, isLoading: isBusy } = usePostHook();
@@ -76,11 +95,14 @@ const SubscriptionPayments = () => {
     const term = search.trim().toLowerCase();
     if (!term) return all;
     return all.filter((item) => {
-      return (
+      const payer = payerOf(item);
+      return Boolean(
         item.ref_id?.toLowerCase().includes(term) ||
-        item.user?.name_of_member_organization?.toLowerCase().includes(term) ||
-        item.user?.name_of_representative?.toLowerCase().includes(term) ||
-        item.user?.account_type?.toLowerCase().includes(term)
+        payer?.name_of_member_organization?.toLowerCase().includes(term) ||
+        payer?.name_of_representative?.toLowerCase().includes(term) ||
+        payer?.email?.toLowerCase().includes(term) ||
+        payer?.membership_id?.toLowerCase().includes(term) ||
+        payer?.account_type?.toLowerCase().includes(term),
       );
     });
   }, [query.data, search]);
@@ -105,10 +127,14 @@ const SubscriptionPayments = () => {
   };
 
   const handleVerify = () => {
-    if (selected?.user_id === undefined || selected.user_id === null) return;
+    const userId = selected?.payer?.id ?? selected?.user_id;
+    if (userId === undefined || userId === null) {
+      toast.error("This transaction has no member attached to verify.");
+      return;
+    }
     handlePost(
       "admin/member/subscribe",
-      { user_id: Number(selected.user_id) },
+      { user_id: Number(userId) },
       "application/json",
       onSuccess,
     );
@@ -187,62 +213,72 @@ const SubscriptionPayments = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {transactions.map((item, index) => (
-                    <TableRow key={item.id ?? index}>
-                      <TableCell className="whitespace-nowrap px-4 py-4">{index + 1}</TableCell>
-                      <TableCell className="max-w-[220px] truncate px-4 py-4" title={item.ref_id}>
-                        {item.ref_id}
-                      </TableCell>
-                      <TableCell className="whitespace-nowrap px-4 py-4">
-                        <div className="flex flex-col">
-                          <span>{item.user?.name_of_member_organization ?? "—"}</span>
-                          {item.user?.name_of_representative && (
-                            <span className="text-sm text-muted-foreground">
-                              {item.user.name_of_representative}
-                            </span>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell className="whitespace-nowrap px-4 py-4">
-                        {item.user?.account_type ?? "—"}
-                      </TableCell>
-                      <TableCell className="whitespace-nowrap px-4 py-4">
-                        {formatAsNgnMoney(Number(item.amount))}
-                      </TableCell>
-                      <TableCell className="whitespace-nowrap px-4 py-4">
-                        <span
-                          className={`rounded-md px-2 py-0.5 text-xs font-semibold capitalize ${statusBadgeClasses(item.status)} ${statusBadgeBg(item.status)}`}
-                        >
-                          {statusLabel(item.status)}
-                        </span>
-                      </TableCell>
-                      <TableCell className="whitespace-nowrap px-4 py-4">
-                        {formatDate(item.paid_at ?? item.created_at)}
-                      </TableCell>
-                      <TableCell className="whitespace-nowrap px-4 py-4">
-                        <div className="flex items-center gap-2">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            aria-label="View receipt"
-                            onClick={() => handleView(item.receipt)}
-                            className="h-8 w-8 text-blue-700 hover:bg-blue-700/10"
+                  {transactions.map((item, index) => {
+                    const payer = payerOf(item);
+                    const name = payerName(item);
+                    return (
+                      <TableRow key={item.id ?? index}>
+                        <TableCell className="whitespace-nowrap px-4 py-4">{index + 1}</TableCell>
+                        <TableCell className="max-w-[220px] truncate px-4 py-4" title={item.ref_id}>
+                          {item.ref_id}
+                        </TableCell>
+                        <TableCell className="whitespace-nowrap px-4 py-4">
+                          <div className="flex flex-col">
+                            <span>{name}</span>
+                            {payer?.name_of_representative &&
+                              payer.name_of_representative !== name && (
+                                <span className="text-sm text-muted-foreground">
+                                  {payer.name_of_representative}
+                                </span>
+                              )}
+                            {payer?.membership_id && (
+                              <span className="text-xs text-muted-foreground">
+                                {payer.membership_id}
+                              </span>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell className="whitespace-nowrap px-4 py-4">
+                          {payer?.account_type ?? "—"}
+                        </TableCell>
+                        <TableCell className="whitespace-nowrap px-4 py-4">
+                          {formatAsNgnMoney(Number(item.amount))}
+                        </TableCell>
+                        <TableCell className="whitespace-nowrap px-4 py-4">
+                          <span
+                            className={`rounded-md px-2 py-0.5 text-xs font-semibold capitalize ${statusBadgeClasses(item.status)} ${statusBadgeBg(item.status)}`}
                           >
-                            <Eye className="!size-4" />
-                          </Button>
-                          <Button
-                            variant="link"
-                            size="sm"
-                            onClick={() => openVerify(item)}
-                            className="h-auto gap-1 p-0 text-[#015907]"
-                          >
-                            <ShieldCheck aria-hidden="true" className="size-4" />
-                            Verify
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                            {statusLabel(item.status)}
+                          </span>
+                        </TableCell>
+                        <TableCell className="whitespace-nowrap px-4 py-4">
+                          {formatDate(item.paid_at ?? item.created_at)}
+                        </TableCell>
+                        <TableCell className="whitespace-nowrap px-4 py-4">
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              aria-label="View receipt"
+                              onClick={() => handleView(item.receipt)}
+                              className="h-8 w-8 text-blue-700 hover:bg-blue-700/10"
+                            >
+                              <Eye className="!size-4" />
+                            </Button>
+                            <Button
+                              variant="link"
+                              size="sm"
+                              onClick={() => openVerify(item)}
+                              className="h-auto gap-1 p-0 text-[#015907]"
+                            >
+                              <ShieldCheck aria-hidden="true" className="size-4" />
+                              Verify
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </div>
@@ -250,9 +286,7 @@ const SubscriptionPayments = () => {
         </div>
       </div>
 
-      {receiptUrl && (
-        <ReceiptModal item={receiptUrl} close={() => setReceiptUrl(null)} />
-      )}
+      {receiptUrl && <ReceiptModal item={receiptUrl} close={() => setReceiptUrl(null)} />}
 
       <Verify title="" noHead>
         <ReusableModal
