@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import { Calendar, MapPin } from "lucide-react";
 
 import useGetHook from "@/app/hook/useGet";
+import { isEventPublished } from "@/app/pages/admin/Events/event-status";
 import type { AdminEventItem } from "@/types/api";
 
 export interface EventItem {
@@ -17,7 +18,12 @@ export interface EventItem {
 
 const toEventItems = (items: AdminEventItem[]): EventItem[] =>
   items
-    .filter((item) => (item.status === "Inactive" ? false : !!item.title))
+    // Only published events appear on the public site; `status` is unset on legacy
+    // records, which should stay visible.
+    .filter((item) => {
+      if (!item.title) return false;
+      return item.status === null || item.status === undefined || isEventPublished(item);
+    })
     .map((item) => {
       const start =
         item.start_date && dayjs(item.start_date).isValid() ? dayjs(item.start_date) : null;

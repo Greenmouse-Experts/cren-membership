@@ -1,9 +1,13 @@
 import dayjs from "dayjs";
-import { ArrowLeft, Calendar, MapPin, Pencil, User } from "lucide-react";
+import { ArrowLeft, Calendar, Eye, EyeOff, MapPin, Pencil, User } from "lucide-react";
+import { toast } from "react-toastify";
 
 import useGetHook from "@/app/hook/useGet";
+import usePostHook from "@/app/hook/usePost";
 import { useNavigate, useParams } from "@/lib/router-compat";
+import { isEventPublished } from "./event-status";
 import type { AdminEventItem } from "@/types/api";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -11,10 +15,20 @@ const EventDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const query = useGetHook<AdminEventItem[]>("admin/events");
+  const { handlePost, isLoading: isPublishing } = usePostHook();
 
-  const event = (query.data?.data ?? []).find(
-    (item) => String(item.id) === String(id),
-  );
+  const event = (query.data?.data ?? []).find((item) => String(item.id) === String(id));
+
+  const handlePublishToggle = () => {
+    if (!event?.id) return;
+    const action = isEventPublished(event) ? "unpublish" : "publish";
+    handlePost(`admin/event/${action}`, { event_id: event.id }, "application/json", () => {
+      query.refetch();
+      toast.success(
+        action === "publish" ? "Event published successfully" : "Event unpublished successfully",
+      );
+    });
+  };
 
   const formatRange = (item: AdminEventItem) => {
     const start = item.start_date ? dayjs(item.start_date) : null;
@@ -44,13 +58,24 @@ const EventDetailPage = () => {
           <h1 className="text-xl font-semibold text-[#075b2f]">Event Details</h1>
         </div>
         {event && (
-          <Button
-            onClick={() => navigate(`/admin/events/create?id=${event.id}`)}
-            className="gap-2 bg-[#015907] text-white"
-          >
-            <Pencil aria-hidden="true" />
-            Edit Event
-          </Button>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              variant="outline"
+              disabled={isPublishing}
+              onClick={handlePublishToggle}
+              className="gap-2 border-[#015907] text-[#015907] hover:bg-[#015907]/5"
+            >
+              {isEventPublished(event) ? <EyeOff aria-hidden="true" /> : <Eye aria-hidden="true" />}
+              {isEventPublished(event) ? "Unpublish" : "Publish"}
+            </Button>
+            <Button
+              onClick={() => navigate(`/admin/events/create?id=${event.id}`)}
+              className="gap-2 bg-[#015907] text-white"
+            >
+              <Pencil aria-hidden="true" />
+              Edit Event
+            </Button>
+          </div>
         )}
       </div>
 
@@ -102,9 +127,20 @@ const EventDetailPage = () => {
             </div>
 
             <div>
-              <h2 className="text-[1.35rem] font-semibold leading-snug text-[#075b2f]">
-                {event.title}
-              </h2>
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="text-[1.35rem] font-semibold leading-snug text-[#075b2f]">
+                  {event.title}
+                </h2>
+                <Badge
+                  className={
+                    isEventPublished(event)
+                      ? "border border-transparent bg-[#075b2f]/10 text-[#075b2f]"
+                      : "border border-transparent bg-amber-500/15 text-amber-700"
+                  }
+                >
+                  {isEventPublished(event) ? "Published" : "Draft"}
+                </Badge>
+              </div>
 
               <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-[#5f6a62]">
                 <span className="inline-flex items-center gap-2">

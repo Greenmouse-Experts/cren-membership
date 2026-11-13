@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import dayjs from "dayjs";
-import { Calendar, MapPin, Pencil, Plus, Search, Trash2 } from "lucide-react";
+import { Calendar, Eye, EyeOff, MapPin, Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { toast } from "react-toastify";
 
 import useModal from "@/app/hook/useModal";
@@ -8,6 +8,7 @@ import useGetHook from "@/app/hook/useGet";
 import usePostHook from "@/app/hook/usePost";
 import ReusableModal from "@/app/components/ReusableModal";
 import { useNavigate } from "@/lib/router-compat";
+import { isEventPublished } from "./event-status";
 import type { AdminEventItem } from "@/types/api";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,9 +19,12 @@ const AdminEventList = () => {
   const query = useGetHook<AdminEventItem[]>("admin/events");
   const navigate = useNavigate();
   const { handlePost, isLoading: isDeleting } = usePostHook();
+  const { handlePost: togglePublish, isLoading: isPublishing } = usePostHook();
 
   const { Modal: Delete, setShowModal: setShowDelete } = useModal();
+  const { Modal: Publish, setShowModal: setShowPublish } = useModal();
   const [selected, setSelected] = useState<AdminEventItem | null>(null);
+  const [publishAction, setPublishAction] = useState<"publish" | "unpublish">("publish");
   const [search, setSearch] = useState("");
 
   const events = query.data?.data ?? [];
@@ -41,6 +45,12 @@ const AdminEventList = () => {
     setShowDelete(true);
   };
 
+  const openPublishToggle = (item: AdminEventItem) => {
+    setSelected(item);
+    setPublishAction(isEventPublished(item) ? "unpublish" : "publish");
+    setShowPublish(true);
+  };
+
   const handleDelete = () => {
     if (!selected?.id) return;
     handlePost(
@@ -53,6 +63,26 @@ const AdminEventList = () => {
         query.refetch();
         toast.success("Event deleted successfully");
         setShowDelete(false);
+      },
+    );
+  };
+
+  const handlePublishToggle = () => {
+    if (!selected?.id) return;
+    togglePublish(
+      `admin/event/${publishAction}`,
+      {
+        event_id: selected.id,
+      },
+      "application/json",
+      () => {
+        query.refetch();
+        toast.success(
+          publishAction === "publish"
+            ? "Event published successfully"
+            : "Event unpublished successfully",
+        );
+        setShowPublish(false);
       },
     );
   };
@@ -76,7 +106,7 @@ const AdminEventList = () => {
           <div>
             <h1 className="text-xl font-semibold text-[#075b2f]">CREN Events</h1>
             <p className="mt-1 text-sm text-[#62705f]">
-              Add, view, edit and delete events shown on the public website.
+              Add, view, edit, publish and delete events shown on the public website.
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -165,9 +195,36 @@ const AdminEventList = () => {
                       className="absolute right-3 top-3 flex items-center gap-1 rounded-md bg-white/95 p-1.5 shadow-sm"
                       onClick={(event) => event.stopPropagation()}
                     >
+                      <Badge
+                        className={
+                          isEventPublished(item)
+                            ? "border border-transparent bg-[#075b2f]/10 text-[#075b2f]"
+                            : "border border-transparent bg-amber-500/15 text-amber-700"
+                        }
+                      >
+                        {isEventPublished(item) ? "Published" : "Draft"}
+                      </Badge>
                       <span className="px-1 text-[0.72rem] text-[#5f6a62]">
                         {item.created_at ? dayjs(item.created_at).format("DD MMM YYYY") : ""}
                       </span>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        aria-label={
+                          isEventPublished(item)
+                            ? `Unpublish ${item.title ?? "event"}`
+                            : `Publish ${item.title ?? "event"}`
+                        }
+                        title={isEventPublished(item) ? "Unpublish" : "Publish"}
+                        onClick={() => openPublishToggle(item)}
+                        className="hidden h-7 w-7 text-[#015907] hover:bg-[#015907]/10 group-hover:inline-flex"
+                      >
+                        {isEventPublished(item) ? (
+                          <EyeOff className="!size-3.5" />
+                        ) : (
+                          <Eye className="!size-3.5" />
+                        )}
+                      </Button>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -228,6 +285,17 @@ const AdminEventList = () => {
           isBusy={isDeleting}
         />
       </Delete>
+
+      <Publish title="" noHead>
+        <ReusableModal
+          title={`Are you sure you want to ${publishAction}${selected?.title ? ` "${selected.title}"` : " this event"}?`}
+          cancelTitle="No, cancel"
+          actionTitle={publishAction === "publish" ? "Yes, publish" : "Yes, unpublish"}
+          closeModal={() => setShowPublish(false)}
+          action={handlePublishToggle}
+          isBusy={isPublishing}
+        />
+      </Publish>
     </>
   );
 };

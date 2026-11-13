@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { isEventPublished } from "@/app/pages/admin/Events/event-status";
 import { toEventItems } from "@/routes/-home-comps/EventsSection";
 import type { AdminEventItem } from "@/types/api";
 
@@ -61,5 +62,25 @@ describe("toEventItems", () => {
 
     expect(items).toHaveLength(1);
     expect(items[0]?.title).toBe("CREN event");
+  });
+
+  it("keeps events whose status is unset", () => {
+    const items = toEventItems([event({ status: null })]);
+
+    expect(items).toHaveLength(1);
+  });
+});
+
+describe("isEventPublished", () => {
+  it("normalizes the status shapes the API returns", () => {
+    expect(isEventPublished({ status: true })).toBe(true);
+    expect(isEventPublished({ status: 1 })).toBe(true);
+    expect(isEventPublished({ status: "Active" })).toBe(true);
+    expect(isEventPublished({ status: " published " })).toBe(true);
+
+    expect(isEventPublished({ status: false })).toBe(false);
+    expect(isEventPublished({ status: 0 })).toBe(false);
+    expect(isEventPublished({ status: "Inactive" })).toBe(false);
+    expect(isEventPublished({ status: null })).toBe(false);
   });
 });
