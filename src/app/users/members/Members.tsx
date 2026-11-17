@@ -1,31 +1,16 @@
 // @ts-nocheck
 import React, { useMemo, useState } from "react";
-import axios from "axios";
 import dayjs from "dayjs";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { toast } from "react-toastify";
-import {
-  Search,
-  Plus,
-  FileDown,
-  Eye,
-  Pencil,
-  Trash2,
-  CreditCard,
-  Loader2,
-  AlertTriangle,
-  User as UserIcon,
-} from "lucide-react";
+import { Search, FileDown, Eye, CreditCard } from "lucide-react";
 
-import { API_URL } from "@/app/services/env";
 import useGetHook from "../../hook/useGet";
 import type { Member } from "@/types/api";
 
 // Modals
-import AddMembers from "./AddMembers";
 import MemberModal from "./memberModal";
-import EditMember from "./EditMember";
 import CardModal from "./CardModal";
 
 // shadcn/ui components
@@ -42,16 +27,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 
 // Helper to reliably extract array of members from response structures
 const extractMembers = (response: any): Member[] => {
@@ -72,14 +47,11 @@ const Members = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selected, setSelected] = useState<Member | null>(null);
-  const [isBusy, setIsBusy] = useState(false);
 
-  // Modals state
+  // Modals state — members may only be viewed here; editing and deleting
+  // accounts is not permitted from the directory.
   const [showDetails, setShowDetails] = useState(false);
   const [showID, setShowID] = useState(false);
-  const [showAddMemberPopup, setShowAddMemberPopup] = useState(false);
-  const [showEditMemberPopup, setShowEditMemberPopup] = useState(false);
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   // Extracted raw members from API response
   const rawMembers = useMemo(() => extractMembers(data), [data]);
@@ -111,23 +83,6 @@ const Members = () => {
     });
   }, [rawMembers, searchQuery]);
 
-  const handleAddMemberClick = () => {
-    setShowAddMemberPopup(true);
-  };
-
-  const handleCloseAddMemberPopup = () => {
-    setShowAddMemberPopup(false);
-  };
-
-  const handleEditMemberClick = (item: Member) => {
-    setSelected(item);
-    setShowEditMemberPopup(true);
-  };
-
-  const handleCloseEditMemberPopup = () => {
-    setShowEditMemberPopup(false);
-  };
-
   const openCard = (item: Member) => {
     setSelected(item);
     setShowID(true);
@@ -136,11 +91,6 @@ const Members = () => {
   const openDetails = (item: Member) => {
     setSelected(item);
     setShowDetails(true);
-  };
-
-  const openDelete = (item: Member) => {
-    setSelected(item);
-    setIsDeleteOpen(true);
   };
 
   const downloadAsPDF = () => {
@@ -168,33 +118,6 @@ const Members = () => {
     doc.save("members.pdf");
   };
 
-  const DeleteMember = async () => {
-    if (!selected?.id) return;
-    setIsBusy(true);
-    const token = typeof window !== "undefined" ? localStorage.getItem("igbo_token") : null;
-
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-      };
-      const res = await axios.post(
-        `${API_URL}/member/delete/member?member_id=${selected.id}`,
-        {},
-        config,
-      );
-      toast.success(res.data?.message || "Member deleted successfully");
-      refetch();
-      setIsDeleteOpen(false);
-    } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Failed to delete member");
-    } finally {
-      setIsBusy(false);
-    }
-  };
-
   return (
     <div className="w-full p-4 lg:p-6 space-y-6">
       <Card className="border shadow-sm">
@@ -203,7 +126,7 @@ const Members = () => {
             <div>
               <CardTitle className="text-2xl font-bold tracking-tight">Members</CardTitle>
               <CardDescription>
-                Browse member directory, view credentials, generate cards, and manage profiles.
+                Browse the member directory, view credentials and generate ID cards.
               </CardDescription>
             </div>
             <div className="flex flex-wrap items-center gap-2">
@@ -250,7 +173,7 @@ const Members = () => {
                   <TableHead>Member Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Date Joined</TableHead>
-                  <TableHead className="text-right pr-6">Actions</TableHead>
+                  {/*<TableHead className="text-right pr-6">Actions</TableHead>*/}
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -328,7 +251,7 @@ const Members = () => {
                         <TableCell className="text-muted-foreground whitespace-nowrap">
                           {item.created_at ? dayjs(item.created_at).format("DD-MMM-YYYY") : "—"}
                         </TableCell>
-                        <TableCell className="text-right pr-6">
+                        {/*<TableCell className="text-right pr-6">
                           <div className="flex items-center justify-end gap-1.5">
                             <Button
                               variant="outline"
@@ -340,16 +263,7 @@ const Members = () => {
                               <CreditCard className="h-3.5 w-3.5" />
                               <span className="hidden sm:inline">Card</span>
                             </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="h-8 text-xs gap-1 text-blue-900 border-blue-200 hover:bg-blue-50 hover:text-blue-900 dark:border-blue-800 dark:text-blue-300 dark:hover:bg-blue-950 cursor-pointer"
-                              onClick={() => handleEditMemberClick(item)}
-                              title="Edit Member"
-                            >
-                              <Pencil className="h-3.5 w-3.5" />
-                              <span className="hidden sm:inline">Edit</span>
-                            </Button>
+
                             <Button
                               variant="ghost"
                               size="icon"
@@ -359,17 +273,8 @@ const Members = () => {
                             >
                               <Eye className="h-4 w-4" />
                             </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-8 w-8 text-destructive/80 hover:text-destructive hover:bg-destructive/10 cursor-pointer"
-                              onClick={() => openDelete(item)}
-                              title="Delete Member"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
                           </div>
-                        </TableCell>
+                        </TableCell>*/}
                       </TableRow>
                     );
                   })
@@ -391,61 +296,11 @@ const Members = () => {
       </Card>
 
       {/* Popups & Modals */}
-      {showAddMemberPopup && (
-        <div className="popup">
-          <AddMembers refetch={refetch} onClose={handleCloseAddMemberPopup} />
-        </div>
+
+      {showID && selected && <CardModal item={selected} close={() => setShowID(false)} />}
+      {showDetails && selected && (
+        <MemberModal item={selected} close={() => setShowDetails(false)} />
       )}
-
-      {showEditMemberPopup && (
-        <div className="popup">
-          <EditMember item={selected} onClose={handleCloseEditMemberPopup} refetch={refetch} />
-        </div>
-      )}
-
-      {showID && <CardModal item={selected} close={() => setShowID(false)} />}
-      {showDetails && <MemberModal item={selected} close={() => setShowDetails(false)} />}
-
-      {/* Delete Confirmation AlertDialog */}
-      <AlertDialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2 text-destructive">
-              <AlertTriangle className="h-5 w-5" />
-              Delete Member Account
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete the member account for{" "}
-              <span className="font-semibold text-foreground">
-                {selected?.first_name || selected?.last_name
-                  ? `${selected?.first_name || ""} ${selected?.last_name || ""}`.trim()
-                  : selected?.name_of_representative || selected?.email || "this member"}
-              </span>
-              ? This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={isBusy}>No, cancel</AlertDialogCancel>
-            <AlertDialogAction
-              disabled={isBusy}
-              className="bg-destructive hover:bg-destructive/90 text-destructive-foreground cursor-pointer"
-              onClick={(e) => {
-                e.preventDefault();
-                DeleteMember();
-              }}
-            >
-              {isBusy ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Deleting...
-                </>
-              ) : (
-                "Yes, Delete"
-              )}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 };

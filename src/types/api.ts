@@ -23,6 +23,8 @@ export interface Member {
   membership_professional_bodies?: string | null;
   previous_insolvency_work_experience?: string | null;
   referee_email_address?: string | null;
+  id_number?: string | null;
+  occupation?: string | null;
   email_verified_at?: string | null;
   passport?: string | null;
   password?: string;
