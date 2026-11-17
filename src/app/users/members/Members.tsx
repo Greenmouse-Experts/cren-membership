@@ -68,7 +68,7 @@ const Members = () => {
     isLoading: loading,
     refetch,
     isError,
-  } = useGetHook<Member[]>("member/retrieve/all/member");
+  } = useGetHook<Member[]>("/member/retrieve/all/member-accounts");
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selected, setSelected] = useState<Member | null>(null);
